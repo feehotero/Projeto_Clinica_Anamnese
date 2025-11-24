@@ -1,0 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+info:
+  application:
+    name: Unisantos-Anamnese
+    description: Aplicacao para anamnese
+    author: Anamnesianos
+    version: '@project.version@'
+spring:
+  profiles:
+    active: dev

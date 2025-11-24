@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulários</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="./js/bootstrap.js" defer></script>
+    <script src="./js/globalScript.js" defer></script>
+    <script src="./js/formularios.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="div-header">
+            <span id="headerusuarioNome"></span>
+            <span>|</span>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 512 512" width="16" height="16" id="exitIcon" class="clickable">
+                <path fill="#0079BF"
+                    d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z">
+                </path>
+            </svg>
+        </div>
+        <div class="div-tabs">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="pacientes.html">Pacientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="formularios.html">Formulários</a>
+                </li>
+                <li class="usersTab admin-only nav-item">
+                    <a class="nav-link" aria-current="page" href="gerenciar-usuarios.html">Gerenciar Usuários</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="div-principal">
+        <img src="./img/unisantos-logo.png" alt="Logo Unisantos" width="233px">
+        <div class="div-conteudo">
+            <div class="search-bar form-inline mb-3 gap-2 d-flex align-items-center">
+                <input class="form-control" type="search" placeholder="Pesquisar" aria-label="Search" id="inputPesquisaFormularios">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filtrosAvancados" aria-expanded="false" aria-controls="filtrosAvancados">
+                    Filtros
+                </button>
+            </div>
+            
+            <div class="collapse mb-3" id="filtrosAvancados">
+                <div class="card card-body card-filtros">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-12">
+                            <label for="filtroTipoFormulario" class="form-label">Tipo de Formulário</label>
+                            <select class="form-select" id="selectTipoFormulario">
+                                <option value="todos" selected>Todos</option>
+                                <option value="anamnese">Anamnese</option>
+                                <option value="retorno">Retorno</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="filtroData" class="form-label">Criado em</label>
+                            <input type="date" class="form-control" id="inputCriadoEmInicio">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filtroData" class="form-label" id="labelCriadoEmTermino">Até</label>
+                            <input type="date" class="form-control" id="inputCriadoEmTermino">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="div-tabela">
+                <a href="./adicionar-anamnese.html"><button type="button" class="btn add-button btn-success">Adicionar Anamnese</button></a>
+                <a href="./adicionar-retorno.html"><button type="button" class="btn add-button btn-success">Adicionar Retorno</button></a>
+                <button id="botaoExportarAnamneses" type="button" class="btn add-button btn-primary">Exportar Anamneses</button>
+                <button id="botaoExportarRetornos" type="button" class="btn add-button btn-primary">Exportar Retornos</button>
+
+                <div class="form-check form-switch form-check-reverse switchVisualizacaoFormulario">
+                    <input class="form-check-input" type="checkbox" id="switchTipoVisualizacaoFormulario" checked>
+                    <label class="form-check-label" for="switchTipoVisualizacaoFormulario">Alterar visualização de formulários</label>
+                </div>
+
+                <table class="table caption-top table-bordered table-hover">
+                    <caption>Lista de Formulários</caption>
+                    <thead>
+                        <tr class="primeira-linha">
+                            <th scope="col" class="text-center">Código</th>
+                            <th scope="col">Tipo de Formulário</th>
+                            <th scope="col">Paciente</th>
+                            <th scope="col" class="text-center">Criado Em</th>
+                            <th scope="col" class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabela-tbody" id="tabelaFormulariosCorpo">
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

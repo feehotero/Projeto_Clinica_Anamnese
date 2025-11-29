@@ -39,7 +39,8 @@ public class AuthenticationController {
         User usuario = userService.consultarUsuarioPorLogin(auth.getName());
 
         Integer usuarioId = usuario.getId();
-        String usuarioNome = usuario.getLogin();
+        // Correção: Retorna o nome completo para exibição no front
+        String usuarioNome = usuario.getNome();
         String token = tokenService.generateToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(usuarioId, usuarioNome, token));

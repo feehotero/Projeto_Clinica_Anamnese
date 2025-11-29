@@ -35,9 +35,11 @@ public class User implements UserDetails {
 	@Column(name = "id_matricula")
 	private Integer id;
 
-	// CORREÇÃO: Mapeado 'login' para a coluna correta 'nm_usuario'
 	@Column(name = "nm_usuario", length = 60, nullable = false, unique = true)
 	private String login;
+
+	@Column(name = "nm_nome_completo", length = 100, nullable = false)
+	private String nome;
 
 	@Column(name = "nm_senha", length = 60, nullable = false)
 	private String password;
@@ -54,10 +56,10 @@ public class User implements UserDetails {
 		criadoEm = LocalDateTime.now();
 	}
 
-	// Construtor ajustado para refletir a remoção do campo 'nome'
-	public User(String login, String password, UserRole role) {
+	public User(String login, String password, String nome, UserRole role) {
 		this.login = login;
 		this.password = password;
+		this.nome = nome;
 		this.role = role;
 	}
 

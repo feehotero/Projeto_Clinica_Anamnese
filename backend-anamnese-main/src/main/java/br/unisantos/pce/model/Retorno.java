@@ -55,6 +55,9 @@ public class Retorno {
     @Column(name = "usuario_nome", length = 60, nullable = false)
     private String usuarioNome;
 
+    @Column(name = "ds_metas_ultimas_consultas", nullable = true)
+    private String dsMetasUltimasConsultas;
+
     @Column(name = "ds_comentarios_observacao", nullable = true)
     private String dsComentariosObservacao;
 

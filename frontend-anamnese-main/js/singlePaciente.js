@@ -1,7 +1,7 @@
 const formAtualizarPaciente = document.querySelector(".formAtualizarPaciente");
 const fNome = document.getElementById("nome");
 const fCpf = document.getElementById("cpf");
-const fIdSexo = document.getElementById("idSexo"); // Alterado
+const fIdSexo = document.getElementById("idSexo");
 const fDataNasc = document.getElementById("dataNasc");
 const pacienteId = localStorage.getItem("pacienteId");
 const botaoDeletar = document.getElementById("botaoDeletar");
@@ -99,37 +99,56 @@ function listarFormulariosDoPaciente() {
 
 function atualizarPaciente() {
     return new Promise((resolve, reject) => {
-        let forbidden = false;
         if (validateForm(formAtualizarPaciente)) {
+            // Tratamento de dados antes do envio
+            const sexoInt = fIdSexo.value ? parseInt(fIdSexo.value) : null;
+            const cpfLimpo = desformatarCPF(fCpf.value);
+            
+            const payload = {
+                id: parseInt(pacienteId), // Garante que o ID vai no corpo também
+                nome: fNome.value,
+                cpf: cpfLimpo,
+                idSexo: sexoInt,
+                dataNascimento: fDataNasc.value
+            };
+
+            console.log("Payload enviado:", JSON.stringify(payload));
+
             fetch(urlApi + endpointPacientes + "/" + pacienteId, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `${token}`
                 },
                 method: "PUT",
-                body: JSON.stringify({
-                    nome: fNome.value,
-                    cpf: desformatarCPF(fCpf.value),
-                    idSexo: fIdSexo.value,
-                    dataNascimento: fDataNasc.value
-                })
+                body: JSON.stringify(payload)
             })
-                .then(response => {
-                    if (!response.ok) {
-                        forbidden = true;
-                        return Promise.reject();
+            .then(async response => {
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error(`Erro ${response.status}:`, text);
+                    
+                    let msg = `Erro ${response.status}: `;
+                    try {
+                        const json = JSON.parse(text);
+                        msg += json.message || JSON.stringify(json);
+                    } catch(e) {
+                        msg += text || "Erro desconhecido no servidor";
                     }
-                    goodWarning.textContent = "Paciente atualizado com sucesso!";
-                    resolve(response);
-                })
-                .catch(error => {
-                    if (forbidden) {
-                        badWarning.textContent = "Dados inválidos.";
-                    } else {
-                        badWarning.textContent = "Erro na comunicação com a API.";
-                    }
-                    reject(error);
-                });
+                    
+                    alert(msg); // Mostra o erro exato na tela
+                    return Promise.reject();
+                }
+                goodWarning.textContent = "Paciente atualizado com sucesso!";
+                resolve(response);
+            })
+            .catch(error => {
+                if(!error) { // Se o erro foi tratado no bloco if(!response.ok)
+                     badWarning.textContent = "Erro ao atualizar. Verifique o alerta.";
+                } else {
+                     badWarning.textContent = "Erro de rede ou conexão.";
+                }
+                reject(error);
+            });
         }
     })
 }
@@ -155,16 +174,14 @@ botaoDeletar.addEventListener("click", async () => {
 });
 
 function formatarCPF(valor) {
-    if(!valor) return null;
-
+    if(!valor) return "";
     const digitos = valor.replace(/\D/g, '').slice(0, 11);
     return digitos.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
 }
 
 function desformatarCPF(valor) {
     if(!valor) return null;
-
-    const desformatado = valor.replace(/[.\-]/g, '');
+    const desformatado = valor.replace(/\D/g, '');
     return desformatado.length === 11 ? desformatado : null;
 }
 

@@ -188,7 +188,3 @@ function getData() {
 verificarAutenticacao();
 listarPacientesSelect(fPacienteSelect);
 showTab(currentTab);
-
-verificarAutenticacao();
-listarPacientesSelect(fPacienteSelect);
-showTab(currentTab);

@@ -65,7 +65,7 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 
 		String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-		User newUser = new User(user.getLogin(), encryptedPassword, user.getRole());
+		User newUser = new User(user.getLogin(), encryptedPassword, user.getNome(), user.getRole());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.criarUsuario(newUser));
 	}
@@ -80,7 +80,7 @@ public class UserController {
 			User usuario = usuarioOptional.get();
 
 			if (atributos.containsKey("nome")) {
-				usuario.setLogin((String) atributos.get("nome"));
+				usuario.setNome((String) atributos.get("nome"));
 			}
 
 			if (atributos.containsKey("login")) {

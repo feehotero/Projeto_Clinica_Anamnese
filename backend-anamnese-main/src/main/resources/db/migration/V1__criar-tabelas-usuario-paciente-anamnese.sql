@@ -36,6 +36,7 @@ CREATE TABLE tb_alimento (
 CREATE TABLE tb_usuario (
     id_matricula INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     nm_usuario VARCHAR(60) NOT NULL,
+    nm_nome_completo VARCHAR(100) NOT NULL,
     nm_senha VARCHAR(60) NOT NULL,
     user_role ENUM('ADMIN', 'USER') NOT NULL,
     dt_criacao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -140,6 +141,7 @@ CREATE TABLE tb_retorno (
     id_anamnese INT NOT NULL,
     id_paciente INT NOT NULL,
     id_matricula INT NOT NULL,
+    ds_metas_ultimas_consultas TEXT NULL,
     ds_metas_foram_cumpridas ENUM('sim', 'nao', 'mais_ou_menos') NULL,
     ds_comentarios_observacao TEXT NULL,
     nr_desempenho_cumprimento_metas TINYINT NULL,
@@ -162,5 +164,19 @@ CREATE TABLE tb_retorno (
     FOREIGN KEY (id_matricula) REFERENCES tb_usuario(id_matricula)
 );
 
-INSERT INTO tb_usuario (nm_usuario, nm_senha, user_role)
-VALUES ('admin', '$2a$12$nYYxMYVyQirARNSQBGLGOuVq7HAZkS9rJh7JmvUnKldrBkH1aFlSe', 'ADMIN');
+-- INSERTS OBRIGATÓRIOS
+INSERT INTO tb_sexo (id_sexo, ds_sexo) VALUES (1, 'Masculino'), (2, 'Feminino'), (3, 'Não informado');
+
+INSERT INTO tb_escolaridade (id_escolaridade, ds_escolaridade) VALUES 
+(1, 'Fundamental Completo'), (2, 'Ensino Médio Completo'), (3, 'Ensino Superior Incompleto'), (4, 'Ensino Superior Completo'), (5, 'Outra');
+
+INSERT INTO tb_profissao (id_profissao, ds_profissao) VALUES (1, 'Engenheiro'), (2, 'Médico'), (3, 'Estudante');
+
+INSERT INTO tb_renda_familiar (id_renda_familiar, ds_renda_familiar) VALUES 
+(1, 'Menos de 1 salário mínimo'), (2, 'De 1 a 2 salários mínimos'), (3, 'De 3 a 5 salários mínimos'), (4, 'Mais de 5 salários mínimos'), (5, 'Não sei');
+
+INSERT INTO tb_evacuacao (id_evacuacao, ds_evacuacao) VALUES 
+(1, 'Diária'), (2, 'Alternada'), (3, 'Três vezes por semana'), (4, 'Menos de 3 vezes por semana');
+
+INSERT INTO tb_usuario (nm_usuario, nm_nome_completo, nm_senha, user_role)
+VALUES ('admin', 'Administrador', '$2a$12$nYYxMYVyQirARNSQBGLGOuVq7HAZkS9rJh7JmvUnKldrBkH1aFlSe', 'ADMIN');

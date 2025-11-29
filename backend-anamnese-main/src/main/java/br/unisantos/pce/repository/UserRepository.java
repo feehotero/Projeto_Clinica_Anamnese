@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT * FROM tb_usuario ORDER BY dt_criacao DESC", nativeQuery = true)
     List<User> findAllByOrderByCriadoEmDesc();
 
-    @Query(value = "SELECT * FROM tb_usuario WHERE UPPER(nm_usuario) ILIKE CONCAT('%', :nome, '%') OR UPPER(cd_matricula) ILIKE CONCAT('%', :nome, '%') ORDER BY dt_criacao DESC", nativeQuery = true)
+    // Correção: Uso de UPPER e LIKE para compatibilidade e busca pelo nome completo
+    @Query(value = "SELECT * FROM tb_usuario WHERE UPPER(nm_nome_completo) LIKE UPPER(CONCAT('%', :nome, '%')) OR UPPER(nm_usuario) LIKE UPPER(CONCAT('%', :nome, '%')) ORDER BY dt_criacao DESC", nativeQuery = true)
     List<User> findAllByNomeOrMatriculaOrderByCriadoEmDesc(@Param("nome") String nome);
 }

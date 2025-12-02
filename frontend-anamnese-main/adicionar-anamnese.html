@@ -2,7 +2,6 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Adicionar Anamnese</title>
     <link rel="stylesheet" href="./css/bootstrap.css" />
     <link rel="stylesheet" href="./css/style.css" />
@@ -47,190 +46,180 @@
     </header>
 
     <div class="div-principal">
-      <img src="./img/unisantos-logo.png" alt="Logo Unisantos" width="233px" />
+      <img src="./img/unisantos-logo.png" alt="Logo" width="233px" />
       <div class="div-conteudo">
         <form id="regForm" class="formAddAnamnese needs-validation" novalidate>
           <div class="tab">
             <div class="header-tab"><h1 class="fs-5">Dados Pessoais</h1></div>
-
             <div class="mb-4">
-              <label for="pacienteId" class="form-label"
-                >Paciente <span class="required">*</span></label
-              >
-              <select class="form-select" id="pacienteId" required>
-                <option selected disabled value="">
-                  Selecione um paciente...
-                </option>
+              <label>Paciente <span class="required">*</span></label
+              ><select id="pacienteId" class="form-select" required>
+                <option value="" disabled selected>Selecione...</option>
               </select>
             </div>
-
             <div class="mb-4">
-              <label class="form-label">Escolaridade</label>
-              <select id="escolaridade" class="form-select">
+              <label>Escolaridade</label
+              ><select id="escolaridade" class="form-select">
                 <option value="">Selecione...</option>
-                <option value="1">Fundamental Completo</option>
-                <option value="2">Ensino Médio Completo</option>
+                <option value="1">Fundamental</option>
+                <option value="2">Médio</option>
                 <option value="3">Superior Incompleto</option>
                 <option value="4">Superior Completo</option>
                 <option value="5">Outra</option>
               </select>
             </div>
-
             <div class="mb-4">
-              <label class="form-label">Profissão</label>
-              <select id="profissao" class="form-select">
+              <label>Profissão</label
+              ><select id="profissao" class="form-select">
                 <option value="">Selecione...</option>
                 <option value="1">Engenheiro</option>
                 <option value="2">Médico</option>
                 <option value="3">Estudante</option>
               </select>
             </div>
-
             <div class="row">
-              <div class="col-md-6 mb-4">
-                <label class="form-label">Período Estudo</label>
-                <select id="periodoEstudo" class="form-select">
+              <div class="col-6 mb-4">
+                <label>Período Estudo</label
+                ><select id="periodoEstudo" class="form-select">
                   <option value="">Selecione...</option>
                   <option value="manha">Manhã</option>
                   <option value="tarde">Tarde</option>
                   <option value="noite">Noite</option>
-                  <option value="NA">Não se aplica</option>
                 </select>
               </div>
-              <div class="col-md-6 mb-4">
-                <label class="form-label">Período Trabalho</label>
-                <select id="periodoTrabalho" class="form-select">
+              <div class="col-6 mb-4">
+                <label>Período Trabalho</label
+                ><select id="periodoTrabalho" class="form-select">
                   <option value="">Selecione...</option>
                   <option value="manha">Manhã</option>
                   <option value="tarde">Tarde</option>
                   <option value="noite">Noite</option>
-                  <option value="NA">Não se aplica</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div class="tab">
-            <div class="header-tab">
-              <h2 class="fs-5">Dados Clínicos e Sociais</h2>
-            </div>
-
+            <div class="header-tab"><h2 class="fs-5">Dados Clínicos</h2></div>
             <div class="mb-4">
-              <label>Renda Familiar</label>
-              <select id="rendaFamiliar" class="form-select">
+              <label>Renda Familiar</label
+              ><select id="rendaFamiliar" class="form-select">
                 <option value="">Selecione...</option>
-                <option value="1">Menos de 1 SM</option>
-                <option value="2">1 a 2 SM</option>
-                <option value="3">3 a 5 SM</option>
-                <option value="4">Mais de 5 SM</option>
-                <option value="5">Não sei</option>
+                <option value="1">&lt; 1 SM</option>
+                <option value="2">1-2 SM</option>
+                <option value="3">3-5 SM</option>
+                <option value="4">&gt; 5 SM</option>
               </select>
             </div>
-
             <div class="mb-4">
-              <label>Pessoas no domicílio</label>
-              <input
+              <label>Pessoas Domicílio</label
+              ><input
                 type="number"
                 id="numPessoasDomicilio"
                 class="form-control"
-                min="0"
+                placeholder="0"
               />
             </div>
-
             <div class="mb-4">
-              <label>Motivo da Consulta</label>
-              <textarea id="motivo" class="form-control" rows="2"></textarea>
+              <label>Motivo</label
+              ><input type="text" id="motivo" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label>Apresenta Doenças?</label>
-              <input type="text" id="doenca" class="form-control" />
+              <label>Doenças</label
+              ><input type="text" id="doenca" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label>Antecedentes Familiares</label>
-              <input type="text" id="antecedentes" class="form-control" />
+              <label>Antecedentes</label
+              ><input type="text" id="antecedentes" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label>Medicamentos Contínuos</label>
-              <input type="text" id="medicamento" class="form-control" />
+              <label>Medicamentos</label
+              ><input type="text" id="medicamento" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label>Suplementos</label>
-              <input type="text" id="suplemento" class="form-control" />
+              <label>Suplementos</label
+              ><input type="text" id="suplemento" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label>Frequência de Evacuação</label>
-              <select id="evacuacao" class="form-select">
+              <label>Evacuação</label
+              ><select id="evacuacao" class="form-select">
                 <option value="">Selecione...</option>
                 <option value="1">Diária</option>
                 <option value="2">Alternada</option>
                 <option value="3">3x Semana</option>
-                <option value="4">Menos de 3x Semana</option>
+                <option value="4">Menos de 3x</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label>Consistência</label
+              ><select id="consistenciaEvacuacao" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="1">Tipo 1</option>
+                <option value="2">Tipo 2</option>
+                <option value="3">Tipo 3</option>
+                <option value="4">Tipo 4</option>
+                <option value="5">Tipo 5</option>
+                <option value="6">Tipo 6</option>
+                <option value="7">Tipo 7</option>
               </select>
             </div>
           </div>
 
           <div class="tab">
-            <div class="header-tab">
-              <h2 class="fs-5">Refeições Realizadas</h2>
-            </div>
+            <div class="header-tab"><h2 class="fs-5">Refeições</h2></div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="1"
-                id="r1"
-              /><label class="form-check-label" for="r1">Café da Manhã</label>
+                class="form-check-input"
+              />
+              <label>Café da Manhã</label>
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="2"
-                id="r2"
-              /><label class="form-check-label" for="r2">Lanche da Manhã</label>
+                class="form-check-input"
+              />
+              <label>Lanche da Manhã</label>
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="3"
-                id="r3"
-              /><label class="form-check-label" for="r3">Almoço</label>
+                class="form-check-input"
+              />
+              <label>Almoço</label>
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="4"
-                id="r4"
-              /><label class="form-check-label" for="r4">Lanche da Tarde</label>
+                class="form-check-input"
+              />
+              <label>Lanche da Tarde</label>
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="5"
-                id="r5"
-              /><label class="form-check-label" for="r5">Jantar</label>
+                class="form-check-input"
+              />
+              <label>Jantar</label>
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
                 type="checkbox"
                 name="refeicoes"
                 value="6"
-                id="r6"
-              /><label class="form-check-label" for="r6">Ceia</label>
+                class="form-check-input"
+              />
+              <label>Ceia</label>
             </div>
           </div>
 
@@ -238,17 +227,9 @@
             <div class="header-tab">
               <h2 class="fs-5">Frequência Alimentar</h2>
             </div>
-            <div
-              class="table-responsive"
-              style="max-height: 450px; overflow-y: auto"
-            >
-              <table
-                class="table table-striped table-bordered text-center table-sm"
-              >
-                <thead
-                  class="table-light"
-                  style="position: sticky; top: 0; z-index: 10"
-                >
+            <div class="table-responsive" style="max-height: 400px">
+              <table class="table table-bordered text-center table-sm">
+                <thead class="table-light sticky-top">
                   <tr>
                     <th>Alimento</th>
                     <th>Diário</th>
@@ -272,13 +253,6 @@
                     <td><input type="radio" name="f_10" value="mensal" /></td>
                     <td><input type="radio" name="f_10" value="nao" /></td>
                   </tr>
-                  <tr class="food-row" data-id="7">
-                    <td>Tomate</td>
-                    <td><input type="radio" name="f_7" value="diario" /></td>
-                    <td><input type="radio" name="f_7" value="semanal" /></td>
-                    <td><input type="radio" name="f_7" value="mensal" /></td>
-                    <td><input type="radio" name="f_7" value="nao" /></td>
-                  </tr>
                   <tr class="food-row" data-id="35">
                     <td>Feijão</td>
                     <td><input type="radio" name="f_35" value="diario" /></td>
@@ -287,32 +261,18 @@
                     <td><input type="radio" name="f_35" value="nao" /></td>
                   </tr>
                   <tr class="food-row" data-id="47">
-                    <td>Arroz Branco</td>
+                    <td>Arroz</td>
                     <td><input type="radio" name="f_47" value="diario" /></td>
                     <td><input type="radio" name="f_47" value="semanal" /></td>
                     <td><input type="radio" name="f_47" value="mensal" /></td>
                     <td><input type="radio" name="f_47" value="nao" /></td>
                   </tr>
                   <tr class="food-row" data-id="41">
-                    <td>Carne Bovina</td>
+                    <td>Carne</td>
                     <td><input type="radio" name="f_41" value="diario" /></td>
                     <td><input type="radio" name="f_41" value="semanal" /></td>
                     <td><input type="radio" name="f_41" value="mensal" /></td>
                     <td><input type="radio" name="f_41" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="43">
-                    <td>Frango</td>
-                    <td><input type="radio" name="f_43" value="diario" /></td>
-                    <td><input type="radio" name="f_43" value="semanal" /></td>
-                    <td><input type="radio" name="f_43" value="mensal" /></td>
-                    <td><input type="radio" name="f_43" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="57">
-                    <td>Pão Francês</td>
-                    <td><input type="radio" name="f_57" value="diario" /></td>
-                    <td><input type="radio" name="f_57" value="semanal" /></td>
-                    <td><input type="radio" name="f_57" value="mensal" /></td>
-                    <td><input type="radio" name="f_57" value="nao" /></td>
                   </tr>
                   <tr class="food-row" data-id="79">
                     <td>Refrigerante</td>
@@ -321,12 +281,12 @@
                     <td><input type="radio" name="f_79" value="mensal" /></td>
                     <td><input type="radio" name="f_79" value="nao" /></td>
                   </tr>
-                  <tr class="food-row" data-id="94">
+                  <tr class="food-row" data-id="93">
                     <td>Açúcar</td>
-                    <td><input type="radio" name="f_94" value="diario" /></td>
-                    <td><input type="radio" name="f_94" value="semanal" /></td>
-                    <td><input type="radio" name="f_94" value="mensal" /></td>
-                    <td><input type="radio" name="f_94" value="nao" /></td>
+                    <td><input type="radio" name="f_93" value="diario" /></td>
+                    <td><input type="radio" name="f_93" value="semanal" /></td>
+                    <td><input type="radio" name="f_93" value="mensal" /></td>
+                    <td><input type="radio" name="f_93" value="nao" /></td>
                   </tr>
                 </tbody>
               </table>
@@ -334,10 +294,7 @@
           </div>
 
           <div class="tab">
-            <div class="header-tab">
-              <h2 class="fs-5">Comportamento Alimentar</h2>
-            </div>
-
+            <div class="header-tab"><h2 class="fs-5">Comportamento</h2></div>
             <div class="mb-4">
               <label>Quem cozinha?</label
               ><input type="text" id="quemCozinha" class="form-control" />
@@ -352,16 +309,12 @@
               </select>
             </div>
             <div class="mb-4">
-              <label>Companhia nas refeições</label
+              <label>Companhia</label
               ><select id="companhiaRefeicoes" class="form-select">
                 <option value="">Selecione...</option>
                 <option value="sozinho">Sozinho</option>
                 <option value="acompanhado">Acompanhado</option>
               </select>
-            </div>
-            <div class="mb-4">
-              <label>Fome Fisiológica</label
-              ><input type="text" id="fomeFisiologica" class="form-control" />
             </div>
             <div class="mb-4">
               <label>Não mudar no plano</label
@@ -372,36 +325,30 @@
               ><input type="text" id="aversaoAlimentar" class="form-control" />
             </div>
             <div class="mb-4">
-              <label>Proteína Animal</label
-              ><input
-                type="text"
-                id="toleraProteinaAnimal"
-                class="form-control"
-              />
-            </div>
-            <div class="mb-4">
               <label>Alergias</label
               ><input type="text" id="alergias" class="form-control" />
             </div>
             <div class="row">
-              <div class="col-md-6 mb-4">
-                <label>Nota Saciedade (0-10)</label
+              <div class="col-6 mb-4">
+                <label>Saciedade (0-10)</label
                 ><input
                   type="number"
                   id="notaSaciedade"
                   class="form-control"
                   min="0"
                   max="10"
+                  placeholder="0"
                 />
               </div>
-              <div class="col-md-6 mb-4">
-                <label>Nota Humor (0-10)</label
+              <div class="col-6 mb-4">
+                <label>Humor (0-10)</label
                 ><input
                   type="number"
                   id="notaHumor"
                   class="form-control"
                   min="0"
                   max="10"
+                  placeholder="0"
                 />
               </div>
             </div>
@@ -410,41 +357,45 @@
           <div class="tab">
             <div class="header-tab"><h2 class="fs-5">Antropometria</h2></div>
             <div class="row">
-              <div class="col-md-4 mb-4">
+              <div class="col-4 mb-4">
                 <label>Peso (kg)</label
                 ><input
                   type="number"
                   id="peso"
                   class="form-control"
                   step="0.1"
+                  placeholder="0.0"
                 />
               </div>
-              <div class="col-md-4 mb-4">
+              <div class="col-4 mb-4">
                 <label>Estatura (m)</label
                 ><input
                   type="number"
                   id="estatura"
                   class="form-control"
                   step="0.01"
+                  placeholder="0.00"
                 />
               </div>
-              <div class="col-md-4 mb-4">
+              <div class="col-4 mb-4">
                 <label>IMC</label
                 ><input
                   type="number"
                   id="imc"
                   class="form-control"
                   step="0.1"
+                  placeholder="0.0"
                 />
               </div>
             </div>
             <div class="mb-4">
-              <label>Circ. Cintura (cm)</label
+              <label>Cintura (cm)</label
               ><input
                 type="number"
                 id="circunferenciaCintura"
                 class="form-control"
                 step="0.1"
+                placeholder="0.0"
               />
             </div>
           </div>
@@ -452,34 +403,33 @@
           <div class="tab">
             <div class="header-tab"><h2 class="fs-5">Metas</h2></div>
             <div class="mb-4">
-              <label>Metas para o próximo retorno</label>
-              <textarea class="form-control" id="metas" rows="4"></textarea>
+              <label>Metas</label
+              ><textarea id="metas" class="form-control" rows="4"></textarea>
             </div>
           </div>
 
-          <div>
-            <span id="goodWarning"></span>
-            <span id="badWarning"></span>
-            <div class="div-step-buttons mt-3 d-flex justify-content-between">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                id="prevBtn"
-                onclick="prevTab()"
-              >
-                Anterior
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                id="nextBtn"
-                onclick="nextTab(cadastrarAnamnese)"
-              >
-                Próximo
-              </button>
-            </div>
+          <div class="d-flex justify-content-between mt-3">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="prevBtn"
+              onclick="prevTab()"
+            >
+              Anterior
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="nextBtn"
+              onclick="nextTab(cadastrarAnamnese)"
+            >
+              Próximo
+            </button>
           </div>
-
+          <div class="text-center mt-2">
+            <span id="badWarning" class="text-danger"></span
+            ><span id="goodWarning" class="text-success"></span>
+          </div>
           <div style="text-align: center; margin-top: 20px">
             <span class="step"></span><span class="step"></span
             ><span class="step"></span><span class="step"></span

@@ -1,15 +1,15 @@
 package br.unisantos.pce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_dados_fisiologicos")
 public class DadosFisiologicos {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_dados_fisiologicos")
@@ -26,6 +26,10 @@ public class DadosFisiologicos {
     private Float estatura;
     @Column(name = "nr_imc")
     private Float imc;
+    @Column(name = "nr_circunferencia_cintura")
+    private Float circunferenciaCintura;
+
+    // Outros campos do banco se necessários
     @Column(name = "nr_cb")
     private Float cb;
     @Column(name = "nr_dct")
@@ -52,8 +56,6 @@ public class DadosFisiologicos {
     private Float reactancia;
     @Column(name = "nr_angulo_de_fase")
     private Float anguloDeFase;
-    @Column(name = "nr_circunferencia_cintura")
-    private Float circunferenciaCintura;
     @Column(name = "nr_circunferencia_quadril")
     private Float circunferenciaQuadril;
     @Column(name = "nr_circunferencia_panturrilha")

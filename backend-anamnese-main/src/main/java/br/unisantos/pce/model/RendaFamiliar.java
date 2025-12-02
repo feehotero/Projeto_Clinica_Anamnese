@@ -1,9 +1,11 @@
 package br.unisantos.pce.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_renda_familiar")
 public class RendaFamiliar {
@@ -12,6 +14,6 @@ public class RendaFamiliar {
     @Column(name = "id_renda_familiar")
     private Integer id;
 
-    @Column(name = "ds_renda_familiar", nullable = false, unique = true, length = 100)
+    @Column(name = "ds_renda_familiar")
     private String descricao;
 }

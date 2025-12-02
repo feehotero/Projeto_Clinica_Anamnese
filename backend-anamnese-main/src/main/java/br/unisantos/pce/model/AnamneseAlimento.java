@@ -2,15 +2,14 @@ package br.unisantos.pce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_anamnese_alimento")
 public class AnamneseAlimento {
-
     public enum Frequencia {
         diario, semanal, mensal, nao
     }
@@ -18,7 +17,7 @@ public class AnamneseAlimento {
     @EmbeddedId
     private AnamneseAlimentoKey id = new AnamneseAlimentoKey();
 
-    @JsonBackReference // Evita loop infinito no JSON
+    @JsonBackReference
     @ManyToOne
     @MapsId("anamneseId")
     @JoinColumn(name = "id_anamnese")
@@ -32,12 +31,4 @@ public class AnamneseAlimento {
     @Enumerated(EnumType.STRING)
     @Column(name = "ds_frenquencia_consumo")
     private Frequencia frequencia;
-
-    // Construtor auxiliar
-    public AnamneseAlimento(Anamnese anamnese, Alimento alimento, Frequencia frequencia) {
-        this.anamnese = anamnese;
-        this.alimento = alimento;
-        this.frequencia = frequencia;
-        this.id = new AnamneseAlimentoKey(anamnese.getId(), alimento.getId());
-    }
 }

@@ -1,9 +1,11 @@
 package br.unisantos.pce.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_profissao")
 public class Profissao {
@@ -12,6 +14,6 @@ public class Profissao {
     @Column(name = "id_profissao")
     private Integer id;
 
-    @Column(name = "ds_profissao", nullable = false, unique = true, length = 100)
+    @Column(name = "ds_profissao")
     private String descricao;
 }

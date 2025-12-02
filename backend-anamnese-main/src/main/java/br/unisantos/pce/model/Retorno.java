@@ -1,24 +1,22 @@
 package br.unisantos.pce.model;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import br.unisantos.pce.user.User;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_retorno")
 public class Retorno {
-
     public enum Opcao {
         sim, nao, mais_ou_menos
     }
 
     public enum AtividadeFisica {
-        manteve_o_que_ja_fazia,
-        aumentei_a_frequencia_intensidade,
-        ainda_nao_consegui_praticar,
+        manteve_o_que_ja_fazia, aumentei_a_frequencia_intensidade, ainda_nao_consegui_praticar,
         nao_iniciei_e_nao_pretendo_iniciar
     }
 
@@ -66,14 +64,12 @@ public class Retorno {
     @Column(name = "ds_metas_proximo_retorno", columnDefinition = "TEXT")
     private String metasProximoRetorno;
 
-    // Medidas rápidas no retorno
     @Column(name = "nr_peso")
     private Float peso;
     @Column(name = "nr_imc")
     private Float imc;
     @Column(name = "nr_circunferencia_abdominal")
     private Float circunferenciaAbdominal;
-
     @Column(name = "ds_valores_bioimpedancia", columnDefinition = "TEXT")
     private String valoresBioimpedancia;
     @Column(name = "ds_observacoes_bioimpedancia", columnDefinition = "TEXT")

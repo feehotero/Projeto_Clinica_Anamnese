@@ -1,19 +1,19 @@
 package br.unisantos.pce.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import br.unisantos.pce.user.User;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_anamnese")
 public class Anamnese {
-
 	public enum Periodo {
 		manha, tarde, noite, NA
 	}
@@ -39,7 +39,7 @@ public class Anamnese {
 	@JoinColumn(name = "id_matricula", nullable = false)
 	private User usuario;
 
-	// --- Campos Simples ---
+	// --- Campos ---
 	@Column(name = "ds_motivo", columnDefinition = "TEXT")
 	private String motivo;
 	@Column(name = "ds_doenca", columnDefinition = "TEXT")
@@ -50,7 +50,6 @@ public class Anamnese {
 	private String medicamento;
 	@Column(name = "ds_suplemento", columnDefinition = "TEXT")
 	private String suplemento;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "nm_periodo_estudo")
 	private Periodo periodoEstudo;
@@ -59,7 +58,7 @@ public class Anamnese {
 	private Periodo periodoTrabalho;
 	@Column(name = "nr_pessoa_domicilio")
 	private Integer numPessoasDomicilio;
-	@Column(name = "ds_quem_cozinha")
+	@Column(name = "ds_quem_cozinha", columnDefinition = "TEXT")
 	private String quemCozinha;
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ds_necessidade_comer_estressado_ansioso_triste")
@@ -69,16 +68,26 @@ public class Anamnese {
 	private Companhia companhiaRefeicoes;
 	@Column(name = "ds_fome_fisiologica")
 	private String fomeFisiologica;
-	@Column(name = "ds_nao_modificar_plano_alimentar")
+	@Column(name = "ds_nao_modificar_plano_alimentar", columnDefinition = "TEXT")
 	private String naoModificarPlano;
-	@Column(name = "ds_aversao_alimentar")
+	@Column(name = "ds_aversao_alimentar", columnDefinition = "TEXT")
 	private String aversaoAlimentar;
-	@Column(name = "ds_alergia_intolerancias_alimentares")
+	@Column(name = "ds_tolera_alimentos_proteina_animal", columnDefinition = "TEXT")
+	private String toleraProteinaAnimal;
+	@Column(name = "ds_alergia_intolerancias_alimentares", columnDefinition = "TEXT")
 	private String alergias;
+	@Column(name = "nr_nota_saciedade_pos_refeicoes")
+	private Integer notaSaciedade;
+	@Column(name = "nr_nota_humor_pos_refeicoes")
+	private Integer notaHumor;
 	@Column(name = "ds_metas", columnDefinition = "TEXT")
 	private String metas;
+	@Column(name = "consistencia_evacuacao")
+	private Integer consistenciaEvacuacao;
+	@Column(name = "ds_necessidade_emocional_comer")
+	private String necessidadeEmocionalComer;
 
-	// --- Relacionamentos ---
+	// --- FKs ---
 	@ManyToOne
 	@JoinColumn(name = "id_escolaridade")
 	private Escolaridade escolaridade;
@@ -92,7 +101,7 @@ public class Anamnese {
 	@JoinColumn(name = "id_evacuacao")
 	private Evacuacao evacuacao;
 
-	// OneToOne com JSON Managed Reference para evitar loop e erro de validação
+	// --- Listas ---
 	@JsonManagedReference
 	@OneToOne(mappedBy = "anamnese", cascade = CascadeType.ALL)
 	private DadosFisiologicos dadosFisiologicos;
@@ -101,7 +110,6 @@ public class Anamnese {
 	@JoinTable(name = "tb_anamnese_refeicao", joinColumns = @JoinColumn(name = "id_anamnese"), inverseJoinColumns = @JoinColumn(name = "id_refeicao"))
 	private List<Refeicao> refeicoes;
 
-	// NOVO: Relacionamento com Alimentos
 	@JsonManagedReference
 	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL)
 	private List<AnamneseAlimento> alimentos = new ArrayList<>();

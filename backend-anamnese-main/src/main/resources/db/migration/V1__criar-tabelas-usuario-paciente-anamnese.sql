@@ -77,6 +77,7 @@ CREATE TABLE tb_anamnese (
     ds_alergia_intolerancias_alimentares TEXT NULL,
     nr_nota_saciedade_pos_refeicoes TINYINT NULL,
     nr_nota_humor_pos_refeicoes TINYINT NULL,
+    consistencia_evacuacao TINYINT NULL, -- Campo adicionado
     ds_metas TEXT NULL,
     dt_criacao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     id_escolaridade INT NULL,
@@ -168,34 +169,30 @@ CREATE TABLE tb_retorno (
 
 /* --- 2. INSERTS DE DOMÍNIO (DADOS OBRIGATÓRIOS) --- */
 
--- Usuário Admin Padrão (Senha: 123)
+-- Usuário Admin
 INSERT INTO tb_usuario (nm_usuario, nm_nome_completo, nm_senha, user_role) 
 VALUES ('admin', 'Administrador', '$2a$12$nYYxMYVyQirARNSQBGLGOuVq7HAZkS9rJh7JmvUnKldrBkH1aFlSe', 'ADMIN');
 
--- Sexo
+-- Domínios Básicos
 INSERT INTO tb_sexo (ds_sexo) VALUES ('Masculino'), ('Feminino'), ('Não informado');
 
--- Escolaridade
 INSERT INTO tb_escolaridade (ds_escolaridade) VALUES 
 ('Fundamental Completo'), ('Ensino Médio Completo'), ('Ensino Superior Incompleto'), ('Ensino Superior Completo'), ('Outra');
 
--- Profissão
 INSERT INTO tb_profissao (ds_profissao) VALUES ('Engenheiro'), ('Médico'), ('Estudante');
 
--- Renda Familiar
 INSERT INTO tb_renda_familiar (ds_renda_familiar) VALUES 
 ('Menos de 1 salário mínimo'), ('De 1 a 2 salários mínimos'), ('De 3 a 5 salários mínimos'), ('Mais de 5 salários mínimos'), ('Não sei');
 
--- Evacuação
 INSERT INTO tb_evacuacao (ds_evacuacao) VALUES 
 ('Diária'), ('Alternada'), ('Três vezes por semana'), ('Menos de 3 vezes por semana');
 
--- Refeições
+-- Refeições (IMPORTANTE: IDs 1 a 6)
 INSERT INTO tb_refeicao (ds_refeicao) VALUES 
 ('Café da Manhã'), ('Lanche da Manhã'), ('Almoço'), 
 ('Lanche da Tarde'), ('Jantar'), ('Ceia');
 
--- Alimentos (Lista Completa para o Formulário)
+-- Alimentos (Lista Completa)
 INSERT INTO tb_alimento (ds_alimento) VALUES 
 ('Cenoura'), ('Beterraba'), ('Berinjela'), ('Pepino'), ('Abobrinha'), ('Chuchu'), ('Tomate'), -- IDs 1-7
 ('Acelga'), ('Agrião'), ('Alface'), ('Brócolis'), ('Chicória'), ('Couve Manteiga'), ('Couve-flor'), ('Espinafre'), ('Rúcula'), -- IDs 8-16
@@ -206,10 +203,10 @@ INSERT INTO tb_alimento (ds_alimento) VALUES
 ('Arroz Branco Polido'), ('Arroz Integral'), -- IDs 47-48
 ('Leite Integral/Desnatado/Semi'), ('Leite Sem Lactose'), ('Queijos'), ('Iogurtes'), -- IDs 49-52
 ('Aveia'), ('Granola'), ('Quinoa'), ('Linhaça/Chia'), -- IDs 53-56
-('Pão Francês'), ('Pão Francês Integral'), ('Pão de Forma'), ('Pão de Forma Integral'), ('Pão de Cará'), -- IDs 57-61
-('Requeijão'), ('Margarina'), ('Manteiga'), ('Ricota'), ('Cottage'), ('Doce de Leite'), ('Creme de Avelã'), ('Geleia'), -- IDs 62-69
-('Mistinho/Esfiha'), ('Coxinha/Croquete'), ('Empadas'), ('Pão de Queijo'), -- IDs 70-73
-('Salgadinho de Pacote'), ('Biscoito Salgado'), ('Biscoito Doce'), ('Chocolate'), ('Refrigerante'), ('Suco em Pó/Caixa'), ('Pratos Congelados'), ('Macarrão Instantâneo'), ('Bolinho'), ('Fast Food'), -- IDs 74-83
-('Salame'), ('Presunto'), ('Apresuntado/Mortadela'), ('Linguiça'), ('Salsicha'), ('Peito de Peru'), ('Rosbife'), ('Nuggets'), ('Hambúrguer'), -- IDs 84-92
-('Açúcar'), ('Adoçante'), ('Mel/Melado'), ('Confeitaria'), ('Guloseimas'), ('Achocolatados'), -- IDs 93-98
-('Ketchup'), ('Mostarda'), ('Shoyu'), ('Tare'), ('Maionese'); -- IDs 99-103
+('Pão Francês'), ('Pão de Forma'), ('Pão Integral'), -- IDs 57-59
+('Requeijão'), ('Margarina'), ('Manteiga'), ('Ricota'), ('Cottage'), ('Doce de Leite'), ('Creme de Avelã'), ('Geleia'), -- IDs 60-67
+('Mistinho/Esfiha'), ('Coxinha/Croquete'), ('Empadas'), ('Pão de Queijo'), -- IDs 68-71
+('Salgadinho de Pacote'), ('Biscoito Salgado'), ('Biscoito Doce'), ('Chocolate'), ('Refrigerante'), ('Suco em Pó/Caixa'), ('Pratos Congelados'), ('Macarrão Instantâneo'), ('Bolinho'), ('Fast Food'), -- IDs 72-81
+('Salame'), ('Presunto'), ('Apresuntado/Mortadela'), ('Linguiça'), ('Salsicha'), ('Peito de Peru'), ('Rosbife'), ('Nuggets'), ('Hambúrguer'), -- IDs 82-90
+('Açúcar'), ('Adoçante'), ('Mel/Melado'), ('Confeitaria'), ('Guloseimas'), ('Achocolatados'), -- IDs 91-96
+('Ketchup'), ('Mostarda'), ('Shoyu'), ('Tare'), ('Maionese'); -- IDs 97-101

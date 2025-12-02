@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Adicionar Formulário</title>
+    <title>Adicionar Anamnese</title>
     <link rel="stylesheet" href="./css/bootstrap.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/anamnese.css" />
@@ -12,20 +12,16 @@
     <script src="./js/globalScript.js" defer></script>
     <script src="./js/addAnamnese.js" defer></script>
   </head>
-
   <body>
     <header>
       <div class="div-header">
-        <span id="headerusuarioNome"></span>
-        <span>|</span>
+        <span id="headerusuarioNome"></span> |
         <svg
-          aria-hidden="true"
-          focusable="false"
+          id="exitIcon"
+          class="clickable"
           viewBox="0 0 512 512"
           width="16"
           height="16"
-          id="exitIcon"
-          class="clickable"
         >
           <path
             fill="#0079BF"
@@ -36,23 +32,13 @@
       <div class="div-tabs">
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="pacientes.html"
-              >Pacientes</a
-            >
+            <a class="nav-link" href="pacientes.html">Pacientes</a>
           </li>
           <li class="nav-item">
-            <a
-              class="nav-link active"
-              aria-current="page"
-              href="formularios.html"
-              >Formulários</a
-            >
+            <a class="nav-link active" href="formularios.html">Formulários</a>
           </li>
           <li class="usersTab admin-only nav-item">
-            <a
-              class="nav-link"
-              aria-current="page"
-              href="gerenciar-usuarios.html"
+            <a class="nav-link" href="gerenciar-usuarios.html"
               >Gerenciar Usuários</a
             >
           </li>
@@ -65,215 +51,285 @@
       <div class="div-conteudo">
         <form id="regForm" class="formAddAnamnese needs-validation" novalidate>
           <div class="tab">
-            <div class="header-tab">
-              <h1 class="fs-5">Adicionar Anamnese</h1>
-            </div>
+            <div class="header-tab"><h1 class="fs-5">Dados Pessoais</h1></div>
 
             <div class="mb-4">
               <label for="pacienteId" class="form-label"
                 >Paciente <span class="required">*</span></label
               >
-              <input
-                type="text"
-                class="form-select"
-                list="pacienteSelect"
-                id="pacienteId"
-                name="pacienteId"
-                placeholder="Selecione um paciente"
-                required
-              />
-              <datalist id="pacienteSelect"> </datalist>
+              <select class="form-select" id="pacienteId" required>
+                <option selected disabled value="">
+                  Selecione um paciente...
+                </option>
+              </select>
             </div>
 
             <div class="mb-4">
-              <label for="idEscolaridade" class="form-label"
-                >Escolaridade</label
-              >
-              <select
-                id="idEscolaridade"
-                name="idEscolaridade"
-                class="form-select"
-              >
-                <option selected disabled value="">
-                  Selecione uma escolaridade
-                </option>
+              <label class="form-label">Escolaridade</label>
+              <select id="escolaridade" class="form-select">
+                <option value="">Selecione...</option>
                 <option value="1">Fundamental Completo</option>
                 <option value="2">Ensino Médio Completo</option>
-                <option value="3">Ensino Superior Incompleto</option>
-                <option value="4">Ensino Superior Completo</option>
+                <option value="3">Superior Incompleto</option>
+                <option value="4">Superior Completo</option>
                 <option value="5">Outra</option>
               </select>
             </div>
 
             <div class="mb-4">
-              <label for="nmPeriodoEstudo" class="form-label"
-                >Período de Estudo</label
-              >
-              <select
-                id="nmPeriodoEstudo"
-                name="nmPeriodoEstudo"
-                class="form-select"
-              >
-                <option selected disabled value="">
-                  Selecione um período de estudo
-                </option>
-                <option value="manha">Manhã</option>
-                <option value="tarde">Tarde</option>
-                <option value="noite">Noite</option>
-                <option value="NA">Não se aplica</option>
-              </select>
-            </div>
-
-            <div class="mb-4">
-              <label for="nmPeriodoTrabalho" class="form-label"
-                >Período de Trabalho</label
-              >
-              <select
-                id="nmPeriodoTrabalho"
-                name="nmPeriodoTrabalho"
-                class="form-select"
-              >
-                <option selected disabled value="">
-                  Selecione um período de trabalho
-                </option>
-                <option value="manha">Manhã</option>
-                <option value="tarde">Tarde</option>
-                <option value="noite">Noite</option>
-                <option value="NA">Não se aplica</option>
-              </select>
-            </div>
-
-            <div class="mb-4">
-              <label for="idProfissao" class="form-label">Profissão</label>
-              <select id="idProfissao" name="idProfissao" class="form-select">
-                <option selected disabled value="">
-                  Selecione a Profissão
-                </option>
+              <label class="form-label">Profissão</label>
+              <select id="profissao" class="form-select">
+                <option value="">Selecione...</option>
                 <option value="1">Engenheiro</option>
                 <option value="2">Médico</option>
                 <option value="3">Estudante</option>
               </select>
             </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Período Estudo</label>
+                <select id="periodoEstudo" class="form-select">
+                  <option value="">Selecione...</option>
+                  <option value="manha">Manhã</option>
+                  <option value="tarde">Tarde</option>
+                  <option value="noite">Noite</option>
+                  <option value="NA">Não se aplica</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Período Trabalho</label>
+                <select id="periodoTrabalho" class="form-select">
+                  <option value="">Selecione...</option>
+                  <option value="manha">Manhã</option>
+                  <option value="tarde">Tarde</option>
+                  <option value="noite">Noite</option>
+                  <option value="NA">Não se aplica</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="tab">
             <div class="header-tab">
-              <h2 class="fs-5">Características Socioeconômicas</h2>
+              <h2 class="fs-5">Dados Clínicos e Sociais</h2>
             </div>
 
             <div class="mb-4">
-              <label for="idRendaFamiliar" class="form-label"
-                >Renda Familiar</label
-              >
-              <select
-                id="idRendaFamiliar"
-                name="idRendaFamiliar"
-                class="form-select"
-              >
-                <option selected disabled value="">
-                  Selecione a renda familiar
-                </option>
-                <option value="1">Menos de 1 salário mínimo</option>
-                <option value="2">De 1 a 2 salários mínimos</option>
-                <option value="3">De 3 a 5 salários mínimos</option>
-                <option value="4">Mais de 5 salários mínimos</option>
+              <label>Renda Familiar</label>
+              <select id="rendaFamiliar" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="1">Menos de 1 SM</option>
+                <option value="2">1 a 2 SM</option>
+                <option value="3">3 a 5 SM</option>
+                <option value="4">Mais de 5 SM</option>
                 <option value="5">Não sei</option>
               </select>
             </div>
 
             <div class="mb-4">
-              <label for="nrPessoaDomicilio" class="form-label"
-                >Número de Pessoas no Domicílio</label
-              >
+              <label>Pessoas no domicílio</label>
               <input
                 type="number"
-                id="nrPessoaDomicilio"
-                name="nrPessoaDomicilio"
+                id="numPessoasDomicilio"
                 class="form-control"
                 min="0"
               />
+            </div>
+
+            <div class="mb-4">
+              <label>Motivo da Consulta</label>
+              <textarea id="motivo" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label>Apresenta Doenças?</label>
+              <input type="text" id="doenca" class="form-control" />
+            </div>
+
+            <div class="mb-4">
+              <label>Antecedentes Familiares</label>
+              <input type="text" id="antecedentes" class="form-control" />
+            </div>
+
+            <div class="mb-4">
+              <label>Medicamentos Contínuos</label>
+              <input type="text" id="medicamento" class="form-control" />
+            </div>
+
+            <div class="mb-4">
+              <label>Suplementos</label>
+              <input type="text" id="suplemento" class="form-control" />
+            </div>
+
+            <div class="mb-4">
+              <label>Frequência de Evacuação</label>
+              <select id="evacuacao" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="1">Diária</option>
+                <option value="2">Alternada</option>
+                <option value="3">3x Semana</option>
+                <option value="4">Menos de 3x Semana</option>
+              </select>
             </div>
           </div>
 
           <div class="tab">
             <div class="header-tab">
-              <h2 class="fs-5">História Clínica</h2>
+              <h2 class="fs-5">Refeições Realizadas</h2>
             </div>
-
-            <div class="mb-4">
-              <label for="dsMotivo" class="form-label"
-                >Motivo pela procura do ambulatório</label
-              >
+            <div class="form-check">
               <input
-                type="text"
-                id="dsMotivo"
-                name="dsMotivo"
-                class="form-control"
-              />
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="1"
+                id="r1"
+              /><label class="form-check-label" for="r1">Café da Manhã</label>
             </div>
-
-            <div class="mb-4">
-              <label for="dsDoenca" class="form-label"
-                >Apresenta alguma doença?</label
-              >
+            <div class="form-check">
               <input
-                type="text"
-                id="dsDoenca"
-                name="dsDoenca"
-                class="form-control"
-              />
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="2"
+                id="r2"
+              /><label class="form-check-label" for="r2">Lanche da Manhã</label>
             </div>
-
-            <div class="mb-4">
-              <label for="dsAntecedentes" class="form-label"
-                >Apresenta antecedentes familiares de alguma doença crônica?
-                (DM, HAS, dislipidemia...)</label
-              >
+            <div class="form-check">
               <input
-                type="text"
-                id="dsAntecedentes"
-                name="dsAntecedentes"
-                class="form-control"
-              />
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="3"
+                id="r3"
+              /><label class="form-check-label" for="r3">Almoço</label>
             </div>
-
-            <div class="mb-4">
-              <label for="dsMedicamento" class="form-label"
-                >Faz uso de medicamentos contínuos?</label
-              >
+            <div class="form-check">
               <input
-                type="text"
-                id="dsMedicamento"
-                name="dsMedicamento"
-                class="form-control"
-              />
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="4"
+                id="r4"
+              /><label class="form-check-label" for="r4">Lanche da Tarde</label>
             </div>
-
-            <div class="mb-4">
-              <label for="dsSuplemento" class="form-label"
-                >Faz uso de suplementos ou complementos alimentares?</label
-              >
+            <div class="form-check">
               <input
-                type="text"
-                id="dsSuplemento"
-                name="dsSuplemento"
-                class="form-control"
-              />
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="5"
+                id="r5"
+              /><label class="form-check-label" for="r5">Jantar</label>
             </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="refeicoes"
+                value="6"
+                id="r6"
+              /><label class="form-check-label" for="r6">Ceia</label>
+            </div>
+          </div>
 
-            <div class="mb-4">
-              <label for="idEvacuacao" class="form-label"
-                >Frequência de Evacuação</label
+          <div class="tab">
+            <div class="header-tab">
+              <h2 class="fs-5">Frequência Alimentar</h2>
+            </div>
+            <div
+              class="table-responsive"
+              style="max-height: 450px; overflow-y: auto"
+            >
+              <table
+                class="table table-striped table-bordered text-center table-sm"
               >
-              <select id="idEvacuacao" name="idEvacuacao" class="form-select">
-                <option selected disabled value="">
-                  Selecione uma frequência de evacuação
-                </option>
-                <option value="1">Diária</option>
-                <option value="2">Alternada</option>
-                <option value="3">Três vezes por semana</option>
-                <option value="4">Menos de 3 vezes por semana</option>
-              </select>
+                <thead
+                  class="table-light"
+                  style="position: sticky; top: 0; z-index: 10"
+                >
+                  <tr>
+                    <th>Alimento</th>
+                    <th>Diário</th>
+                    <th>Semanal</th>
+                    <th>Mensal</th>
+                    <th>Não</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="food-row" data-id="1">
+                    <td>Cenoura</td>
+                    <td><input type="radio" name="f_1" value="diario" /></td>
+                    <td><input type="radio" name="f_1" value="semanal" /></td>
+                    <td><input type="radio" name="f_1" value="mensal" /></td>
+                    <td><input type="radio" name="f_1" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="10">
+                    <td>Alface</td>
+                    <td><input type="radio" name="f_10" value="diario" /></td>
+                    <td><input type="radio" name="f_10" value="semanal" /></td>
+                    <td><input type="radio" name="f_10" value="mensal" /></td>
+                    <td><input type="radio" name="f_10" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="7">
+                    <td>Tomate</td>
+                    <td><input type="radio" name="f_7" value="diario" /></td>
+                    <td><input type="radio" name="f_7" value="semanal" /></td>
+                    <td><input type="radio" name="f_7" value="mensal" /></td>
+                    <td><input type="radio" name="f_7" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="35">
+                    <td>Feijão</td>
+                    <td><input type="radio" name="f_35" value="diario" /></td>
+                    <td><input type="radio" name="f_35" value="semanal" /></td>
+                    <td><input type="radio" name="f_35" value="mensal" /></td>
+                    <td><input type="radio" name="f_35" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="47">
+                    <td>Arroz Branco</td>
+                    <td><input type="radio" name="f_47" value="diario" /></td>
+                    <td><input type="radio" name="f_47" value="semanal" /></td>
+                    <td><input type="radio" name="f_47" value="mensal" /></td>
+                    <td><input type="radio" name="f_47" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="41">
+                    <td>Carne Bovina</td>
+                    <td><input type="radio" name="f_41" value="diario" /></td>
+                    <td><input type="radio" name="f_41" value="semanal" /></td>
+                    <td><input type="radio" name="f_41" value="mensal" /></td>
+                    <td><input type="radio" name="f_41" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="43">
+                    <td>Frango</td>
+                    <td><input type="radio" name="f_43" value="diario" /></td>
+                    <td><input type="radio" name="f_43" value="semanal" /></td>
+                    <td><input type="radio" name="f_43" value="mensal" /></td>
+                    <td><input type="radio" name="f_43" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="57">
+                    <td>Pão Francês</td>
+                    <td><input type="radio" name="f_57" value="diario" /></td>
+                    <td><input type="radio" name="f_57" value="semanal" /></td>
+                    <td><input type="radio" name="f_57" value="mensal" /></td>
+                    <td><input type="radio" name="f_57" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="79">
+                    <td>Refrigerante</td>
+                    <td><input type="radio" name="f_79" value="diario" /></td>
+                    <td><input type="radio" name="f_79" value="semanal" /></td>
+                    <td><input type="radio" name="f_79" value="mensal" /></td>
+                    <td><input type="radio" name="f_79" value="nao" /></td>
+                  </tr>
+                  <tr class="food-row" data-id="94">
+                    <td>Açúcar</td>
+                    <td><input type="radio" name="f_94" value="diario" /></td>
+                    <td><input type="radio" name="f_94" value="semanal" /></td>
+                    <td><input type="radio" name="f_94" value="mensal" /></td>
+                    <td><input type="radio" name="f_94" value="nao" /></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -283,383 +339,128 @@
             </div>
 
             <div class="mb-4">
-              <label for="dsQuemCozinha" class="form-label"
-                >Quem cozinha sua comida?</label
-              >
-              <input
-                type="text"
-                id="dsQuemCozinha"
-                name="dsQuemCozinha"
-                class="form-control"
-              />
+              <label>Quem cozinha?</label
+              ><input type="text" id="quemCozinha" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label
-                for="dsNecessidadeComerEstressadoAnsiosoTriste"
-                class="form-label"
-                >Costuma ter a necessidade de comer quando está estressado(a),
-                ansioso(a) ou triste?</label
-              >
-              <select
-                class="form-select"
-                aria-label="dsNecessidadeComerEstressadoAnsiosoTriste"
-                name="dsNecessidadeComerEstressadoAnsiosoTriste"
-                id="dsNecessidadeComerEstressadoAnsiosoTriste"
-              >
-                <option selected disabled value="">Selecione uma opção</option>
+              <label>Come por emoção?</label
+              ><select id="necessidadeComerEmocional" class="form-select">
+                <option value="">Selecione...</option>
                 <option value="sim">Sim</option>
                 <option value="nao">Não</option>
-                <option value="as_vezes">As vezes</option>
+                <option value="as_vezes">Às vezes</option>
               </select>
             </div>
-
             <div class="mb-4">
-              <label
-                for="dsRealizaRefeicoesSozinhoAcompanhado"
-                class="form-label"
-                >Costuma realizar as refeições sozinho(a) ou
-                acompanhado(a)?</label
-              >
-              <select
-                class="form-select"
-                aria-label="dsRealizaRefeicoesSozinhoAcompanhado"
-                name="dsRealizaRefeicoesSozinhoAcompanhado"
-                id="dsRealizaRefeicoesSozinhoAcompanhado"
-              >
-                <option selected disabled value="">Selecione uma opção</option>
+              <label>Companhia nas refeições</label
+              ><select id="companhiaRefeicoes" class="form-select">
+                <option value="">Selecione...</option>
                 <option value="sozinho">Sozinho</option>
                 <option value="acompanhado">Acompanhado</option>
               </select>
             </div>
-
             <div class="mb-4">
-              <label for="dsFomeFisiologica" class="form-label"
-                >Qual a frequência da sua fome fisiológica?</label
-              >
-              <input
-                class="form-control"
-                id="dsFomeFisiologica"
-                name="dsFomeFisiologica"
-                placeholder="Descreva a frequência (e.g. Apenas nos horários das refeições)"
-              />
+              <label>Fome Fisiológica</label
+              ><input type="text" id="fomeFisiologica" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label for="dsNecessidadeEmocionalComer" class="form-label"
-                >Qual a frequência da sua necessidade emocional de comer alguma
-                coisa?</label
-              >
-              <input
-                class="form-control"
-                id="dsNecessidadeEmocionalComer"
-                name="dsNecessidadeEmocionalComer"
-                placeholder="Descreva a frequência (e.g. Por ansiedade, Não há)"
-              />
+              <label>Não mudar no plano</label
+              ><input type="text" id="naoModificarPlano" class="form-control" />
             </div>
-
             <div class="mb-4">
-              <label for="dsNaoModificarPlanoAlimentar" class="form-label"
-                >O que você gostaria que não fosse modificado no seu plano
-                alimentar?</label
-              >
-              <input
+              <label>Aversões</label
+              ><input type="text" id="aversaoAlimentar" class="form-control" />
+            </div>
+            <div class="mb-4">
+              <label>Proteína Animal</label
+              ><input
                 type="text"
-                id="dsNaoModificarPlanoAlimentar"
-                name="dsNaoModificarPlanoAlimentar"
+                id="toleraProteinaAnimal"
                 class="form-control"
               />
             </div>
-
             <div class="mb-4">
-              <label for="dsAversaoAlimentar" class="form-label"
-                >Você tem alguma aversão alimentar? (alimentos que não come de
-                jeito nenhum)</label
-              >
-              <input
-                type="text"
-                id="dsAversaoAlimentar"
-                name="dsAversaoAlimentar"
-                class="form-control"
-              />
+              <label>Alergias</label
+              ><input type="text" id="alergias" class="form-control" />
             </div>
-
-            <div class="mb-4">
-              <label for="dsToleraAlimentosProteinaAnimal" class="form-label"
-                >Tolera igualmente os alimentos fonte de proteína animal? (carne
-                bovina, frango, suínos, peixe, frutos do mar...)</label
-              >
-              <input
-                type="text"
-                id="dsToleraAlimentosProteinaAnimal"
-                name="dsToleraAlimentosProteinaAnimal"
-                class="form-control"
-              />
-            </div>
-
-            <div class="mb-4">
-              <label for="dsAlergiaIntoleranciasAlimentares" class="form-label"
-                >Apresenta alergias e /ou intolerâncias alimentares? Se sim,
-                quais?</label
-              >
-              <input
-                type="text"
-                id="dsAlergiaIntoleranciasAlimentares"
-                name="dsAlergiaIntoleranciasAlimentares"
-                class="form-control"
-              />
-            </div>
-
-            <div class="container text-center mb-4 p-3 rounded border">
-              <div class="mb-4">
-                Dê uma nota à sua saciedade após as refeições
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label>Nota Saciedade (0-10)</label
+                ><input
+                  type="number"
+                  id="notaSaciedade"
+                  class="form-control"
+                  min="0"
+                  max="10"
+                />
               </div>
-              <div class="row mb-4">
-                <div class="col">1</div>
-                <div class="col">2</div>
-                <div class="col">3</div>
-                <div class="col">4</div>
-                <div class="col">5</div>
-                <div class="col">6</div>
-                <div class="col">7</div>
-                <div class="col">8</div>
-                <div class="col">9</div>
-                <div class="col">10</div>
-              </div>
-              <div
-                class="row mb-4 radioInput"
-                radioInput-name="nrNotaSaciedadePosRefeicoes"
-              >
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes1"
-                    value="1"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes2"
-                    value="2"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes3"
-                    value="3"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes4"
-                    value="4"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes5"
-                    value="5"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes6"
-                    value="6"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes7"
-                    value="7"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes8"
-                    value="8"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes9"
-                    value="9"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaSaciedadePosRefeicoes"
-                    id="nrNotaSaciedadePosRefeicoes10"
-                    value="10"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="container text-center mb-4 p-3 rounded border">
-              <div class="mb-4">
-                Dê uma nota ao seu humor/como se sente após realizar as
-                refeições
-              </div>
-              <div class="row mb-4">
-                <div class="col">1</div>
-                <div class="col">2</div>
-                <div class="col">3</div>
-                <div class="col">4</div>
-                <div class="col">5</div>
-                <div class="col">6</div>
-                <div class="col">7</div>
-                <div class="col">8</div>
-                <div class="col">9</div>
-                <div class="col">10</div>
-              </div>
-              <div
-                class="row mb-4 radioInput"
-                radioInput-name="nrNotaHumorPosRefeicoes"
-              >
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes1"
-                    value="1"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes2"
-                    value="2"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes3"
-                    value="3"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes4"
-                    value="4"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes5"
-                    value="5"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes6"
-                    value="6"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes7"
-                    value="7"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes8"
-                    value="8"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes9"
-                    value="9"
-                  />
-                </div>
-                <div class="col">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="nrNotaHumorPosRefeicoes"
-                    id="nrNotaHumorPosRefeicoes10"
-                    value="10"
-                  />
-                </div>
+              <div class="col-md-6 mb-4">
+                <label>Nota Humor (0-10)</label
+                ><input
+                  type="number"
+                  id="notaHumor"
+                  class="form-control"
+                  min="0"
+                  max="10"
+                />
               </div>
             </div>
           </div>
 
           <div class="tab">
-            <div class="header-tab">
-              <h2 class="fs-5">Metas</h2>
+            <div class="header-tab"><h2 class="fs-5">Antropometria</h2></div>
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <label>Peso (kg)</label
+                ><input
+                  type="number"
+                  id="peso"
+                  class="form-control"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-4">
+                <label>Estatura (m)</label
+                ><input
+                  type="number"
+                  id="estatura"
+                  class="form-control"
+                  step="0.01"
+                />
+              </div>
+              <div class="col-md-4 mb-4">
+                <label>IMC</label
+                ><input
+                  type="number"
+                  id="imc"
+                  class="form-control"
+                  step="0.1"
+                />
+              </div>
             </div>
-
             <div class="mb-4">
-              <label for="dsMetas" class="form-label"
-                >Metas para o próximo retorno</label
-              >
-              <textarea
+              <label>Circ. Cintura (cm)</label
+              ><input
+                type="number"
+                id="circunferenciaCintura"
                 class="form-control"
-                id="dsMetas"
-                name="dsMetas"
-                class="form-control"
-              ></textarea>
+                step="0.1"
+              />
+            </div>
+          </div>
+
+          <div class="tab">
+            <div class="header-tab"><h2 class="fs-5">Metas</h2></div>
+            <div class="mb-4">
+              <label>Metas para o próximo retorno</label>
+              <textarea class="form-control" id="metas" rows="4"></textarea>
             </div>
           </div>
 
           <div>
             <span id="goodWarning"></span>
             <span id="badWarning"></span>
-            <div class="div-step-buttons mt-3">
+            <div class="div-step-buttons mt-3 d-flex justify-content-between">
               <button
                 type="button"
                 class="btn btn-secondary"
@@ -679,11 +480,11 @@
             </div>
           </div>
 
-          <div style="text-align: center; margin-top: 40px">
-            <span class="step"></span>
-            <span class="step"></span>
-            <span class="step"></span>
-            <span class="step"></span>
+          <div style="text-align: center; margin-top: 20px">
+            <span class="step"></span><span class="step"></span
+            ><span class="step"></span><span class="step"></span
+            ><span class="step"></span><span class="step"></span
+            ><span class="step"></span>
           </div>
         </form>
       </div>

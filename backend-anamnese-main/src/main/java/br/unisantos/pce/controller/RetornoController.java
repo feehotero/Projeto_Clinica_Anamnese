@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.unisantos.pce.model.Retorno;
-import br.unisantos.pce.model.Paciente;
 import br.unisantos.pce.service.RetornoService;
-import br.unisantos.pce.service.PacienteService;
-import br.unisantos.pce.service.UserService;
-import br.unisantos.pce.user.User;
 import jakarta.validation.Valid;
 
 @RestController
@@ -31,14 +27,10 @@ import jakarta.validation.Valid;
 public class RetornoController {
 
 	private final RetornoService retornoService;
-	private final PacienteService pacienteService;
-	private final UserService userService;
 
 	@Autowired
-	public RetornoController(RetornoService retornoService, PacienteService pacienteService, UserService userService) {
+	public RetornoController(RetornoService retornoService) {
 		this.retornoService = retornoService;
-		this.pacienteService = pacienteService;
-		this.userService = userService;
 	}
 
 	@GetMapping
@@ -59,44 +51,29 @@ public class RetornoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Retorno>> consultarRetorno(@PathVariable Integer id) {
 		Optional<Retorno> retorno = retornoService.consultarRetorno(id);
-
 		if (retorno.isPresent()) {
-			return ResponseEntity.ok(retornoService.consultarRetorno(id));
+			return ResponseEntity.ok(retorno);
 		}
-
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@PostMapping
 	public ResponseEntity<Retorno> criarRetorno(@RequestBody @Valid Retorno newRetorno) {
-		Optional<Paciente> paciente = pacienteService.consultarPaciente(newRetorno.getPacienteId());
-		Optional<User> usuario = userService.consultarUsuarioPorId(newRetorno.getUsuarioId());
-
-		if (paciente.isPresent() && usuario.isPresent()) {
-			newRetorno.setPacienteNome(paciente.get().getNome());
-			newRetorno.setUsuarioNome(usuario.get().getLogin());
-			retornoService.criarRetorno(newRetorno);
-			return ResponseEntity.status(HttpStatus.CREATED).body(newRetorno);
-		}
-
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		// O JSON deve vir com { "anamnese": { "id": X }, "paciente": { "id": Y }, ... }
+		Retorno retornoSalvo = retornoService.criarRetorno(newRetorno);
+		return ResponseEntity.status(HttpStatus.CREATED).body(retornoSalvo);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Retorno> alterarRetorno(@PathVariable Integer id,
 			@RequestBody @Valid Retorno retornoAtualizado) {
-		Optional<Paciente> paciente = pacienteService.consultarPaciente(retornoAtualizado.getPacienteId());
-		Optional<User> usuario = userService.consultarUsuarioPorId(retornoAtualizado.getUsuarioId());
-		Optional<Retorno> retorno = retornoService.consultarRetorno(id);
+		Optional<Retorno> retornoExistente = retornoService.consultarRetorno(id);
 
-		if (retorno.isPresent() && paciente.isPresent() && usuario.isPresent()) {
+		if (retornoExistente.isPresent()) {
 			retornoAtualizado.setId(id);
-			retornoAtualizado.setPacienteNome(paciente.get().getNome());
-			retornoAtualizado.setUsuarioNome(usuario.get().getLogin());
-			retornoAtualizado.setCriadoEm(retorno.get().getCriadoEm());
-			;
-			retornoService.alterarRetorno(retornoAtualizado);
-			return ResponseEntity.status(HttpStatus.CREATED).body(retornoAtualizado);
+			retornoAtualizado.setCriadoEm(retornoExistente.get().getCriadoEm());
+
+			return ResponseEntity.status(HttpStatus.OK).body(retornoService.alterarRetorno(retornoAtualizado));
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -105,13 +82,10 @@ public class RetornoController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletarRetorno(@PathVariable Integer id) {
 		Optional<Retorno> retornoOptional = retornoService.consultarRetorno(id);
-
 		if (retornoOptional.isPresent()) {
 			retornoService.deletarRetorno(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
-
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
-
 }

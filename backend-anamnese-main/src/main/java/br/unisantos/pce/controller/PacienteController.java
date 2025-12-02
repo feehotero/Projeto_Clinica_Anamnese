@@ -7,28 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import br.unisantos.pce.model.Anamnese;
 import br.unisantos.pce.model.Paciente;
 import br.unisantos.pce.model.Retorno;
 import br.unisantos.pce.service.AnamneseService;
 import br.unisantos.pce.service.PacienteService;
 import br.unisantos.pce.service.RetornoService;
+import jakarta.validation.Valid;
 
 @RestController
-// @CrossOrigin removido para usar a configuração global do
-// SecurityConfigurations
+@CrossOrigin("*")
 @RequestMapping(value = "/pacientes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PacienteController {
 
@@ -54,54 +44,41 @@ public class PacienteController {
 	public ResponseEntity<Optional<Paciente>> consultarPaciente(@PathVariable Integer id) {
 		Optional<Paciente> paciente = pacienteService.consultarPaciente(id);
 		if (paciente.isPresent()) {
-			return ResponseEntity.ok(pacienteService.consultarPaciente(id));
+			return ResponseEntity.ok(paciente);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@PostMapping
-	public ResponseEntity<?> criarPaciente(@RequestBody @Valid Paciente novopaciente, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.badRequest().body(result.getAllErrors());
-		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(pacienteService.criarPaciente(novopaciente));
+	public ResponseEntity<Paciente> criarPaciente(@Valid @RequestBody Paciente novoPaciente) {
+		// Recebe { "nome": "...", "sexo": { "id": 1 }, ... }
+		return ResponseEntity.status(HttpStatus.CREATED).body(pacienteService.criarPaciente(novoPaciente));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> alterarPaciente(@PathVariable Integer id,
-			@RequestBody @Valid Paciente pacienteAtualizado, BindingResult result) {
-
-		if (result.hasErrors()) {
-			return ResponseEntity.badRequest().body(result.getAllErrors());
-		}
-
+	public ResponseEntity<Paciente> alterarPaciente(@PathVariable Integer id,
+			@RequestBody Paciente pacienteAtualizado) {
 		Optional<Paciente> pacienteOptional = pacienteService.consultarPaciente(id);
-		List<Anamnese> anamneses = anamneseService.listarAnamnesesByPacienteId(id);
-		List<Retorno> retornos = retornoService.listarRetornosByPacienteId(id);
+
+		// Buscamos formulários vinculados apenas se precisarmos atualizar cascata,
+		// mas com o novo modelo relacional, o nome não é duplicado, então não
+		// precisamos atualizar Anamneses/Retornos manualmente!
 
 		if (pacienteOptional.isPresent()) {
 			Paciente paciente = pacienteOptional.get();
-
 			paciente.setNome(pacienteAtualizado.getNome());
 			paciente.setCpf(pacienteAtualizado.getCpf());
-			paciente.setIdSexo(pacienteAtualizado.getIdSexo());
+			paciente.setSexo(pacienteAtualizado.getSexo()); // Objeto Sexo
 			paciente.setDataNascimento(pacienteAtualizado.getDataNascimento());
 
-			if (!anamneses.isEmpty()) {
-				for (Anamnese anamnese : anamneses) {
-					anamnese.setPacienteNome(paciente.getNome());
-					anamneseService.alterarAnamnese(anamnese);
-				}
-			}
-			if (!retornos.isEmpty()) {
-				for (Retorno retorno : retornos) {
-					retorno.setPacienteNome(paciente.getNome());
-					retornoService.alterarRetorno(retorno);
-				}
-			}
+			// NÃO é mais necessário iterar sobre anamneses e retornos para mudar o nome do
+			// paciente,
+			// pois agora eles possuem uma FK para a tabela Paciente.
+
 			return ResponseEntity.ok(pacienteService.alterarPaciente(paciente));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Paciente não encontrado");
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@DeleteMapping("/{id}")

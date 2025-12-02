@@ -10,18 +10,15 @@ import br.unisantos.pce.model.Retorno;
 
 public interface RetornoRepository extends JpaRepository<Retorno, Integer> {
 
-    @Query(value = "SELECT * FROM tb_retorno WHERE id_paciente = :pacienteId ORDER BY dt_criacao DESC", nativeQuery = true)
-    List<Retorno> findAllByPacienteId(@Param("pacienteId") Integer pacienteId);
+    List<Retorno> findAllByPacienteId(Integer pacienteId);
 
-    @Query(value = "SELECT * FROM tb_retorno WHERE id_matricula = :usuarioId ORDER BY dt_criacao DESC", nativeQuery = true)
-    List<Retorno> findAllByUsuarioId(@Param("usuarioId") Integer usuarioId);
+    List<Retorno> findAllByUsuarioId(Integer usuarioId);
 
-    @Query(value = "SELECT * FROM tb_retorno ORDER BY dt_criacao DESC", nativeQuery = true)
     List<Retorno> findAllByOrderByCriadoEmDesc();
 
-    @Query(value = "SELECT * FROM tb_retorno WHERE id_anamnese = :anamneseId ORDER BY dt_criacao DESC", nativeQuery = true)
-    List<Retorno> findAllByAnamneseIdOrderByCriadoEmDesc(@Param("anamneseId") Integer anamneseId);
+    List<Retorno> findAllByAnamneseIdOrderByCriadoEmDesc(Integer anamneseId);
 
-    @Query(value = "SELECT * FROM tb_retorno WHERE UPPER(paciente_nome) ILIKE CONCAT('%', :nome, '%') ORDER BY dt_criacao DESC", nativeQuery = true)
+    // Usando JPQL para navegar no objeto Paciente e filtrar pelo nome
+    @Query("SELECT r FROM Retorno r WHERE UPPER(r.paciente.nome) LIKE CONCAT('%', UPPER(:nome), '%') ORDER BY r.criadoEm DESC")
     List<Retorno> findByPacienteNome(@Param("nome") String pacienteNome);
 }

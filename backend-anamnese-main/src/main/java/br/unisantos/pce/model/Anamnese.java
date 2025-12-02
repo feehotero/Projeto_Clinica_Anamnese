@@ -2,138 +2,109 @@ package br.unisantos.pce.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.unisantos.pce.user.User;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_anamnese")
 public class Anamnese {
 
-	private enum Periodo {
-		manha,
-		tarde,
-		noite,
-		NA;
+	public enum Periodo {
+		manha, tarde, noite, NA
 	}
 
-	private enum Opcao {
-		sim,
-		nao,
-		as_vezes;
+	public enum Opcao {
+		sim, nao, as_vezes
 	}
 
-	private enum Companhia {
-		sozinho,
-		acompanhado;
+	public enum Companhia {
+		sozinho, acompanhado
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_anamnese", nullable = false)
+	@Column(name = "id_anamnese")
 	private Integer id;
 
-	@Column(name = "id_paciente", nullable = false)
-	private Integer pacienteId;
+	@ManyToOne
+	@JoinColumn(name = "id_paciente", nullable = false)
+	private Paciente paciente;
 
-	@Column(name = "paciente_nome", length = 60, nullable = false)
-	private String pacienteNome;
+	@ManyToOne
+	@JoinColumn(name = "id_matricula", nullable = false)
+	private User usuario;
 
-	@Column(name = "id_matricula", nullable = false)
-	private Integer usuarioId;
-
-	@Column(name = "usuario_nome", length = 60, nullable = false)
-	private String usuarioNome;
-
-	@Column(name = "id_escolaridade", nullable = true)
-	private Integer idEscolaridade;
-
-	@Column(name = "id_profissao", nullable = true)
-	private Integer idProfissao;
-
-	@Column(name = "id_renda_familiar", nullable = true)
-	private Integer idRendaFamiliar;
-
-	@Column(name = "nm_periodo_estudo", nullable = true)
-	@Enumerated(EnumType.STRING)
-	private Periodo nmPeriodoEstudo;
-
-	@Column(name = "nm_periodo_trabalho", nullable = true)
-	@Enumerated(EnumType.STRING)
-	private Periodo nmPeriodoTrabalho;
-
-	@Column(name = "nr_pessoa_domicilio", columnDefinition = "TINYINT", nullable = true)
-	private Integer nrPessoaDomicilio;
-
-	@Column(name = "ds_motivo", columnDefinition = "TEXT", nullable = true)
-	private String dsMotivo;
-
+	// --- Campos Simples ---
+	@Column(name = "ds_motivo", columnDefinition = "TEXT")
+	private String motivo;
 	@Column(name = "ds_doenca", columnDefinition = "TEXT")
-	private String dsDoenca;
-
+	private String doenca;
 	@Column(name = "ds_antecedentes", columnDefinition = "TEXT")
-	private String dsAntecedentes;
-
+	private String antecedentes;
 	@Column(name = "ds_medicamento", columnDefinition = "TEXT")
-	private String dsMedicamento;
+	private String medicamento;
+	@Column(name = "ds_suplemento", columnDefinition = "TEXT")
+	private String suplemento;
 
-	@Column(name = "ds_suplemento")
-	private String dsSuplemento;
-
-	@Column(name = "id_evacuacao", nullable = true)
-	private Integer idEvacuacao;
-
+	@Enumerated(EnumType.STRING)
+	@Column(name = "nm_periodo_estudo")
+	private Periodo periodoEstudo;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "nm_periodo_trabalho")
+	private Periodo periodoTrabalho;
+	@Column(name = "nr_pessoa_domicilio")
+	private Integer numPessoasDomicilio;
 	@Column(name = "ds_quem_cozinha")
-	private String dsQuemCozinha;
-
+	private String quemCozinha;
+	@Enumerated(EnumType.STRING)
 	@Column(name = "ds_necessidade_comer_estressado_ansioso_triste")
+	private Opcao necessidadeComerEmocional;
 	@Enumerated(EnumType.STRING)
-	private Opcao dsNecessidadeComerEstressadoAnsiosoTriste;
-
 	@Column(name = "ds_realiza_refeicoes_sozinho_acompanhado")
-	@Enumerated(EnumType.STRING)
-	private Companhia dsRealizaRefeicoesSozinhoAcompanhado;
-
+	private Companhia companhiaRefeicoes;
 	@Column(name = "ds_fome_fisiologica")
-	private String dsFomeFisiologica;
-
-	@Column(name = "ds_necessidade_emocional_comer")
-	private String dsNecessidadeEmocionalComer;
-
+	private String fomeFisiologica;
 	@Column(name = "ds_nao_modificar_plano_alimentar")
-	private String dsNaoModificarPlanoAlimentar;
-
+	private String naoModificarPlano;
 	@Column(name = "ds_aversao_alimentar")
-	private String dsAversaoAlimentar;
-
-	@Column(name = "ds_tolera_alimentos_proteina_animal")
-	private String dsToleraAlimentosProteinaAnimal;
-
+	private String aversaoAlimentar;
 	@Column(name = "ds_alergia_intolerancias_alimentares")
-	private String dsAlergiaIntoleranciasAlimentares;
+	private String alergias;
+	@Column(name = "ds_metas", columnDefinition = "TEXT")
+	private String metas;
 
-	@Column(name = "nr_nota_saciedade_pos_refeicoes", columnDefinition = "TINYINT", nullable = true)
-	private Integer nrNotaSaciedadePosRefeicoes;
+	// --- Relacionamentos ---
+	@ManyToOne
+	@JoinColumn(name = "id_escolaridade")
+	private Escolaridade escolaridade;
+	@ManyToOne
+	@JoinColumn(name = "id_profissao")
+	private Profissao profissao;
+	@ManyToOne
+	@JoinColumn(name = "id_renda_familiar")
+	private RendaFamiliar rendaFamiliar;
+	@ManyToOne
+	@JoinColumn(name = "id_evacuacao")
+	private Evacuacao evacuacao;
 
-	@Column(name = "nr_nota_humor_pos_refeicoes", columnDefinition = "TINYINT", nullable = true)
-	private Integer nrNotaHumorPosRefeicoes;
+	// OneToOne com JSON Managed Reference para evitar loop e erro de validação
+	@JsonManagedReference
+	@OneToOne(mappedBy = "anamnese", cascade = CascadeType.ALL)
+	private DadosFisiologicos dadosFisiologicos;
 
-	@Column(name = "ds_metas")
-	private String dsMetas;
+	@ManyToMany
+	@JoinTable(name = "tb_anamnese_refeicao", joinColumns = @JoinColumn(name = "id_anamnese"), inverseJoinColumns = @JoinColumn(name = "id_refeicao"))
+	private List<Refeicao> refeicoes;
+
+	// NOVO: Relacionamento com Alimentos
+	@JsonManagedReference
+	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL)
+	private List<AnamneseAlimento> alimentos = new ArrayList<>();
 
 	@Column(name = "dt_criacao", nullable = false)
 	private LocalDateTime criadoEm;
@@ -142,7 +113,4 @@ public class Anamnese {
 	protected void onCreate() {
 		criadoEm = LocalDateTime.now();
 	}
-
-	@Transient
-	private List<Retorno> retornos;
 }

@@ -2,196 +2,106 @@ const formAddRetorno = document.querySelector(".formAddRetorno");
 const pacienteNome = document.getElementById("pacienteNome");
 const criadoPor = document.getElementById("criadoPor");
 const retornoId = localStorage.getItem("retornoId");
-const divStepButtons = document.querySelector(".div-step-buttons");
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
 const tabs = document.getElementsByClassName("tab");
-const fPacienteSelect = document.getElementById("pacienteSelect");
-const fAnamneseSelect = document.getElementById("anamneseSelect");
 const botaoDeletar = document.getElementById("botaoDeletar");
 let currentTab = 0;
 
 function consultarRetorno() {
     fetch(urlApi + endpointRetornos + "/" + retornoId, {
-        headers: {
-            "Authorization": `${token}`
+        headers: { "Authorization": `${token}` }
+    })
+    .then(response => response.json())
+    .then(retorno => {
+        // Preencher header e selects
+        if(retorno.paciente) pacienteNome.textContent = retorno.paciente.nome;
+        if(retorno.usuario) criadoPor.textContent = retorno.usuario.nome;
+        
+        // Helper
+        const setVal = (id, v) => { if(document.getElementById(id)) document.getElementById(id).value = v || ""; };
+
+        setVal("anamneseId", retorno.anamnese?.id);
+        setVal("pacienteId", retorno.paciente?.id);
+        setVal("pacienteNome", retorno.paciente?.nome);
+
+        setVal("metasUltimasConsultas", retorno.metasUltimasConsultas);
+        setVal("comentariosObservacao", retorno.comentariosObservacao);
+        setVal("metasForamCumpridas", retorno.metasForamCumpridas);
+        setVal("motivoAssinaladoCumprimentoMetas", retorno.motivoCumprimentoMetas);
+        setVal("comoSentiuMudancaHabitos", retorno.sentiuMudancaHabitos);
+        setVal("adaptacaoMudancaHabitos", retorno.adaptacaoMudanca);
+        setVal("motivosDificuldadeAdaptacao", retorno.dificuldadeAdaptacao);
+        setVal("sentePrecisaMelhorarAlimentacao", retorno.melhorarAlimentacao);
+        setVal("habitoIntestinal", retorno.habitoIntestinal);
+        setVal("atvFisica", retorno.atividadeFisica);
+        setVal("metasProximoRetorno", retorno.metasProximoRetorno);
+        
+        setVal("pesoAtual", retorno.peso);
+        setVal("imc", retorno.imc);
+        setVal("circunferenciaAbdominal", retorno.circunferenciaAbdominal);
+        
+        setVal("valoresBioimpedancia", retorno.valoresBioimpedancia);
+        setVal("observacoesBioimpedancia", retorno.observacoesBioimpedancia);
+
+        // Radio desempenho
+        if(retorno.desempenhoMetas) {
+            const rad = document.querySelector(`input[name="desempenhoCumprimentoMetas"][value="${retorno.desempenhoMetas}"]`);
+            if(rad) rad.checked = true;
         }
     })
-        .then(response => response.json())
-        .then(retorno => {
-            preencherCampoPaciente(retorno.anamneseId);
-            criadoPor.textContent = retorno.usuarioNome;
-            
-
-            const fieldMappingReverse = {
-             
-                'dsComentariosObservacao': 'dsComentariosObservacao',
-                'dsMetasForamCumpridas': 'dsMetasForamCumpridas',
-                'nrDesempenhoCumprimentoMetas': 'nrDesempenhoCumprimentoMetas',
-                'dsMotivoAssinaladoCumprimentoMetas': 'dsMotivoAssinaladoCumprimentoMetas',
-                'dsComoSentiuMudancaHabitos': 'dsComoSentiuMudancaHabitos',
-                'dsAdaptacaoMudancaHabitos': 'dsAdaptacaoMudancaHabitos',
-                'dsMotivosDificuldadeAdaptacao': 'dsMotivosDificuldadeAdaptacao',
-                'dsSentePrecisaMelhorarAlimentacao': 'dsSentePrecisaMelhorarAlimentacao',
-                'dsHabitoIntestinal': 'dsHabitoIntestinal',
-                'dsAtividadeFisica': 'dsAtividadeFisica',
-                'dsMetasProximoRetorno': 'dsMetasProximoRetorno',
-                'nrPeso': 'nrPeso',
-                'nrImc': 'nrImc',
-                'nrCircunferenciaAbdominal': 'nrCircunferenciaAbdominal',
-                'dsValoresBioimpedancia': 'dsValoresBioimpedancia',
-                'dsObservacoesBioimpedancia': 'dsObservacoesBioimpedancia',
-                
-             
-                'anamneseId': 'anamneseId',
-                'pacienteId': 'pacienteId'
-            };
-
-            for (const key in fieldMappingReverse) {
-                if (retorno.hasOwnProperty(key)) {
-                    const value = retorno[key];
-                    const inputName = fieldMappingReverse[key];
-                    const input = document.querySelector(`[name=${inputName}]`);
-
-                    if (input) {
-                        switch (input.type) {
-                            case 'radio':
-                                const radioButton = document.querySelector(`input[type=radio][name=${inputName}][value="${value}"]`);
-                                if (radioButton) {
-                                    radioButton.checked = true;
-                                }
-                                break;
-                            default:
-                                input.value = value;
-                        }
-                    } 
-                }
-            }
-
-        
-            if(!pacienteNome.textContent) {
-                pacienteNome.textContent = retorno.pacienteNome;
-            }
-
-        })
-        .catch(error => {
-            console.error(error);
-        })
+    .catch(console.error);
 }
 
+// Atualizar (PUT) usando mesma lógica do addRetorno
 function atualizarRetorno() {
-    const data = getData();
-    const forbidden = false;
+    // ... Replicar getData() do addRetorno.js aqui ...
+    const data = getDataLocal(); 
     return new Promise((resolve, reject) => {
         if (validateForm(formAddRetorno)) {
             fetch(urlApi + endpointRetornos + "/" + retornoId, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${token}`
-                },
+                headers: { "Content-Type": "application/json", "Authorization": `${token}` },
                 method: "PUT",
                 body: JSON.stringify(data)
             })
-                .then(response => {
-                    if (!response.ok) {
-                        forbidden = true;
-                        return Promise.reject();
-                    }
-                    goodWarning.textContent = "Retorno atualizada com sucesso!";
-                    resolve(response);
-                })
-                .catch(error => {
-                    if (forbidden) {
-                        badWarning.textContent = "Dados inválidos.";
-                    } else {
-                        badWarning.textContent = "Erro na comunicação com a API.";
-                    }
-                    reject(error);
-                })
-        } else {
-            badWarning.textContent = "Preencha todos os campos obrigatórios";
-        }
-    })
-}
-
-function getData() {
- 
-    const inputs = document.querySelectorAll('.formAddRetorno input, .formAddRetorno select, .formAddRetorno textarea');
-    const data = { 
-        usuarioId: usuarioId,
-    
-        anamneseId: document.getElementById('anamneseId').value ? parseInt(document.getElementById('anamneseId').value) : null,
-        pacienteId: document.getElementById('pacienteId').value ? parseInt(document.getElementById('pacienteId').value) : null,
-    };
-    
-    inputs.forEach(input => {
-        let value = input.value;
-        let name = input.name;
-        
- 
-        switch (name) {
-            case 'metasUltimasConsultas':
-               
-                return; 
-            case 'comentariosObservacao':
-                name = 'dsComentariosObservacao';
-                break;
-            case 'metasForamCumpridas':
-                name = 'dsMetasForamCumpridas';
-                break;
-            case 'desempenhoCumprimentoMetas':
-                name = 'nrDesempenhoCumprimentoMetas';
-                break;
-            case 'motivoAssinaladoCumprimentoMetas':
-                name = 'dsMotivoAssinaladoCumprimentoMetas';
-                break;
-            case 'comoSentiuMudancaHabitos':
-                name = 'dsComoSentiuMudancaHabitos';
-                break;
-            case 'adaptacaoMudancaHabitos':
-                name = 'dsAdaptacaoMudancaHabitos';
-                break;
-            case 'motivosDificuldadeAdaptacao':
-                name = 'dsMotivosDificuldadeAdaptacao';
-                break;
-            case 'sentePrecisaMelhorarAlimentacao':
-                name = 'dsSentePrecisaMelhorarAlimentacao';
-                break;
-            case 'habitoIntestinal':
-                name = 'dsHabitoIntestinal';
-                break;
-            case 'atvFisica':
-                name = 'dsAtividadeFisica';
-                break;
-            case 'metasProximoRetorno':
-                name = 'dsMetasProximoRetorno';
-                break;
-            case 'pesoAtual':
-                name = 'nrPeso';
-                break;
-            case 'imc':
-                name = 'nrImc';
-                break;
-            case 'circunferenciaAbdominal':
-                name = 'nrCircunferenciaAbdominal';
-                break;
-            case 'valoresBioimpedancia':
-                name = 'dsValoresBioimpedancia';
-                break;
-            case 'observacoesBioimpedancia':
-                name = 'dsObservacoesBioimpedancia';
-                break;
-        }
-
-        if (input.type === 'radio') {
-          if (input.checked) {
-            data[name] = input.value;
-          }
-        } else if (name !== 'pacienteNome' && value !== "") {
-          data[name] = value;
+            .then(r => {
+                if(!r.ok) return Promise.reject();
+                goodWarning.textContent = "Atualizado!";
+                resolve(r);
+            })
+            .catch(reject);
         }
     });
+}
 
+function getDataLocal() {
+    // Cópia local do getData do addRetorno.js para garantir funcionamento independente
+    const getVal = (id) => document.getElementById(id).value || null;
+    const usuarioIdLocal = localStorage.getItem("usuarioId");
+    const data = {
+        usuario: { id: usuarioIdLocal },
+        paciente: { id: getVal("pacienteId") },
+        anamnese: { id: getVal("anamneseId") },
+        metasUltimasConsultas: getVal("metasUltimasConsultas"),
+        comentariosObservacao: getVal("comentariosObservacao"),
+        metasForamCumpridas: getVal("metasForamCumpridas"),
+        desempenhoMetas: getVal("desempenhoCumprimentoMetas"),
+        motivoCumprimentoMetas: getVal("motivoAssinaladoCumprimentoMetas"),
+        sentiuMudancaHabitos: getVal("comoSentiuMudancaHabitos"),
+        adaptacaoMudanca: getVal("adaptacaoMudancaHabitos"),
+        dificuldadeAdaptacao: getVal("motivosDificuldadeAdaptacao"),
+        melhorarAlimentacao: getVal("sentePrecisaMelhorarAlimentacao"),
+        habitoIntestinal: getVal("habitoIntestinal"),
+        atividadeFisica: getVal("atvFisica"),
+        metasProximoRetorno: getVal("metasProximoRetorno"),
+        peso: getVal("pesoAtual"),
+        imc: getVal("imc"),
+        circunferenciaAbdominal: getVal("circunferenciaAbdominal"),
+        valoresBioimpedancia: getVal("valoresBioimpedancia"),
+        observacoesBioimpedancia: getVal("observacoesBioimpedancia")
+    };
+    const desempenhoRadio = document.querySelector('input[name="desempenhoCumprimentoMetas"]:checked');
+    if(desempenhoRadio) data.desempenhoMetas = desempenhoRadio.value;
     return data;
 }
 
@@ -199,13 +109,9 @@ botaoDeletar.addEventListener("click", async () => {
     try {
         await deletarItem(retornoId, endpointRetornos);
         window.location.href = "formularios.html";
-    } catch {
-        verificarAutenticacao();
-    }
+    } catch { verificarAutenticacao(); }
 });
 
 verificarAutenticacao();
-listarPacientesSelect(fPacienteSelect);
-listarAnamnesesSelect(fAnamneseSelect);
 consultarRetorno();
 showTab(currentTab);

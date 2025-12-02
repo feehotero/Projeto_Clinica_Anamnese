@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
-
+    
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -33,13 +33,12 @@ public class AuthenticationController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login (@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         User usuario = userService.consultarUsuarioPorLogin(auth.getName());
 
         Integer usuarioId = usuario.getId();
-        // Correção: Retorna o nome completo para exibição no front
         String usuarioNome = usuario.getNome();
         String token = tokenService.generateToken((User) auth.getPrincipal());
 

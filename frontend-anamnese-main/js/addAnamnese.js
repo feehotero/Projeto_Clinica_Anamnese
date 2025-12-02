@@ -1,190 +1,190 @@
 const formAddAnamnese = document.querySelector(".formAddAnamnese");
-const divStepButtons = document.querySelector(".div-step-buttons");
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
 const tabs = document.getElementsByClassName("tab");
-const fPacienteSelect = document.getElementById("pacienteSelect");
+const fPacienteSelect = document.getElementById("pacienteId");
 let currentTab = 0;
 
 function cadastrarAnamnese() {
   const data = getData();
   let forbidden = false;
+  
+  // Feedback visual
+  const originalBtnText = nextBtn.textContent;
+  nextBtn.disabled = true;
+  nextBtn.textContent = "Enviando...";
+
   return new Promise((resolve, reject) => {
-    if (validateForm(formAddAnamnese)) {
-      fetch(urlApi + endpointAnamneses, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `${token}`
-        },
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-        .then(response => {
-          if (!response.ok) {
-            forbidden = true;
-            return Promise.reject();
-          }
-          goodWarning.textContent = "Anamnese cadastrada com sucesso!";
-          resolve(response);
-        })
-        .catch(error => {
-          if (forbidden) {
-            badWarning.textContent = "Dados inválidos.";
-          } else {
-            badWarning.textContent = "Erro na comunicação com a API.";
-          }
-          reject(error);
-        })
-    } else {
-      badWarning.textContent = "Preencha todos os campos obrigatórios";
+    // Validação obrigatória apenas para o Paciente
+    if (!data.paciente.id) {
+        badWarning.textContent = "Erro: Selecione um paciente na primeira etapa.";
+        nextBtn.disabled = false;
+        nextBtn.textContent = originalBtnText;
+        reject("Paciente não selecionado");
+        return;
     }
+
+    fetch(urlApi + endpointAnamneses, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `${token}`
+      },
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (!response.ok) {
+        forbidden = true;
+        // Tenta pegar o corpo do erro para debug
+        return response.text().then(text => {
+            throw new Error(text || response.statusText);
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      goodWarning.textContent = "Anamnese salva com sucesso!";
+      badWarning.textContent = "";
+      setTimeout(() => {
+          window.location.href = "formularios.html";
+      }, 1500);
+      resolve(data);
+    })
+    .catch(error => {
+      nextBtn.disabled = false;
+      nextBtn.textContent = originalBtnText;
+      console.error("Erro detalhado:", error);
+      
+      if (forbidden) {
+        badWarning.textContent = "Dados inválidos. Verifique se preencheu campos numéricos com letras ou formatos errados.";
+      } else {
+        badWarning.textContent = "Erro de conexão com o servidor.";
+      }
+      reject(error);
+    })
   })
 }
 
 function getData() {
+  // --- FUNÇÕES AUXILIARES PARA LIMPEZA DE DADOS ---
   
-  const inputs = document.querySelectorAll('.formAddAnamnese input, .formAddAnamnese select, .formAddAnamnese textarea');
-  const data = { usuarioId: usuarioId, };
-
-  
-  const fieldMapping = {
-   
-    'idEscolaridade': 'idEscolaridade',
-    'idProfissao': 'idProfissao',
-    'idRendaFamiliar': 'idRendaFamiliar',
-    'nmPeriodoEstudo': 'nmPeriodoEstudo',
-    'nmPeriodoTrabalho': 'nmPeriodoTrabalho',
-    'nrPessoaDomicilio': 'nrPessoaDomicilio',
-    
-    'dsMotivo': 'dsMotivo',
-    'dsDoenca': 'dsDoenca',
-    'dsAntecedentes': 'dsAntecedentes',
-    'dsMedicamento': 'dsMedicamento',
-    'dsSuplemento': 'dsSuplemento',
-    'idEvacuacao': 'idEvacuacao',
-    
-    'dsQuemCozinha': 'dsQuemCozinha',
-    'dsNecessidadeComerEstressadoAnsiosoTriste': 'dsNecessidadeComerEstressadoAnsiosoTriste',
-    'dsRealizaRefeicoesSozinhoAcompanhado': 'dsRealizaRefeicoesSozinhoAcompanhado',
-    'dsFomeFisiologica': 'dsFomeFisiologica',
-    'dsNecessidadeEmocionalComer': 'dsNecessidadeEmocionalComer',
-    'dsNaoModificarPlanoAlimentar': 'dsNaoModificarPlanoAlimentar',
-    'dsAversaoAlimentar': 'dsAversaoAlimentar',
-    'dsToleraAlimentosProteinaAnimal': 'dsToleraAlimentosProteinaAnimal',
-    'dsAlergiaIntoleranciasAlimentares': 'dsAlergiaIntoleranciasAlimentares',
-    'nrNotaSaciedadePosRefeicoes': 'nrNotaSaciedadePosRefeicoes',
-    'nrNotaHumorPosRefeicoes': 'nrNotaHumorPosRefeicoes',
-    
-    'dsMetas': 'dsMetas',
-    
-    'pacienteId': 'pacienteId',
-    'usuarioId': 'usuarioId'
-    
-    
+  // Para textos: Retorna null se vazio
+  const getString = (id) => {
+      const el = document.getElementById(id);
+      if (!el || !el.value) return null;
+      return el.value.trim() === "" ? null : el.value.trim();
   };
 
-  
-  inputs.forEach(input => {
-    let key = input.name;
-    let value = input.value;
-   
-    const newKey = fieldMapping[key] || key;
+  // Para Inteiros: Retorna null se vazio ou inválido
+  const getInt = (id) => {
+      const el = document.getElementById(id);
+      if (!el || !el.value || el.value.trim() === "") return null;
+      const val = parseInt(el.value, 10);
+      return isNaN(val) ? null : val;
+  };
 
-    
-    if (newKey.startsWith('id') && input.type === 'select-one' && value !== "") {
-        value = parseInt(value);
-    }
-    
-    if (input.type === 'checkbox') {
-     
-      return; 
-    } else if (input.type === 'radio') {
-      if (input.checked) {
-        
-        data[newKey] = value; 
-      } else {
-        return;
-      }
-    } else if (value === "") {
-      value = null;
-    }
+  // Para Floats: Retorna null se vazio ou inválido
+  const getFloat = (id) => {
+      const el = document.getElementById(id);
+      if (!el || !el.value || el.value.trim() === "") return null;
+      // Substitui vírgula por ponto caso o usuário digite
+      const val = parseFloat(el.value.replace(',', '.')); 
+      return isNaN(val) ? null : val;
+  };
 
-    if (newKey in fieldMapping || newKey === 'pacienteId' || newKey === 'usuarioId') {
-      data[newKey] = value;
-    }
+  // Para Selects de Objetos (FKs): Retorna {id: X} ou null
+  const getObjId = (id) => {
+      const val = getInt(id);
+      return val ? { id: val } : null;
+  };
+
+  const usuarioIdLocal = localStorage.getItem("usuarioId");
+
+  // --- MONTAGEM DO JSON ---
+  const data = {
+    usuario: { id: parseInt(usuarioIdLocal) },
+    paciente: { id: getInt("pacienteId") },
+    
+    // Objetos (Foreign Keys)
+    escolaridade: getObjId("escolaridade"),
+    profissao: getObjId("profissao"),
+    rendaFamiliar: getObjId("rendaFamiliar"),
+    evacuacao: getObjId("evacuacao"),
+
+    // Strings e Enums
+    motivo: getString("motivo"),
+    doenca: getString("doenca"),
+    antecedentes: getString("antecedentes"),
+    medicamento: getString("medicamento"),
+    suplemento: getString("suplemento"),
+    periodoEstudo: getString("periodoEstudo"),
+    periodoTrabalho: getString("periodoTrabalho"),
+    quemCozinha: getString("quemCozinha"),
+    necessidadeComerEmocional: getString("necessidadeComerEmocional"),
+    companhiaRefeicoes: getString("companhiaRefeicoes"),
+    fomeFisiologica: getString("fomeFisiologica"),
+    naoModificarPlano: getString("naoModificarPlano"),
+    aversaoAlimentar: getString("aversaoAlimentar"),
+    toleraProteinaAnimal: getString("toleraProteinaAnimal"),
+    alergias: getString("alergias"),
+    metas: getString("metas"),
+
+    // Inteiros
+    numPessoasDomicilio: getInt("numPessoasDomicilio"),
+    notaSaciedade: getInt("notaSaciedade"),
+    notaHumor: getInt("notaHumor"),
+
+    // Dados Fisiológicos (Floats)
+    dadosFisiologicos: {
+        peso: getFloat("peso"),
+        estatura: getFloat("estatura"),
+        imc: getFloat("imc"),
+        circunferenciaCintura: getFloat("circunferenciaCintura")
+    },
+
+    // Listas
+    refeicoes: [],
+    alimentos: []
+  };
+
+  // Coletar Refeições
+  document.querySelectorAll('input[name="refeicoes"]:checked').forEach((check) => {
+      data.refeicoes.push({ id: parseInt(check.value) });
   });
-  
 
-  data.usuarioId = usuarioId;
+  // Coletar Frequência Alimentar
+  document.querySelectorAll('.food-row').forEach(row => {
+      const id = row.getAttribute('data-id');
+      const radio = row.querySelector(`input[name="f_${id}"]:checked`);
+      
+      if (radio) {
+          data.alimentos.push({
+              alimento: { id: parseInt(id) },
+              frequencia: radio.value
+          });
+      }
+  });
 
-  
-  delete data.escolaridade;
-  delete data.periodoEstudo;
-  delete data.lancheEstudo;
-  delete data.periodoTrabalho;
-  delete data.lancheTrabalho;
-  delete data.profissao;
-  delete data.rendaFamiliar;
-  delete data.numPessoasDomicilio;
-  delete data.motivo;
-  delete data.apresentaDoenca;
-  delete data.antecedentesFamiliares;
-  delete data.medicamentosContinuos;
-  delete data.suplementosComplementos;
-  delete data.frequenciaEvacuacao;
-  delete data.consistenciaEvacuacao;
-  delete data.praticaAtvFisica;
-  delete data.atvFisica;
-  delete data.cafeDaManha;
-  delete data.lancheDaManha;
-  delete data.almoco;
-  delete data.lancheDaTarde;
-  delete data.jantar;
-  delete data.ceia;
-  delete data.quemCozinha;
-  delete data.necessidadeComerEstressadoAnsiosoTriste;
-  delete data.realizaRefeicoesSozinhoAcompanhado;
-  delete data.excessoAlimentosNaoSaudaveisSintomas;
-  delete data.dificuldadeRotinaAlimentarSaudavel;
-  delete data.necessidadeConsoloAlimentar;
-  delete data.dificuldadePararDeComer;
-  delete data.frequenciaFomeFisiologica;
-  delete data.frequenciaNecessidadeEmocionalComer;
-  delete data.naoModificarPlanoAlimentar;
-  delete data.aversaoAlimentar;
-  delete data.toleraAlimentosProteinaAnimal;
-  delete data.alergiaIntoleranciasAlimentares;
-  delete data.notaSaciedadePosRefeicoes;
-  delete data.notaHumorPosRefeicoes;
-  delete data.pesoAtual;
-  delete data.estatura;
-  delete data.imc;
-  delete data.cb;
-  delete data.dct;
-  delete data.dcb;
-  delete data.dcse;
-  delete data.dcsi;
-  delete data.somatoria4Dobras;
-  delete data.porcentagemGorduraCorporalSomatoria4Dobras;
-  delete data.pesoGordura;
-  delete data.pesoMassaMagra;
-  delete data.totalAgua;
-  delete data.porcentagemAguaMassaMagra;
-  delete data.resistencia;
-  delete data.reactancia;
-  delete data.anguloDeFase;
-  delete data.circunferenciaCintura;
-  delete data.circunferenciaQuadril;
-  delete data.circunferenciaPanturrilha;
-  delete data.emapDireita;
-  delete data.emapEsquerda;
-  delete data.forcaPreencaoManualDireita;
-  delete data.forcaPreencaoManualEsquerda;
-  delete data.metas;
-
+  console.log("JSON Enviado:", data); // Debug no console
   return data;
 }
 
+function listarPacientesSelect(select) {
+    fetch(urlApi + endpointPacientes, { headers: { "Authorization": `${token}` } })
+      .then(r => r.json())
+      .then(data => {
+        // Limpa options anteriores
+        select.innerHTML = '<option selected disabled value="">Selecione um paciente...</option>';
+        data.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.nome;
+          select.appendChild(opt);
+        });
+      })
+      .catch(console.error);
+}
+
 verificarAutenticacao();
-listarPacientesSelect(fPacienteSelect);
+if(fPacienteSelect) listarPacientesSelect(fPacienteSelect);
 showTab(currentTab);

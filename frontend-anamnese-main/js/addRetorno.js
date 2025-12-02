@@ -1,10 +1,7 @@
 const formAddRetorno = document.querySelector(".formAddRetorno");
-const divStepButtons = document.querySelector(".div-step-buttons");
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
 const tabs = document.getElementsByClassName("tab");
-const fPacienteSelect = document.getElementById("pacienteSelect");
-const fAnamneseSelect = document.getElementById("anamneseSelect");
 let currentTab = 0;
 
 function cadastrarRetorno() {
@@ -25,120 +22,95 @@ function cadastrarRetorno() {
             forbidden = true;
             return Promise.reject();
           }
-          goodWarning.textContent = "Retorno cadastrada com sucesso!";
+          goodWarning.textContent = "Retorno cadastrado com sucesso!";
           resolve(response);
         })
         .catch(error => {
-          if (forbidden) {
-            badWarning.textContent = "Dados inválidos.";
-          } else {
-            badWarning.textContent = "Erro na comunicação com a API.";
-          }
+          badWarning.textContent = forbidden ? "Dados inválidos." : "Erro na API.";
           reject(error);
         })
     } else {
-      badWarning.textContent = "Preencha todos os campos obrigatórios";
+      badWarning.textContent = "Preencha os campos obrigatórios";
     }
   })
 }
 
 function getData() {
- 
-  const inputs = document.querySelectorAll('.formAddRetorno input, .formAddRetorno select, .formAddRetorno textarea');
-  const data = { 
-    usuarioId: usuarioId,
+  const getVal = (id) => document.getElementById(id).value || null;
+  const usuarioIdLocal = localStorage.getItem("usuarioId");
 
-    anamneseId: document.getElementById('anamneseId').value ? parseInt(document.getElementById('anamneseId').value) : null,
-    pacienteId: document.getElementById('pacienteId').value ? parseInt(document.getElementById('pacienteId').value) : null,
+  // Estrutura aninhada para Retorno
+  const data = {
+      usuario: { id: usuarioIdLocal },
+      paciente: { id: getVal("pacienteId") },
+      anamnese: { id: getVal("anamneseId") },
+      
+      metasUltimasConsultas: getVal("metasUltimasConsultas"),
+      comentariosObservacao: getVal("comentariosObservacao"),
+      metasForamCumpridas: getVal("metasForamCumpridas"),
+      desempenhoMetas: getVal("desempenhoCumprimentoMetas"), // Nome ajustado à entidade nova
+      motivoCumprimentoMetas: getVal("motivoAssinaladoCumprimentoMetas"),
+      sentiuMudancaHabitos: getVal("comoSentiuMudancaHabitos"),
+      adaptacaoMudanca: getVal("adaptacaoMudancaHabitos"),
+      dificuldadeAdaptacao: getVal("motivosDificuldadeAdaptacao"),
+      melhorarAlimentacao: getVal("sentePrecisaMelhorarAlimentacao"),
+      habitoIntestinal: getVal("habitoIntestinal"),
+      atividadeFisica: getVal("atvFisica"),
+      metasProximoRetorno: getVal("metasProximoRetorno"),
+      
+      peso: getVal("pesoAtual"),
+      imc: getVal("imc"),
+      circunferenciaAbdominal: getVal("circunferenciaAbdominal"),
+      
+      valoresBioimpedancia: getVal("valoresBioimpedancia"),
+      observacoesBioimpedancia: getVal("observacoesBioimpedancia")
   };
   
-  inputs.forEach(input => {
-    let value = input.value;
-    let name = input.name;
-    
-    
-    switch (name) {
-        case 'metasUltimasConsultas':
-            name = 'dsMetasUltimasConsultas';
-            break;
-        case 'comentariosObservacao':
-            name = 'dsComentariosObservacao';
-            break;
-        case 'metasForamCumpridas':
-            name = 'dsMetasForamCumpridas';
-            break;
-        case 'desempenhoCumprimentoMetas':
-            name = 'nrDesempenhoCumprimentoMetas';
-            break;
-        case 'motivoAssinaladoCumprimentoMetas':
-            name = 'dsMotivoAssinaladoCumprimentoMetas';
-            break;
-        case 'comoSentiuMudancaHabitos':
-            name = 'dsComoSentiuMudancaHabitos';
-            break;
-        case 'adaptacaoMudancaHabitos':
-            name = 'dsAdaptacaoMudancaHabitos';
-            break;
-        case 'motivosDificuldadeAdaptacao':
-            name = 'dsMotivosDificuldadeAdaptacao';
-            break;
-        case 'sentePrecisaMelhorarAlimentacao':
-            name = 'dsSentePrecisaMelhorarAlimentacao';
-            break;
-        case 'habitoIntestinal':
-            name = 'dsHabitoIntestinal';
-            break;
-        case 'atvFisica':
-            name = 'dsAtividadeFisica';
-            break;
-        case 'metasProximoRetorno':
-            name = 'dsMetasProximoRetorno';
-            break;
-        case 'pesoAtual':
-            name = 'nrPeso';
-            break;
-        case 'imc':
-            name = 'nrImc';
-            break;
-        case 'circunferenciaAbdominal':
-            name = 'nrCircunferenciaAbdominal';
-            break;
-        case 'valoresBioimpedancia':
-            name = 'dsValoresBioimpedancia';
-            break;
-        case 'observacoesBioimpedancia':
-            name = 'dsObservacoesBioimpedancia';
-            break;
-    }
-    
-    if (input.type === 'radio') {
-      if (input.checked) {
-        value = input.value;
-        data[name] = value;
-      }
-    } else if (name === "pacienteNome") {
-        
-        return;
-    } else if (value !== "" && name !== 'anamneseId' && name !== 'pacienteId') {
-      data[name] = value;
-    }
-  });
+  // Tratar Radio buttons se houver (ex: desempenho)
+  const desempenhoRadio = document.querySelector('input[name="desempenhoCumprimentoMetas"]:checked');
+  if(desempenhoRadio) data.desempenhoMetas = desempenhoRadio.value;
 
   return data;
 }
 
-async function adicionarAnamnese() {
-  const urlParametros = new URLSearchParams(window.location.search);
-  const id = urlParametros.get('id');
-  if(!isNaN(id)) {
-    document.getElementById("anamneseId").value = id;
-    await preencherCampoPaciente(id);
-  }
+// Logica para preencher o select de Anamneses e auto-selecionar Paciente
+function listarAnamnesesSelect(selectEl) {
+    fetch(urlApi + endpointAnamneses, { headers: { "Authorization": `${token}` }})
+    .then(r => r.json())
+    .then(data => {
+        data.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a.id;
+            opt.textContent = `Anamnese #${a.id} - ${a.paciente.nome}`;
+            selectEl.appendChild(opt);
+        });
+        verificarUrlParam(); // Verifica se veio ID pela URL
+    });
 }
 
-limparCampoPaciente();
+async function preencherCampoPaciente(anamneseId) {
+    if(!anamneseId) return;
+    try {
+        const r = await fetch(urlApi + endpointAnamneses + "/" + anamneseId, {
+            headers: { "Authorization": `${token}` }
+        });
+        const anamnese = await r.json();
+        if(anamnese && anamnese.paciente) {
+            document.getElementById("pacienteId").value = anamnese.paciente.id;
+            document.getElementById("pacienteNome").value = anamnese.paciente.nome;
+        }
+    } catch(e) { console.error(e); }
+}
+
+function verificarUrlParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if(id) {
+        document.getElementById("anamneseId").value = id;
+        preencherCampoPaciente(id);
+    }
+}
+
 verificarAutenticacao();
-listarPacientesSelect(fPacienteSelect);
-listarAnamnesesSelect(fAnamneseSelect);
-adicionarAnamnese();
+listarAnamnesesSelect(document.getElementById("anamneseId"));
 showTab(currentTab);

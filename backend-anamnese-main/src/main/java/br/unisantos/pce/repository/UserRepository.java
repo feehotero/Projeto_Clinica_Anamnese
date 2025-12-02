@@ -10,12 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import br.unisantos.pce.user.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    // O JPA usa o nome do atributo na classe, então 'login' mapeia para
+    // 'nm_usuario' automaticamente
     UserDetails findByLogin(String login);
 
-    @Query(value = "SELECT * FROM tb_usuario ORDER BY dt_criacao DESC", nativeQuery = true)
     List<User> findAllByOrderByCriadoEmDesc();
 
-    // Correção: Uso de UPPER e LIKE para compatibilidade e busca pelo nome completo
-    @Query(value = "SELECT * FROM tb_usuario WHERE UPPER(nm_nome_completo) LIKE UPPER(CONCAT('%', :nome, '%')) OR UPPER(nm_usuario) LIKE UPPER(CONCAT('%', :nome, '%')) ORDER BY dt_criacao DESC", nativeQuery = true)
+    // Query Nativa atualizada
+    @Query(value = "SELECT * FROM tb_usuario WHERE UPPER(nm_nome_completo) LIKE CONCAT('%', UPPER(:nome), '%') OR UPPER(nm_usuario) LIKE CONCAT('%', UPPER(:nome), '%') ORDER BY dt_criacao DESC", nativeQuery = true)
     List<User> findAllByNomeOrMatriculaOrderByCriadoEmDesc(@Param("nome") String nome);
 }

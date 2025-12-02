@@ -2,111 +2,82 @@ package br.unisantos.pce.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.unisantos.pce.user.User;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_retorno")
 public class Retorno {
 
-    private enum Opcao {
-        sim,
-        nao,
-        mais_ou_menos;
+    public enum Opcao {
+        sim, nao, mais_ou_menos
     }
 
-    private enum AtividadeFisica {
+    public enum AtividadeFisica {
         manteve_o_que_ja_fazia,
         aumentei_a_frequencia_intensidade,
         ainda_nao_consegui_praticar,
-        nao_iniciei_e_nao_pretendo_iniciar;
+        nao_iniciei_e_nao_pretendo_iniciar
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_retorno", nullable = false)
+    @Column(name = "id_retorno")
     private Integer id;
 
-    @Column(name = "id_anamnese", nullable = false)
-    private Integer anamneseId;
+    @ManyToOne
+    @JoinColumn(name = "id_anamnese", nullable = false)
+    private Anamnese anamnese;
 
-    @Column(name = "id_paciente", nullable = false)
-    private Integer pacienteId;
+    @ManyToOne
+    @JoinColumn(name = "id_paciente", nullable = false)
+    private Paciente paciente;
 
-    @Column(name = "paciente_nome", length = 60, nullable = false)
-    private String pacienteNome;
+    @ManyToOne
+    @JoinColumn(name = "id_matricula", nullable = false)
+    private User usuario;
 
-    @Column(name = "id_matricula", nullable = false)
-    private Integer usuarioId;
-
-    @Column(name = "usuario_nome", length = 60, nullable = false)
-    private String usuarioNome;
-
-    @Column(name = "ds_metas_ultimas_consultas", nullable = true)
-    private String dsMetasUltimasConsultas;
-
-    @Column(name = "ds_comentarios_observacao", nullable = true)
-    private String dsComentariosObservacao;
-
-    @Column(name = "ds_metas_foram_cumpridas", nullable = true)
+    @Column(name = "ds_metas_ultimas_consultas", columnDefinition = "TEXT")
+    private String metasUltimasConsultas;
     @Enumerated(EnumType.STRING)
-    private Opcao dsMetasForamCumpridas;
-
-    @Column(name = "nr_desempenho_cumprimento_metas", columnDefinition = "TINYINT", nullable = true)
-    private Integer nrDesempenhoCumprimentoMetas;
-
-    @Column(name = "ds_motivo_assinalado_cumprimento_metas", nullable = true)
-    private String dsMotivoAssinaladoCumprimentoMetas;
-
-    @Column(name = "ds_como_sentiu_mudanca_habitos", nullable = true)
-    private String dsComoSentiuMudancaHabitos;
-
-    @Column(name = "ds_adaptacao_mudanca_habitos", nullable = true)
-    private String dsAdaptacaoMudancaHabitos;
-
-    @Column(name = "ds_motivos_dificuldade_adaptacao", nullable = true)
-    private String dsMotivosDificuldadeAdaptacao;
-
-    @Column(name = "ds_sente_precisa_melhorar_alimentacao", nullable = true)
-    private String dsSentePrecisaMelhorarAlimentacao;
-
-    @Column(name = "ds_habito_intestinal", nullable = true)
-    private String dsHabitoIntestinal;
-
-    @Column(name = "ds_atividade_fisica", nullable = true)
+    @Column(name = "ds_metas_foram_cumpridas")
+    private Opcao metasForamCumpridas;
+    @Column(name = "ds_comentarios_observacao", columnDefinition = "TEXT")
+    private String comentariosObservacao;
+    @Column(name = "nr_desempenho_cumprimento_metas")
+    private Integer desempenhoMetas;
+    @Column(name = "ds_motivo_assinalado_cumprimento_metas", columnDefinition = "TEXT")
+    private String motivoCumprimentoMetas;
+    @Column(name = "ds_como_sentiu_mudanca_habitos", columnDefinition = "TEXT")
+    private String sentiuMudancaHabitos;
+    @Column(name = "ds_adaptacao_mudanca_habitos", columnDefinition = "TEXT")
+    private String adaptacaoMudanca;
+    @Column(name = "ds_motivos_dificuldade_adaptacao", columnDefinition = "TEXT")
+    private String dificuldadeAdaptacao;
+    @Column(name = "ds_sente_precisa_melhorar_alimentacao", columnDefinition = "TEXT")
+    private String melhorarAlimentacao;
+    @Column(name = "ds_habito_intestinal", columnDefinition = "TEXT")
+    private String habitoIntestinal;
     @Enumerated(EnumType.STRING)
-    private AtividadeFisica dsAtividadeFisica;
+    @Column(name = "ds_atividade_fisica")
+    private AtividadeFisica atividadeFisica;
+    @Column(name = "ds_metas_proximo_retorno", columnDefinition = "TEXT")
+    private String metasProximoRetorno;
 
-    @Column(name = "ds_metas_proximo_retorno", nullable = true)
-    private String dsMetasProximoRetorno;
-
+    // Medidas rápidas no retorno
     @Column(name = "nr_peso")
-    private Float nrPeso;
-
+    private Float peso;
     @Column(name = "nr_imc")
-    private Float nrImc;
-
+    private Float imc;
     @Column(name = "nr_circunferencia_abdominal")
-    private Float nrCircunferenciaAbdominal;
+    private Float circunferenciaAbdominal;
 
-    @Column(name = "ds_valores_bioimpedancia", nullable = true)
-    private String dsValoresBioimpedancia;
-
-    @Column(name = "ds_observacoes_bioimpedancia", nullable = true)
-    private String dsObservacoesBioimpedancia;
+    @Column(name = "ds_valores_bioimpedancia", columnDefinition = "TEXT")
+    private String valoresBioimpedancia;
+    @Column(name = "ds_observacoes_bioimpedancia", columnDefinition = "TEXT")
+    private String observacoesBioimpedancia;
 
     @Column(name = "dt_criacao", nullable = false)
     private LocalDateTime criadoEm;
@@ -115,5 +86,4 @@ public class Retorno {
     protected void onCreate() {
         criadoEm = LocalDateTime.now();
     }
-
 }

@@ -9,10 +9,11 @@ import br.unisantos.pce.model.Paciente;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
 
-    @Query(value = "SELECT * FROM tb_paciente ORDER BY dt_criacao DESC", nativeQuery = true)
+    // JPA resolve automaticamente baseado na Entidade (que já está mapeada para
+    // tb_paciente)
     List<Paciente> findAllByOrderByCriadoEmDesc();
 
-    @Query(value = "SELECT * FROM tb_paciente WHERE UPPER(nm_paciente) ILIKE CONCAT('%', :nome, '%') ORDER BY dt_criacao DESC", nativeQuery = true)
+    // Query Nativa atualizada para a nova estrutura do banco
+    @Query(value = "SELECT * FROM tb_paciente WHERE UPPER(nm_paciente) LIKE CONCAT('%', UPPER(:nome), '%') ORDER BY dt_criacao DESC", nativeQuery = true)
     List<Paciente> findByNomeOrderByCriadoEmDesc(@Param("nome") String pacienteNome);
-
 }

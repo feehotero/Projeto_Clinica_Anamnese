@@ -8,25 +8,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Entity
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_usuario")
 public class User implements UserDetails {
 
@@ -35,7 +23,7 @@ public class User implements UserDetails {
 	@Column(name = "id_matricula")
 	private Integer id;
 
-	@Column(name = "nm_usuario", length = 60, nullable = false, unique = true)
+	@Column(name = "nm_usuario", length = 60, nullable = false)
 	private String login;
 
 	@Column(name = "nm_nome_completo", length = 100, nullable = false)
@@ -56,10 +44,10 @@ public class User implements UserDetails {
 		criadoEm = LocalDateTime.now();
 	}
 
-	public User(String login, String password, String nome, UserRole role) {
+	public User(String nome, String login, String password, UserRole role) {
+		this.nome = nome;
 		this.login = login;
 		this.password = password;
-		this.nome = nome;
 		this.role = role;
 	}
 
@@ -68,7 +56,6 @@ public class User implements UserDetails {
 		if (this.role == UserRole.ADMIN) {
 			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
 		}
-
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
@@ -101,5 +88,4 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
 }

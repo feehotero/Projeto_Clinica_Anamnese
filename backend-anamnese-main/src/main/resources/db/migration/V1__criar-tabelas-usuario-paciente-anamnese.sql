@@ -1,3 +1,5 @@
+/* --- 1. CRIAÇÃO DAS TABELAS --- */
+
 CREATE TABLE tb_sexo (
     id_sexo INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     ds_sexo VARCHAR(50) NOT NULL UNIQUE
@@ -164,19 +166,50 @@ CREATE TABLE tb_retorno (
     FOREIGN KEY (id_matricula) REFERENCES tb_usuario(id_matricula)
 );
 
--- INSERTS OBRIGATÓRIOS
-INSERT INTO tb_sexo (id_sexo, ds_sexo) VALUES (1, 'Masculino'), (2, 'Feminino'), (3, 'Não informado');
+/* --- 2. INSERTS DE DOMÍNIO (DADOS OBRIGATÓRIOS) --- */
 
-INSERT INTO tb_escolaridade (id_escolaridade, ds_escolaridade) VALUES 
-(1, 'Fundamental Completo'), (2, 'Ensino Médio Completo'), (3, 'Ensino Superior Incompleto'), (4, 'Ensino Superior Completo'), (5, 'Outra');
-
-INSERT INTO tb_profissao (id_profissao, ds_profissao) VALUES (1, 'Engenheiro'), (2, 'Médico'), (3, 'Estudante');
-
-INSERT INTO tb_renda_familiar (id_renda_familiar, ds_renda_familiar) VALUES 
-(1, 'Menos de 1 salário mínimo'), (2, 'De 1 a 2 salários mínimos'), (3, 'De 3 a 5 salários mínimos'), (4, 'Mais de 5 salários mínimos'), (5, 'Não sei');
-
-INSERT INTO tb_evacuacao (id_evacuacao, ds_evacuacao) VALUES 
-(1, 'Diária'), (2, 'Alternada'), (3, 'Três vezes por semana'), (4, 'Menos de 3 vezes por semana');
-
-INSERT INTO tb_usuario (nm_usuario, nm_nome_completo, nm_senha, user_role)
+-- Usuário Admin Padrão (Senha: 123)
+INSERT INTO tb_usuario (nm_usuario, nm_nome_completo, nm_senha, user_role) 
 VALUES ('admin', 'Administrador', '$2a$12$nYYxMYVyQirARNSQBGLGOuVq7HAZkS9rJh7JmvUnKldrBkH1aFlSe', 'ADMIN');
+
+-- Sexo
+INSERT INTO tb_sexo (ds_sexo) VALUES ('Masculino'), ('Feminino'), ('Não informado');
+
+-- Escolaridade
+INSERT INTO tb_escolaridade (ds_escolaridade) VALUES 
+('Fundamental Completo'), ('Ensino Médio Completo'), ('Ensino Superior Incompleto'), ('Ensino Superior Completo'), ('Outra');
+
+-- Profissão
+INSERT INTO tb_profissao (ds_profissao) VALUES ('Engenheiro'), ('Médico'), ('Estudante');
+
+-- Renda Familiar
+INSERT INTO tb_renda_familiar (ds_renda_familiar) VALUES 
+('Menos de 1 salário mínimo'), ('De 1 a 2 salários mínimos'), ('De 3 a 5 salários mínimos'), ('Mais de 5 salários mínimos'), ('Não sei');
+
+-- Evacuação
+INSERT INTO tb_evacuacao (ds_evacuacao) VALUES 
+('Diária'), ('Alternada'), ('Três vezes por semana'), ('Menos de 3 vezes por semana');
+
+-- Refeições
+INSERT INTO tb_refeicao (ds_refeicao) VALUES 
+('Café da Manhã'), ('Lanche da Manhã'), ('Almoço'), 
+('Lanche da Tarde'), ('Jantar'), ('Ceia');
+
+-- Alimentos (Lista Completa para o Formulário)
+INSERT INTO tb_alimento (ds_alimento) VALUES 
+('Cenoura'), ('Beterraba'), ('Berinjela'), ('Pepino'), ('Abobrinha'), ('Chuchu'), ('Tomate'), -- IDs 1-7
+('Acelga'), ('Agrião'), ('Alface'), ('Brócolis'), ('Chicória'), ('Couve Manteiga'), ('Couve-flor'), ('Espinafre'), ('Rúcula'), -- IDs 8-16
+('Laranja'), ('Tangerina'), ('Limão'), ('Abacaxi'), ('Acerola'), ('Morango'), ('Kiwi'), ('Maracujá'), -- IDs 17-24
+('Banana'), ('Goiaba'), ('Maçã'), ('Mamão'), ('Manga'), ('Melancia'), ('Melão'), ('Pera'), ('Pêssego'), ('Uva'), -- IDs 25-34
+('Feijão'), ('Lentilha'), ('Ervilha'), ('Soja'), ('Grão-de-Bico'), ('Vagem'), -- IDs 35-40
+('Bovina'), ('Suína'), ('Aves'), ('Peixe'), ('Frutos do Mar'), ('Ovo'), -- IDs 41-46
+('Arroz Branco Polido'), ('Arroz Integral'), -- IDs 47-48
+('Leite Integral/Desnatado/Semi'), ('Leite Sem Lactose'), ('Queijos'), ('Iogurtes'), -- IDs 49-52
+('Aveia'), ('Granola'), ('Quinoa'), ('Linhaça/Chia'), -- IDs 53-56
+('Pão Francês'), ('Pão Francês Integral'), ('Pão de Forma'), ('Pão de Forma Integral'), ('Pão de Cará'), -- IDs 57-61
+('Requeijão'), ('Margarina'), ('Manteiga'), ('Ricota'), ('Cottage'), ('Doce de Leite'), ('Creme de Avelã'), ('Geleia'), -- IDs 62-69
+('Mistinho/Esfiha'), ('Coxinha/Croquete'), ('Empadas'), ('Pão de Queijo'), -- IDs 70-73
+('Salgadinho de Pacote'), ('Biscoito Salgado'), ('Biscoito Doce'), ('Chocolate'), ('Refrigerante'), ('Suco em Pó/Caixa'), ('Pratos Congelados'), ('Macarrão Instantâneo'), ('Bolinho'), ('Fast Food'), -- IDs 74-83
+('Salame'), ('Presunto'), ('Apresuntado/Mortadela'), ('Linguiça'), ('Salsicha'), ('Peito de Peru'), ('Rosbife'), ('Nuggets'), ('Hambúrguer'), -- IDs 84-92
+('Açúcar'), ('Adoçante'), ('Mel/Melado'), ('Confeitaria'), ('Guloseimas'), ('Achocolatados'), -- IDs 93-98
+('Ketchup'), ('Mostarda'), ('Shoyu'), ('Tare'), ('Maionese'); -- IDs 99-103

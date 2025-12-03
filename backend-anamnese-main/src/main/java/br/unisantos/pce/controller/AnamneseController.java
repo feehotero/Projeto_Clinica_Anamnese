@@ -52,33 +52,32 @@ public class AnamneseController {
 			Optional<Anamnese> anamneseExistenteOpt = anamneseService.consultarAnamnese(id);
 
 			if (anamneseExistenteOpt.isPresent()) {
-				Anamnese anamneseExistente = anamneseExistenteOpt.get();
-
-				// 1. Garante o ID da Anamnese
+				// Garante o ID da Anamnese
 				anamneseAtualizado.setId(id);
-				anamneseAtualizado.setCriadoEm(anamneseExistente.getCriadoEm());
 
-				// 2. Correção Crítica: Dados Fisiológicos
-				// Se estamos enviando dados novos, precisamos vincular ao ID antigo se ele
-				// existir
-				if (anamneseAtualizado.getDadosFisiologicos() != null) {
-					// Se já existia dados no banco, pega o ID dele para atualizar, senão cria novo
-					if (anamneseExistente.getDadosFisiologicos() != null) {
-						anamneseAtualizado.getDadosFisiologicos()
-								.setId(anamneseExistente.getDadosFisiologicos().getId());
-					}
-					// Garante o vinculo bidirecional
-					anamneseAtualizado.getDadosFisiologicos().setAnamnese(anamneseAtualizado);
-				}
-
-				// 3. Salva
-				return ResponseEntity.ok(anamneseService.alterarAnamnese(anamneseAtualizado));
+				// Salva (o service já trata toda a lógica)
+				Anamnese anamneseSalva = anamneseService.alterarAnamnese(anamneseAtualizado);
+				return ResponseEntity.ok(anamneseSalva);
 			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("Anamnese não encontrada");
+
+		} catch (RuntimeException e) {
+			// Log do erro completo no servidor
+			System.err.println("Erro ao atualizar anamnese: " + e.getMessage());
+			e.printStackTrace();
+
+			// Retorna mensagem mais específica para o frontend
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Erro ao atualizar: " + e.getMessage());
 
 		} catch (Exception e) {
-			e.printStackTrace(); // Isso vai mostrar o erro exato no console do Java
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar: " + e.getMessage());
+			System.err.println("Erro inesperado: " + e.getMessage());
+			e.printStackTrace();
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Erro inesperado ao atualizar anamnese");
 		}
 	}
 

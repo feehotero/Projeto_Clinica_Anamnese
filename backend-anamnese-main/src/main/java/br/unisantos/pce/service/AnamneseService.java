@@ -146,9 +146,112 @@ public class AnamneseService {
     }
 
     @Transactional
-    public Anamnese alterarAnamnese(Anamnese anamnese) {
-        // Mesma lógica do criarAnamnese para garantir entidades gerenciadas
-        return criarAnamnese(anamnese);
+    public Anamnese alterarAnamnese(Anamnese anamneseAtualizado) {
+        // 1. Buscar a anamnese existente
+        Optional<Anamnese> anamneseExistenteOpt = anamneseRepository.findById(anamneseAtualizado.getId());
+
+        if (!anamneseExistenteOpt.isPresent()) {
+            throw new RuntimeException("Anamnese não encontrada");
+        }
+
+        Anamnese anamneseExistente = anamneseExistenteOpt.get();
+
+        // 2. Buscar Paciente gerenciado
+        if (anamneseAtualizado.getPaciente() != null && anamneseAtualizado.getPaciente().getId() != null) {
+            Paciente paciente = pacienteRepository.findById(anamneseAtualizado.getPaciente().getId())
+                    .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+            anamneseAtualizado.setPaciente(paciente);
+        }
+
+        // 3. Buscar Usuario gerenciado
+        if (anamneseAtualizado.getUsuario() != null && anamneseAtualizado.getUsuario().getId() != null) {
+            User usuario = userRepository.findById(anamneseAtualizado.getUsuario().getId())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            anamneseAtualizado.setUsuario(usuario);
+        }
+
+        // 4. Buscar entidades de domínio gerenciadas
+        if (escolaridadeRepository != null && anamneseAtualizado.getEscolaridade() != null
+                && anamneseAtualizado.getEscolaridade().getId() != null) {
+            anamneseAtualizado.setEscolaridade(
+                    escolaridadeRepository.findById(anamneseAtualizado.getEscolaridade().getId()).orElse(null));
+        }
+
+        if (profissaoRepository != null && anamneseAtualizado.getProfissao() != null
+                && anamneseAtualizado.getProfissao().getId() != null) {
+            anamneseAtualizado.setProfissao(
+                    profissaoRepository.findById(anamneseAtualizado.getProfissao().getId()).orElse(null));
+        }
+
+        if (rendaFamiliarRepository != null && anamneseAtualizado.getRendaFamiliar() != null
+                && anamneseAtualizado.getRendaFamiliar().getId() != null) {
+            anamneseAtualizado.setRendaFamiliar(
+                    rendaFamiliarRepository.findById(anamneseAtualizado.getRendaFamiliar().getId()).orElse(null));
+        }
+
+        if (evacuacaoRepository != null && anamneseAtualizado.getEvacuacao() != null
+                && anamneseAtualizado.getEvacuacao().getId() != null) {
+            anamneseAtualizado.setEvacuacao(
+                    evacuacaoRepository.findById(anamneseAtualizado.getEvacuacao().getId()).orElse(null));
+        }
+
+        // 5. Processar Refeições
+        if (refeicaoRepository != null && anamneseAtualizado.getRefeicoes() != null) {
+            List<Refeicao> refeicoesGerenciadas = new ArrayList<>();
+            for (Refeicao r : anamneseAtualizado.getRefeicoes()) {
+                if (r.getId() != null) {
+                    refeicaoRepository.findById(r.getId()).ifPresent(refeicoesGerenciadas::add);
+                }
+            }
+            anamneseAtualizado.setRefeicoes(refeicoesGerenciadas);
+        }
+
+        // 6. CORREÇÃO CRÍTICA: Limpar alimentos antigos antes de adicionar novos
+        if (anamneseExistente.getAlimentos() != null) {
+            anamneseExistente.getAlimentos().clear();
+            anamneseRepository.flush(); // Força a sincronização com o banco
+        }
+
+        // Processar novos Alimentos
+        if (alimentoRepository != null && anamneseAtualizado.getAlimentos() != null
+                && !anamneseAtualizado.getAlimentos().isEmpty()) {
+            List<AnamneseAlimento> alimentosGerenciados = new ArrayList<>();
+
+            for (AnamneseAlimento aa : anamneseAtualizado.getAlimentos()) {
+                if (aa.getAlimento() != null && aa.getAlimento().getId() != null) {
+                    Optional<Alimento> alimentoOpt = alimentoRepository.findById(aa.getAlimento().getId());
+                    if (alimentoOpt.isPresent()) {
+                        aa.setAlimento(alimentoOpt.get());
+                        aa.setAnamnese(anamneseAtualizado);
+
+                        // Criar chave composta
+                        AnamneseAlimentoKey key = new AnamneseAlimentoKey();
+                        key.setAnamneseId(anamneseAtualizado.getId());
+                        key.setAlimentoId(aa.getAlimento().getId());
+                        aa.setId(key);
+
+                        alimentosGerenciados.add(aa);
+                    }
+                }
+            }
+            anamneseAtualizado.setAlimentos(alimentosGerenciados);
+        }
+
+        // 7. CORREÇÃO: Processar DadosFisiologicos mantendo ID existente
+        if (anamneseAtualizado.getDadosFisiologicos() != null) {
+            // Se já existia dados no banco, usa o ID antigo
+            if (anamneseExistente.getDadosFisiologicos() != null) {
+                anamneseAtualizado.getDadosFisiologicos()
+                        .setId(anamneseExistente.getDadosFisiologicos().getId());
+            }
+            // Garante o vínculo bidirecional
+            anamneseAtualizado.getDadosFisiologicos().setAnamnese(anamneseAtualizado);
+        }
+
+        // 8. Manter data de criação original
+        anamneseAtualizado.setCriadoEm(anamneseExistente.getCriadoEm());
+
+        return anamneseRepository.save(anamneseAtualizado);
     }
 
     public Boolean deletarAnamnese(Integer id) {

@@ -39,7 +39,7 @@ public class Anamnese {
 	@JoinColumn(name = "id_matricula", nullable = false)
 	private User usuario;
 
-	// --- Campos ---
+	// --- Campos Originais ---
 	@Column(name = "ds_motivo", columnDefinition = "TEXT")
 	private String motivo;
 	@Column(name = "ds_doenca", columnDefinition = "TEXT")
@@ -87,16 +87,66 @@ public class Anamnese {
 	@Column(name = "ds_necessidade_emocional_comer")
 	private String necessidadeEmocionalComer;
 
+	// --- NOVOS CAMPOS ADICIONADOS ---
+	@Column(name = "fl_lanche_estudo")
+	private Boolean lancheEstudo;
+
+	@Column(name = "fl_lanche_trabalho")
+	private Boolean lancheTrabalho;
+
+	@Column(name = "fl_pratica_atividade_fisica")
+	private Boolean praticaAtvFisica;
+
+	@Column(name = "ds_atividade_fisica_descricao", columnDefinition = "TEXT")
+	private String atvFisica;
+
+	// Descrição das refeições (Recordatório Alimentar)
+	@Column(name = "ds_cafe_manha", columnDefinition = "TEXT")
+	private String cafeDaManha;
+
+	@Column(name = "ds_lanche_manha", columnDefinition = "TEXT")
+	private String lancheDaManha;
+
+	@Column(name = "ds_almoco", columnDefinition = "TEXT")
+	private String almoco;
+
+	@Column(name = "ds_lanche_tarde", columnDefinition = "TEXT")
+	private String lancheDaTarde;
+
+	@Column(name = "ds_jantar", columnDefinition = "TEXT")
+	private String jantar;
+
+	@Column(name = "ds_ceia", columnDefinition = "TEXT")
+	private String ceia;
+
+	// Novos Campos de Comportamento
+	@Column(name = "ds_sintomas_excesso_alimentos", columnDefinition = "TEXT")
+	private String excessoAlimentosNaoSaudaveisSintomas;
+
+	@Column(name = "ds_dificuldade_rotina", columnDefinition = "TEXT")
+	private String dificuldadeRotinaAlimentarSaudavel;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ds_consolo_alimentar")
+	private Opcao necessidadeConsoloAlimentar;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ds_dificuldade_parar_comer")
+	private Opcao dificuldadePararDeComer;
+
 	// --- FKs ---
 	@ManyToOne
 	@JoinColumn(name = "id_escolaridade")
 	private Escolaridade escolaridade;
+
 	@ManyToOne
 	@JoinColumn(name = "id_profissao")
 	private Profissao profissao;
+
 	@ManyToOne
 	@JoinColumn(name = "id_renda_familiar")
 	private RendaFamiliar rendaFamiliar;
+
 	@ManyToOne
 	@JoinColumn(name = "id_evacuacao")
 	private Evacuacao evacuacao;
@@ -110,11 +160,13 @@ public class Anamnese {
 	@JoinTable(name = "tb_anamnese_refeicao", joinColumns = @JoinColumn(name = "id_anamnese"), inverseJoinColumns = @JoinColumn(name = "id_refeicao"))
 	private List<Refeicao> refeicoes;
 
+	// AQUI ESTAVA O ERRO: Adicionado orphanRemoval = true para permitir atualização
+	// da lista
 	@JsonManagedReference
-	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AnamneseAlimento> alimentos = new ArrayList<>();
 
-	// --- CAMPOS ADICIONAIS PARA O FRONTEND ---
+	// --- Auxiliares ---
 	@Transient
 	private List<Retorno> retornos;
 

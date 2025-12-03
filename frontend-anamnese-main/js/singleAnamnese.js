@@ -13,17 +13,22 @@ function consultarAnamnese() {
     fetch(urlApi + endpointAnamneses + "/" + anamneseId, { headers: { "Authorization": `${token}` } })
     .then(r => r.json())
     .then(a => {
-        // Cabeçalho
+        // --- 1. Preenchimento do Cabeçalho ---
         if(pacienteNome && a.paciente) pacienteNome.textContent = a.paciente.nome;
         if(criadoPor && a.usuario) criadoPor.textContent = a.usuario.nome;
         if(botaoCriarRetorno) botaoCriarRetorno.href = `./adicionar-retorno.html?id=${a.id}`;
 
-        // Funções auxiliares
+        // --- 2. Funções Auxiliares de Preenchimento ---
         const set = (id, v) => { 
             const el = document.getElementById(id); 
             if(el) el.value = (v === null || v === undefined) ? "" : v; 
         };
         
+        const setCheck = (id, v) => { 
+            const el = document.getElementById(id); 
+            if(el) el.checked = !!v; 
+        };
+
         const setRadio = (name, v) => {
             if (v !== null && v !== undefined) {
                 const el = document.querySelector(`input[name="${name}"][value="${v}"]`);
@@ -31,66 +36,69 @@ function consultarAnamnese() {
             }
         };
 
-        const setCheck = (id, v) => {
-            const el = document.getElementById(id);
-            if (el) el.checked = !!v;
-        };
-
-        // --- Mapeamento dos Dados Pessoais ---
+        // --- 3. Mapeamento dos Campos ---
+        
+        // Dados Pessoais e Rotina
         set("pacienteId", a.paciente?.id);
         set("escolaridade", a.escolaridade?.id);
-        
-        // No HTML 'profissao' é um input text, mas no backend é objeto. 
-        // Tentamos preencher com a descrição se existir
-        set("profissao", a.profissao?.descricao || ""); 
-        
+        set("profissao", a.profissao?.id); // Corrigido para pegar ID do objeto
         set("periodoEstudo", a.periodoEstudo);
+        setCheck("lancheEstudo", a.lancheEstudo); 
         set("periodoTrabalho", a.periodoTrabalho);
-        // Nota: 'lancheEstudo' e 'lancheTrabalho' não existem no seu Backend (Anamnese.java), então não são recuperados.
+        setCheck("lancheTrabalho", a.lancheTrabalho); 
 
-        // --- Mapeamento Socioeconômico ---
+        // Socioeconômico
         set("rendaFamiliar", a.rendaFamiliar?.id);
         set("numPessoasDomicilio", a.numPessoasDomicilio);
 
-        // --- História Clínica ---
+        // Dados Clínicos
         set("motivo", a.motivo);
-        set("apresentaDoenca", a.doenca); // ID HTML: apresentaDoenca -> Backend: doenca
-        set("antecedentesFamiliares", a.antecedentes); // ID HTML: antecedentesFamiliares -> Backend: antecedentes
-        set("medicamentosContinuos", a.medicamento); // ID HTML: medicamentosContinuos -> Backend: medicamento
-        set("suplementosComplementos", a.suplemento); // ID HTML: suplementosComplementos -> Backend: suplemento
-        
-        set("frequenciaEvacuacao", a.evacuacao?.id); // ID HTML: frequenciaEvacuacao -> Backend: evacuacao object
+        set("apresentaDoenca", a.doenca); 
+        set("antecedentesFamiliares", a.antecedentes); 
+        set("medicamentosContinuos", a.medicamento); 
+        set("suplementosComplementos", a.suplemento); 
+        set("frequenciaEvacuacao", a.evacuacao?.id);
         set("consistenciaEvacuacao", a.consistenciaEvacuacao);
-        
-        // 'praticaAtvFisica' e 'atvFisica' não existem no seu Backend (Anamnese.java)
+        setCheck("praticaAtvFisica", a.praticaAtvFisica);
+        set("atvFisica", a.atvFisica); 
 
-        // --- Comportamento Alimentar ---
+        // Recordatório Alimentar (Descrições)
+        set("cafeDaManha", a.cafeDaManha);
+        set("lancheDaManha", a.lancheDaManha);
+        set("almoco", a.almoco);
+        set("lancheDaTarde", a.lancheDaTarde);
+        set("jantar", a.jantar);
+        set("ceia", a.ceia);
+
+        // Comportamento Alimentar (Completo)
         set("quemCozinha", a.quemCozinha);
-        set("necessidadeComerEstressadoAnsiosoTriste", a.necessidadeComerEmocional); // ID HTML diferente do Backend
-        set("realizaRefeicoesSozinhoAcompanhado", a.companhiaRefeicoes); // ID HTML diferente do Backend
-        
-        set("frequenciaFomeFisiologica", a.fomeFisiologica); // ID HTML: frequenciaFomeFisiologica
-        set("frequenciaNecessidadeEmocionalComer", a.necessidadeEmocionalComer); // ID HTML: frequenciaNecessidadeEmocionalComer
-        
-        set("naoModificarPlanoAlimentar", a.naoModificarPlano); // ID HTML: naoModificarPlanoAlimentar
+        set("necessidadeComerEstressadoAnsiosoTriste", a.necessidadeComerEmocional);
+        set("realizaRefeicoesSozinhoAcompanhado", a.companhiaRefeicoes);
+        set("excessoAlimentosNaoSaudaveisSintomas", a.excessoAlimentosNaoSaudaveisSintomas);
+        set("dificuldadeRotinaAlimentarSaudavel", a.dificuldadeRotinaAlimentarSaudavel);
+        set("necessidadeConsoloAlimentar", a.necessidadeConsoloAlimentar);
+        set("dificuldadePararDeComer", a.dificuldadePararDeComer);
+        set("frequenciaFomeFisiologica", a.fomeFisiologica);
+        set("frequenciaNecessidadeEmocionalComer", a.necessidadeEmocionalComer);
+        set("naoModificarPlanoAlimentar", a.naoModificarPlano);
         set("aversaoAlimentar", a.aversaoAlimentar);
-        set("toleraAlimentosProteinaAnimal", a.toleraProteinaAnimal); // ID HTML: toleraAlimentosProteinaAnimal
-        set("alergiaIntoleranciasAlimentares", a.alergias); // ID HTML: alergiaIntoleranciasAlimentares
+        set("toleraAlimentosProteinaAnimal", a.toleraProteinaAnimal);
+        set("alergiaIntoleranciasAlimentares", a.alergias);
         
-        // Radios de Notas (Saciedade e Humor)
+        // Notas (Radio Buttons)
         setRadio("notaSaciedadePosRefeicoes", a.notaSaciedade);
         setRadio("notaHumorPosRefeicoes", a.notaHumor);
-
+        
         set("metas", a.metas);
 
-        // --- Dados Fisiológicos (Antropometria) ---
+        // Antropometria (Dados Fisiológicos)
         if(a.dadosFisiologicos) {
-            set("pesoAtual", a.dadosFisiologicos.peso); // ID HTML: pesoAtual -> Backend: peso
+            set("pesoAtual", a.dadosFisiologicos.peso);
             set("estatura", a.dadosFisiologicos.estatura);
             set("imc", a.dadosFisiologicos.imc);
             set("circunferenciaCintura", a.dadosFisiologicos.circunferenciaCintura);
             set("somatoria4Dobras", a.dadosFisiologicos.somatoria4Dobras);
-            set("porcentagemGorduraCorporalSomatoria4Dobras", a.dadosFisiologicos.percentualGorduraCalculado); // ID HTML longo
+            set("porcentagemGorduraCorporalSomatoria4Dobras", a.dadosFisiologicos.percentualGorduraCalculado);
             set("pesoGordura", a.dadosFisiologicos.pesoGordura);
             set("pesoMassaMagra", a.dadosFisiologicos.pesoMassaMagra);
             set("totalAgua", a.dadosFisiologicos.totalAgua);
@@ -105,7 +113,6 @@ function consultarAnamnese() {
             set("forcaPreencaoManualDireita", a.dadosFisiologicos.forcaPreencaoManualDireita);
             set("forcaPreencaoManualEsquerda", a.dadosFisiologicos.forcaPreencaoManualEsquerda);
             
-            // Outros campos de dobras (cb, dct, dcb...) também podem ser mapeados se existirem no HTML com esses IDs
             set("cb", a.dadosFisiologicos.cb);
             set("dct", a.dadosFisiologicos.dct);
             set("dcb", a.dadosFisiologicos.dcb);
@@ -113,79 +120,95 @@ function consultarAnamnese() {
             set("dcsi", a.dadosFisiologicos.dcsi);
         }
 
-        // --- ATENÇÃO: Alimentos e Refeições ---
-        // O HTML 'anamnese.html' usa inputs do tipo TEXTO para refeições (ex: 'cafeDaManha'),
-        // mas o Backend só salva checkboxes de ID de refeição. Os textos não são salvos.
-        // Se quiser ver os alimentos marcados (checkboxes/radios), o HTML precisaria ter a mesma estrutura do 'adicionar-anamnese.html'.
+        // --- 4. Carregar Listas (Refeições e Alimentos) ---
         
-        // Lógica parcial para preencher alimentos se os IDs existissem no HTML (provavelmente não funcionarão no anamnese.html atual):
+        if(a.refeicoes) {
+            a.refeicoes.forEach(r => {
+                const ck = document.querySelector(`input[name="refeicoes"][value="${r.id}"]`);
+                if(ck) ck.checked = true;
+            });
+        }
+
         if(a.alimentos) {
              a.alimentos.forEach(item => { 
-                 // Tenta encontrar radio buttons com nomes baseados em ID (estilo adicionar-anamnese)
-                 // Se o seu anamnese.html usa nomes fixos como 'legumesCenoura', essa lógica genérica não funciona sem um mapa manual.
                  const rd = document.querySelector(`input[name="f_${item.alimento.id}"][value="${item.frequencia}"]`); 
-                 if(rd) rd.checked=true; 
+                 if(rd) rd.checked = true; 
              });
         }
+    })
+    .catch(err => {
+        console.error("Erro ao carregar anamnese:", err);
+        alert("Erro ao carregar dados da anamnese.");
     });
 }
 
-// O restante das funções (atualizarAnamnese, getData, etc.) também precisa ser ajustado para pegar os IDs corretos
-// para que o botão "Enviar" funcione nessa tela.
-
 function getData() {
+  // Helpers para capturar valores
   const getString = (id) => { const el = document.getElementById(id); return (el && el.value.trim() !== "") ? el.value.trim() : null; };
   const getInt = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseInt(el.value, 10); return isNaN(v) ? null : v; };
   const getFloat = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseFloat(el.value.replace(',', '.')); return isNaN(v) ? null : v; };
   const getObjId = (id) => { const v = getInt(id); return v ? { id: v } : null; };
-  
+  const getCheck = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
+
   const uid = localStorage.getItem("usuarioId");
   
   const data = {
     usuario: { id: parseInt(uid) },
     paciente: { id: getInt("pacienteId") },
     escolaridade: getObjId("escolaridade"),
-    // Profissao no HTML é texto, mas backend espera objeto ID. Isso pode causar erro ao salvar se não for tratado.
-    // Sugestão: usar select como no adicionar. Se for texto, o backend teria que mudar.
-    // Vou manter null para evitar erro 500 se for texto
-    profissao: null, 
+    profissao: getObjId("profissao"), // AQUI ESTAVA O ERRO: Agora pega o ID do select
     rendaFamiliar: getObjId("rendaFamiliar"),
-    evacuacao: getObjId("frequenciaEvacuacao"), // ID corrigido
+    evacuacao: getObjId("frequenciaEvacuacao"),
     
+    lancheEstudo: getCheck("lancheEstudo"),
+    lancheTrabalho: getCheck("lancheTrabalho"),
+    praticaAtvFisica: getCheck("praticaAtvFisica"),
+    atvFisica: getString("atvFisica"),
+    
+    cafeDaManha: getString("cafeDaManha"),
+    lancheDaManha: getString("lancheDaManha"),
+    almoco: getString("almoco"),
+    lancheDaTarde: getString("lancheDaTarde"),
+    jantar: getString("jantar"),
+    ceia: getString("ceia"),
+
     motivo: getString("motivo"), 
-    doenca: getString("apresentaDoenca"), // ID corrigido
-    antecedentes: getString("antecedentesFamiliares"), // ID corrigido
-    medicamento: getString("medicamentosContinuos"), // ID corrigido
-    suplemento: getString("suplementosComplementos"), // ID corrigido
+    doenca: getString("apresentaDoenca"),
+    antecedentes: getString("antecedentesFamiliares"),
+    medicamento: getString("medicamentosContinuos"),
+    suplemento: getString("suplementosComplementos"),
     
     periodoEstudo: getString("periodoEstudo"), 
     periodoTrabalho: getString("periodoTrabalho"), 
     quemCozinha: getString("quemCozinha"), 
     
-    necessidadeComerEmocional: getString("necessidadeComerEstressadoAnsiosoTriste"), // ID corrigido
-    companhiaRefeicoes: getString("realizaRefeicoesSozinhoAcompanhado"), // ID corrigido
-    fomeFisiologica: getString("frequenciaFomeFisiologica"), // ID corrigido
-    necessidadeEmocionalComer: getString("frequenciaNecessidadeEmocionalComer"), // ID corrigido
-    naoModificarPlano: getString("naoModificarPlanoAlimentar"), // ID corrigido
+    necessidadeComerEmocional: getString("necessidadeComerEstressadoAnsiosoTriste"),
+    companhiaRefeicoes: getString("realizaRefeicoesSozinhoAcompanhado"),
+    excessoAlimentosNaoSaudaveisSintomas: getString("excessoAlimentosNaoSaudaveisSintomas"),
+    dificuldadeRotinaAlimentarSaudavel: getString("dificuldadeRotinaAlimentarSaudavel"),
+    necessidadeConsoloAlimentar: getString("necessidadeConsoloAlimentar"),
+    dificuldadePararDeComer: getString("dificuldadePararDeComer"),
+    fomeFisiologica: getString("frequenciaFomeFisiologica"),
+    necessidadeEmocionalComer: getString("frequenciaNecessidadeEmocionalComer"),
+    naoModificarPlano: getString("naoModificarPlanoAlimentar"),
     aversaoAlimentar: getString("aversaoAlimentar"), 
-    toleraProteinaAnimal: getString("toleraAlimentosProteinaAnimal"), // ID corrigido
-    alergias: getString("alergiaIntoleranciasAlimentares"), // ID corrigido
+    toleraProteinaAnimal: getString("toleraAlimentosProteinaAnimal"),
+    alergias: getString("alergiaIntoleranciasAlimentares"),
     metas: getString("metas"),
     numPessoasDomicilio: getInt("numPessoasDomicilio"), 
     
-    // Radios
     notaSaciedade: parseInt(document.querySelector('input[name="notaSaciedadePosRefeicoes"]:checked')?.value || 0),
     notaHumor: parseInt(document.querySelector('input[name="notaHumorPosRefeicoes"]:checked')?.value || 0),
     
     consistenciaEvacuacao: getInt("consistenciaEvacuacao"),
     
     dadosFisiologicos: { 
-        peso: getFloat("pesoAtual"), // ID corrigido
+        peso: getFloat("pesoAtual"),
         estatura: getFloat("estatura"), 
         imc: getFloat("imc"), 
         circunferenciaCintura: getFloat("circunferenciaCintura"), 
         somatoria4Dobras: getFloat("somatoria4Dobras"), 
-        percentualGorduraCalculado: getFloat("porcentagemGorduraCorporalSomatoria4Dobras"), // Mapeando
+        percentualGorduraCalculado: getFloat("porcentagemGorduraCorporalSomatoria4Dobras"),
         pesoGordura: getFloat("pesoGordura"),
         pesoMassaMagra: getFloat("pesoMassaMagra"),
         totalAgua: getFloat("totalAgua"),
@@ -208,8 +231,22 @@ function getData() {
     refeicoes: [], 
     alimentos: []
   };
-  
-  // A lógica de salvar alimentos/refeições aqui dependeria do HTML ter checkboxes com IDs compatíveis
+
+  document.querySelectorAll('input[name="refeicoes"]:checked').forEach(ck => {
+    data.refeicoes.push({ id: parseInt(ck.value) });
+  });
+
+  document.querySelectorAll('.food-row').forEach(row => {
+      const id = row.getAttribute('data-id');
+      const rad = row.querySelector(`input[name="f_${id}"]:checked`);
+      if(rad) {
+        data.alimentos.push({ 
+          alimento: { id: parseInt(id) }, 
+          frequencia: rad.value 
+        });
+      }
+  });
+
   return data;
 }
 
@@ -220,16 +257,41 @@ function atualizarAnamnese() {
             headers: { "Content-Type": "application/json", "Authorization": `${token}` },
             method: "PUT",
             body: JSON.stringify(data)
-        }).then(r => { if(!r.ok) return Promise.reject(); goodWarning.textContent="Atualizado!"; resolve(r); }).catch(reject);
+        })
+        .then(r => { 
+            if(!r.ok) return Promise.reject(); 
+            goodWarning.textContent = "Anamnese atualizada com sucesso!";
+            setTimeout(() => { resolve(r); }, 1500);
+        })
+        .catch(error => {
+            console.error(error);
+            badWarning.textContent = "Erro ao atualizar. Verifique os dados.";
+            reject(error);
+        });
     });
 }
 
-if(botaoDeletar) botaoDeletar.addEventListener("click", async () => { try { await deletarItem(anamneseId, endpointAnamneses); window.location.href = "formularios.html"; } catch {} });
+if(botaoDeletar) {
+    botaoDeletar.addEventListener("click", async () => { 
+        try { 
+            await deletarItem(anamneseId, endpointAnamneses); 
+            window.location.href = "formularios.html"; 
+        } catch { 
+            verificarAutenticacao();
+        } 
+    });
+}
 
 function listarPacientesSelect(select) {
-    fetch(urlApi + endpointPacientes, { headers: { "Authorization": `${token}` } }).then(r => r.json()).then(d => {
-        d.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.nome; select.appendChild(o); });
-        // Importante: Chama a consulta APÓS carregar os pacientes para garantir que o select esteja pronto
+    fetch(urlApi + endpointPacientes, { headers: { "Authorization": `${token}` } })
+    .then(r => r.json())
+    .then(d => {
+        d.forEach(p => { 
+            const o = document.createElement('option'); 
+            o.value = p.id; 
+            o.textContent = p.nome; 
+            select.appendChild(o); 
+        });
         consultarAnamnese();
     });
 }

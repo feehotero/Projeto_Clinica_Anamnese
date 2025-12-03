@@ -93,6 +93,20 @@
                   <option value="NA">N/A</option>
                 </select>
               </div>
+              <div class="col-md-6 mb-4 d-flex align-items-center">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="lancheEstudo"
+                  />
+                  <label class="form-check-label" for="lancheEstudo"
+                    >Lanche no Estudo?</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-6 mb-4">
                 <label class="form-label">Período Trabalho</label
                 ><select id="periodoTrabalho" class="form-select">
@@ -102,6 +116,18 @@
                   <option value="noite">Noite</option>
                   <option value="NA">N/A</option>
                 </select>
+              </div>
+              <div class="col-md-6 mb-4 d-flex align-items-center">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="lancheTrabalho"
+                  />
+                  <label class="form-check-label" for="lancheTrabalho"
+                    >Lanche no Trabalho?</label
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -126,6 +152,7 @@
                 id="numPessoasDomicilio"
                 class="form-control"
                 placeholder="0"
+                min="0"
               />
             </div>
             <div class="mb-4">
@@ -134,23 +161,35 @@
             </div>
             <div class="mb-4">
               <label>Doenças</label
-              ><input type="text" id="doenca" class="form-control" />
+              ><input type="text" id="apresentaDoenca" class="form-control" />
             </div>
             <div class="mb-4">
               <label>Antecedentes Familiares</label
-              ><input type="text" id="antecedentes" class="form-control" />
+              ><input
+                type="text"
+                id="antecedentesFamiliares"
+                class="form-control"
+              />
             </div>
             <div class="mb-4">
               <label>Medicamentos</label
-              ><input type="text" id="medicamento" class="form-control" />
+              ><input
+                type="text"
+                id="medicamentosContinuos"
+                class="form-control"
+              />
             </div>
             <div class="mb-4">
               <label>Suplementos</label
-              ><input type="text" id="suplemento" class="form-control" />
+              ><input
+                type="text"
+                id="suplementosComplementos"
+                class="form-control"
+              />
             </div>
             <div class="mb-4">
               <label>Frequência Evacuação</label
-              ><select id="evacuacao" class="form-select">
+              ><select id="frequenciaEvacuacao" class="form-select">
                 <option value="">Selecione...</option>
                 <option value="1">Diária</option>
                 <option value="2">Alternada</option>
@@ -169,6 +208,7 @@
               </div>
               <select id="consistenciaEvacuacao" class="form-select">
                 <option value="">Selecione...</option>
+                <option value="0">Tipo 0</option>
                 <option value="1">Tipo 1</option>
                 <option value="2">Tipo 2</option>
                 <option value="3">Tipo 3</option>
@@ -178,60 +218,158 @@
                 <option value="7">Tipo 7</option>
               </select>
             </div>
+
+            <div class="mb-4 form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="praticaAtvFisica"
+              />
+              <label class="form-check-label" for="praticaAtvFisica"
+                >Pratica atividade física regularmente?</label
+              >
+            </div>
+
+            <div class="mb-4">
+              <label for="atvFisica" class="form-label"
+                >Se sim: qual atividade, frequência semanal e duração?</label
+              >
+              <input type="text" id="atvFisica" class="form-control" />
+            </div>
           </div>
 
           <div class="tab">
             <div class="header-tab">
               <h2 class="fs-5">Recordatório Alimentar</h2>
             </div>
-            <p>Selecione as refeições realizadas:</p>
-            <div class="form-check">
+            <p>
+              Selecione as refeições realizadas e descreva o que costuma comer:
+            </p>
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="1"
+                  id="checkCafe"
+                />
+                <label class="form-check-label fw-bold" for="checkCafe"
+                  >Café da Manhã</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="1"
-              /><label>Café da Manhã</label>
+                type="text"
+                id="cafeDaManha"
+                class="form-control mt-1"
+                placeholder="Descreva o café da manhã..."
+              />
             </div>
-            <div class="form-check">
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="2"
+                  id="checkLancheManha"
+                />
+                <label class="form-check-label fw-bold" for="checkLancheManha"
+                  >Lanche da Manhã</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="2"
-              /><label>Lanche da Manhã</label>
+                type="text"
+                id="lancheDaManha"
+                class="form-control mt-1"
+                placeholder="Descreva o lanche..."
+              />
             </div>
-            <div class="form-check">
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="3"
+                  id="checkAlmoco"
+                />
+                <label class="form-check-label fw-bold" for="checkAlmoco"
+                  >Almoço</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="3"
-              /><label>Almoço</label>
+                type="text"
+                id="almoco"
+                class="form-control mt-1"
+                placeholder="Descreva o almoço..."
+              />
             </div>
-            <div class="form-check">
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="4"
+                  id="checkLancheTarde"
+                />
+                <label class="form-check-label fw-bold" for="checkLancheTarde"
+                  >Lanche da Tarde</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="4"
-              /><label>Lanche da Tarde</label>
+                type="text"
+                id="lancheDaTarde"
+                class="form-control mt-1"
+                placeholder="Descreva o lanche..."
+              />
             </div>
-            <div class="form-check">
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="5"
+                  id="checkJantar"
+                />
+                <label class="form-check-label fw-bold" for="checkJantar"
+                  >Jantar</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="5"
-              /><label>Jantar</label>
+                type="text"
+                id="jantar"
+                class="form-control mt-1"
+                placeholder="Descreva o jantar..."
+              />
             </div>
-            <div class="form-check">
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="refeicoes"
+                  value="6"
+                  id="checkCeia"
+                />
+                <label class="form-check-label fw-bold" for="checkCeia"
+                  >Ceia</label
+                >
+              </div>
               <input
-                class="form-check-input"
-                type="checkbox"
-                name="refeicoes"
-                value="6"
-              /><label>Ceia</label>
+                type="text"
+                id="ceia"
+                class="form-control mt-1"
+                placeholder="Descreva a ceia..."
+              />
             </div>
           </div>
 
@@ -276,338 +414,12 @@
                     <td><input type="radio" name="f_2" value="mensal" /></td>
                     <td><input type="radio" name="f_2" value="nao" /></td>
                   </tr>
-                  <tr class="food-row" data-id="3">
-                    <td>Berinjela</td>
-                    <td><input type="radio" name="f_3" value="diario" /></td>
-                    <td><input type="radio" name="f_3" value="semanal" /></td>
-                    <td><input type="radio" name="f_3" value="mensal" /></td>
-                    <td><input type="radio" name="f_3" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="4">
-                    <td>Pepino</td>
-                    <td><input type="radio" name="f_4" value="diario" /></td>
-                    <td><input type="radio" name="f_4" value="semanal" /></td>
-                    <td><input type="radio" name="f_4" value="mensal" /></td>
-                    <td><input type="radio" name="f_4" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="5">
-                    <td>Abobrinha</td>
-                    <td><input type="radio" name="f_5" value="diario" /></td>
-                    <td><input type="radio" name="f_5" value="semanal" /></td>
-                    <td><input type="radio" name="f_5" value="mensal" /></td>
-                    <td><input type="radio" name="f_5" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="6">
-                    <td>Chuchu</td>
-                    <td><input type="radio" name="f_6" value="diario" /></td>
-                    <td><input type="radio" name="f_6" value="semanal" /></td>
-                    <td><input type="radio" name="f_6" value="mensal" /></td>
-                    <td><input type="radio" name="f_6" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="7">
-                    <td>Tomate</td>
-                    <td><input type="radio" name="f_7" value="diario" /></td>
-                    <td><input type="radio" name="f_7" value="semanal" /></td>
-                    <td><input type="radio" name="f_7" value="mensal" /></td>
-                    <td><input type="radio" name="f_7" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Verduras</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="8">
-                    <td>Acelga</td>
-                    <td><input type="radio" name="f_8" value="diario" /></td>
-                    <td><input type="radio" name="f_8" value="semanal" /></td>
-                    <td><input type="radio" name="f_8" value="mensal" /></td>
-                    <td><input type="radio" name="f_8" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="10">
-                    <td>Alface</td>
-                    <td><input type="radio" name="f_10" value="diario" /></td>
-                    <td><input type="radio" name="f_10" value="semanal" /></td>
-                    <td><input type="radio" name="f_10" value="mensal" /></td>
-                    <td><input type="radio" name="f_10" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="11">
-                    <td>Brócolis</td>
-                    <td><input type="radio" name="f_11" value="diario" /></td>
-                    <td><input type="radio" name="f_11" value="semanal" /></td>
-                    <td><input type="radio" name="f_11" value="mensal" /></td>
-                    <td><input type="radio" name="f_11" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="13">
-                    <td>Couve Manteiga</td>
-                    <td><input type="radio" name="f_13" value="diario" /></td>
-                    <td><input type="radio" name="f_13" value="semanal" /></td>
-                    <td><input type="radio" name="f_13" value="mensal" /></td>
-                    <td><input type="radio" name="f_13" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="16">
-                    <td>Rúcula</td>
-                    <td><input type="radio" name="f_16" value="diario" /></td>
-                    <td><input type="radio" name="f_16" value="semanal" /></td>
-                    <td><input type="radio" name="f_16" value="mensal" /></td>
-                    <td><input type="radio" name="f_16" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Frutas</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="17">
-                    <td>Laranja</td>
-                    <td><input type="radio" name="f_17" value="diario" /></td>
-                    <td><input type="radio" name="f_17" value="semanal" /></td>
-                    <td><input type="radio" name="f_17" value="mensal" /></td>
-                    <td><input type="radio" name="f_17" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="18">
-                    <td>Tangerina</td>
-                    <td><input type="radio" name="f_18" value="diario" /></td>
-                    <td><input type="radio" name="f_18" value="semanal" /></td>
-                    <td><input type="radio" name="f_18" value="mensal" /></td>
-                    <td><input type="radio" name="f_18" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="19">
-                    <td>Limão</td>
-                    <td><input type="radio" name="f_19" value="diario" /></td>
-                    <td><input type="radio" name="f_19" value="semanal" /></td>
-                    <td><input type="radio" name="f_19" value="mensal" /></td>
-                    <td><input type="radio" name="f_19" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="20">
-                    <td>Abacaxi</td>
-                    <td><input type="radio" name="f_20" value="diario" /></td>
-                    <td><input type="radio" name="f_20" value="semanal" /></td>
-                    <td><input type="radio" name="f_20" value="mensal" /></td>
-                    <td><input type="radio" name="f_20" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="25">
-                    <td>Banana</td>
-                    <td><input type="radio" name="f_25" value="diario" /></td>
-                    <td><input type="radio" name="f_25" value="semanal" /></td>
-                    <td><input type="radio" name="f_25" value="mensal" /></td>
-                    <td><input type="radio" name="f_25" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="27">
-                    <td>Maçã</td>
-                    <td><input type="radio" name="f_27" value="diario" /></td>
-                    <td><input type="radio" name="f_27" value="semanal" /></td>
-                    <td><input type="radio" name="f_27" value="mensal" /></td>
-                    <td><input type="radio" name="f_27" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="28">
-                    <td>Mamão</td>
-                    <td><input type="radio" name="f_28" value="diario" /></td>
-                    <td><input type="radio" name="f_28" value="semanal" /></td>
-                    <td><input type="radio" name="f_28" value="mensal" /></td>
-                    <td><input type="radio" name="f_28" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="30">
-                    <td>Melancia</td>
-                    <td><input type="radio" name="f_30" value="diario" /></td>
-                    <td><input type="radio" name="f_30" value="semanal" /></td>
-                    <td><input type="radio" name="f_30" value="mensal" /></td>
-                    <td><input type="radio" name="f_30" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="31">
-                    <td>Melão</td>
-                    <td><input type="radio" name="f_31" value="diario" /></td>
-                    <td><input type="radio" name="f_31" value="semanal" /></td>
-                    <td><input type="radio" name="f_31" value="mensal" /></td>
-                    <td><input type="radio" name="f_31" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="34">
-                    <td>Uva</td>
-                    <td><input type="radio" name="f_34" value="diario" /></td>
-                    <td><input type="radio" name="f_34" value="semanal" /></td>
-                    <td><input type="radio" name="f_34" value="mensal" /></td>
-                    <td><input type="radio" name="f_34" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Leguminosas</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="35">
-                    <td>Feijão</td>
-                    <td><input type="radio" name="f_35" value="diario" /></td>
-                    <td><input type="radio" name="f_35" value="semanal" /></td>
-                    <td><input type="radio" name="f_35" value="mensal" /></td>
-                    <td><input type="radio" name="f_35" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="36">
-                    <td>Lentilha</td>
-                    <td><input type="radio" name="f_36" value="diario" /></td>
-                    <td><input type="radio" name="f_36" value="semanal" /></td>
-                    <td><input type="radio" name="f_36" value="mensal" /></td>
-                    <td><input type="radio" name="f_36" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Carnes e Ovos</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="41">
-                    <td>Bovina</td>
-                    <td><input type="radio" name="f_41" value="diario" /></td>
-                    <td><input type="radio" name="f_41" value="semanal" /></td>
-                    <td><input type="radio" name="f_41" value="mensal" /></td>
-                    <td><input type="radio" name="f_41" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="43">
-                    <td>Frango</td>
-                    <td><input type="radio" name="f_43" value="diario" /></td>
-                    <td><input type="radio" name="f_43" value="semanal" /></td>
-                    <td><input type="radio" name="f_43" value="mensal" /></td>
-                    <td><input type="radio" name="f_43" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="44">
-                    <td>Peixe</td>
-                    <td><input type="radio" name="f_44" value="diario" /></td>
-                    <td><input type="radio" name="f_44" value="semanal" /></td>
-                    <td><input type="radio" name="f_44" value="mensal" /></td>
-                    <td><input type="radio" name="f_44" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="46">
-                    <td>Ovo</td>
-                    <td><input type="radio" name="f_46" value="diario" /></td>
-                    <td><input type="radio" name="f_46" value="semanal" /></td>
-                    <td><input type="radio" name="f_46" value="mensal" /></td>
-                    <td><input type="radio" name="f_46" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Arroz</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="47">
-                    <td>Arroz Branco Polido</td>
-                    <td><input type="radio" name="f_47" value="diario" /></td>
-                    <td><input type="radio" name="f_47" value="semanal" /></td>
-                    <td><input type="radio" name="f_47" value="mensal" /></td>
-                    <td><input type="radio" name="f_47" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="48">
-                    <td>Arroz Integral</td>
-                    <td><input type="radio" name="f_48" value="diario" /></td>
-                    <td><input type="radio" name="f_48" value="semanal" /></td>
-                    <td><input type="radio" name="f_48" value="mensal" /></td>
-                    <td><input type="radio" name="f_48" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Lácteos</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="49">
-                    <td>Leite</td>
-                    <td><input type="radio" name="f_49" value="diario" /></td>
-                    <td><input type="radio" name="f_49" value="semanal" /></td>
-                    <td><input type="radio" name="f_49" value="mensal" /></td>
-                    <td><input type="radio" name="f_49" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="51">
-                    <td>Queijos</td>
-                    <td><input type="radio" name="f_51" value="diario" /></td>
-                    <td><input type="radio" name="f_51" value="semanal" /></td>
-                    <td><input type="radio" name="f_51" value="mensal" /></td>
-                    <td><input type="radio" name="f_51" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="52">
-                    <td>Iogurtes</td>
-                    <td><input type="radio" name="f_52" value="diario" /></td>
-                    <td><input type="radio" name="f_52" value="semanal" /></td>
-                    <td><input type="radio" name="f_52" value="mensal" /></td>
-                    <td><input type="radio" name="f_52" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Cereais</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="53">
-                    <td>Aveia</td>
-                    <td><input type="radio" name="f_53" value="diario" /></td>
-                    <td><input type="radio" name="f_53" value="semanal" /></td>
-                    <td><input type="radio" name="f_53" value="mensal" /></td>
-                    <td><input type="radio" name="f_53" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Pães</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="57">
-                    <td>Pão Francês</td>
-                    <td><input type="radio" name="f_57" value="diario" /></td>
-                    <td><input type="radio" name="f_57" value="semanal" /></td>
-                    <td><input type="radio" name="f_57" value="mensal" /></td>
-                    <td><input type="radio" name="f_57" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="58">
-                    <td>Pão de Forma</td>
-                    <td><input type="radio" name="f_58" value="diario" /></td>
-                    <td><input type="radio" name="f_58" value="semanal" /></td>
-                    <td><input type="radio" name="f_58" value="mensal" /></td>
-                    <td><input type="radio" name="f_58" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="59">
-                    <td>Pão Integral</td>
-                    <td><input type="radio" name="f_59" value="diario" /></td>
-                    <td><input type="radio" name="f_59" value="semanal" /></td>
-                    <td><input type="radio" name="f_59" value="mensal" /></td>
-                    <td><input type="radio" name="f_59" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Salgados</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="73">
-                    <td>Pão de Queijo</td>
-                    <td><input type="radio" name="f_73" value="diario" /></td>
-                    <td><input type="radio" name="f_73" value="semanal" /></td>
-                    <td><input type="radio" name="f_73" value="mensal" /></td>
-                    <td><input type="radio" name="f_73" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Ultraprocessados</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="79">
-                    <td>Refrigerante</td>
-                    <td><input type="radio" name="f_79" value="diario" /></td>
-                    <td><input type="radio" name="f_79" value="semanal" /></td>
-                    <td><input type="radio" name="f_79" value="mensal" /></td>
-                    <td><input type="radio" name="f_79" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="78">
-                    <td>Chocolate</td>
-                    <td><input type="radio" name="f_78" value="diario" /></td>
-                    <td><input type="radio" name="f_78" value="semanal" /></td>
-                    <td><input type="radio" name="f_78" value="mensal" /></td>
-                    <td><input type="radio" name="f_78" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="83">
-                    <td>Fast Food</td>
-                    <td><input type="radio" name="f_83" value="diario" /></td>
-                    <td><input type="radio" name="f_83" value="semanal" /></td>
-                    <td><input type="radio" name="f_83" value="mensal" /></td>
-                    <td><input type="radio" name="f_83" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Embutidos</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="86">
-                    <td>Presunto/Apresuntado</td>
-                    <td><input type="radio" name="f_86" value="diario" /></td>
-                    <td><input type="radio" name="f_86" value="semanal" /></td>
-                    <td><input type="radio" name="f_86" value="mensal" /></td>
-                    <td><input type="radio" name="f_86" value="nao" /></td>
-                  </tr>
-                  <tr class="food-row" data-id="92">
-                    <td>Hambúrguer</td>
-                    <td><input type="radio" name="f_92" value="diario" /></td>
-                    <td><input type="radio" name="f_92" value="semanal" /></td>
-                    <td><input type="radio" name="f_92" value="mensal" /></td>
-                    <td><input type="radio" name="f_92" value="nao" /></td>
-                  </tr>
-                  <tr class="table-secondary">
-                    <td colspan="5"><strong>Açúcares</strong></td>
-                  </tr>
-                  <tr class="food-row" data-id="93">
-                    <td>Açúcar</td>
-                    <td><input type="radio" name="f_93" value="diario" /></td>
-                    <td><input type="radio" name="f_93" value="semanal" /></td>
-                    <td><input type="radio" name="f_93" value="mensal" /></td>
-                    <td><input type="radio" name="f_93" value="nao" /></td>
-                  </tr>
                 </tbody>
               </table>
+              <p class="text-muted text-center mt-2">
+                *(Certifique-se de que a tabela completa de alimentos está
+                presente aqui no seu código)*
+              </p>
             </div>
           </div>
 
@@ -616,139 +428,642 @@
               <h2 class="fs-5">Comportamento Alimentar</h2>
             </div>
             <div class="mb-4">
-              <label>Quem cozinha?</label
-              ><input type="text" id="quemCozinha" class="form-control" />
+              <label>Quem cozinha sua comida?</label>
+              <input type="text" id="quemCozinha" class="form-control" />
             </div>
+
             <div class="mb-4">
-              <label>Come por emoção?</label
-              ><select id="necessidadeComerEmocional" class="form-select">
+              <label
+                >Costuma ter a necessidade de comer quando está estressado(a),
+                ansioso(a) ou triste?</label
+              >
+              <select
+                id="necessidadeComerEstressadoAnsiosoTriste"
+                class="form-select"
+              >
                 <option value="">Selecione...</option>
                 <option value="sim">Sim</option>
                 <option value="nao">Não</option>
                 <option value="as_vezes">Às vezes</option>
               </select>
             </div>
+
             <div class="mb-4">
-              <label>Companhia</label
-              ><select id="companhiaRefeicoes" class="form-select">
+              <label
+                >Costuma realizar as refeições sozinho(a) ou
+                acompanhado(a)?</label
+              >
+              <select
+                id="realizaRefeicoesSozinhoAcompanhado"
+                class="form-select"
+              >
                 <option value="">Selecione...</option>
                 <option value="sozinho">Sozinho</option>
                 <option value="acompanhado">Acompanhado</option>
               </select>
             </div>
+
             <div class="mb-4">
-              <label>Fome Fisiológica</label
-              ><input type="text" id="fomeFisiologica" class="form-control" />
-            </div>
-            <div class="mb-4">
-              <label>Necessidade Emocional (Descrição)</label
-              ><input
+              <label
+                >Como se sente ao exagerar em alimentos "não saudáveis"?
+                (sintomas físicos e/ou emocionais)</label
+              >
+              <input
                 type="text"
-                id="necessidadeEmocionalComer"
+                id="excessoAlimentosNaoSaudaveisSintomas"
                 class="form-control"
               />
             </div>
+
             <div class="mb-4">
-              <label>Não mudar no plano</label
-              ><input type="text" id="naoModificarPlano" class="form-control" />
-            </div>
-            <div class="mb-4">
-              <label>Aversões</label
-              ><input type="text" id="aversaoAlimentar" class="form-control" />
-            </div>
-            <div class="mb-4">
-              <label>Proteína Animal</label
-              ><input
+              <label
+                >Tem alguma dificuldade para manter uma rotina alimentar
+                saudável?</label
+              >
+              <input
                 type="text"
-                id="toleraProteinaAnimal"
+                id="dificuldadeRotinaAlimentarSaudavel"
                 class="form-control"
               />
             </div>
+
             <div class="mb-4">
-              <label>Alergias</label
-              ><input type="text" id="alergias" class="form-control" />
+              <label
+                >Sente que precisa "se consolar" comendo algo após um
+                acontecimento ruim/estressante?</label
+              >
+              <select id="necessidadeConsoloAlimentar" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+                <option value="as_vezes">Às vezes</option>
+              </select>
             </div>
+
+            <div class="mb-4">
+              <label
+                >É difícil para você parar de comer ainda que tenha restado
+                comida no prato?</label
+              >
+              <select id="dificuldadePararDeComer" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+                <option value="as_vezes">Às vezes</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label>Qual a frequência da sua fome fisiológica?</label>
+              <select id="frequenciaFomeFisiologica" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="Apenas nos horários das refeições">
+                  Apenas nos horários das refeições
+                </option>
+                <option value="Às vezes nos intervalos entre as refeições">
+                  Às vezes nos intervalos entre as refeições
+                </option>
+                <option value="Sempre com fome independente do horário">
+                  Sempre com fome independente do horário
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label
+                >Qual a frequência da sua necessidade emocional de comer alguma
+                coisa?</label
+              >
+              <select
+                id="frequenciaNecessidadeEmocionalComer"
+                class="form-select"
+              >
+                <option value="">Selecione...</option>
+                <option value="Não há">Não há</option>
+                <option value="Por ansiedade">Por ansiedade</option>
+                <option value="Por tristeza">Por tristeza</option>
+                <option value="Por estresse">Por estresse</option>
+                <option value="Por recompensa a um acontecimento ruim">
+                  Por recompensa a um acontecimento ruim
+                </option>
+                <option value="Por comemoração a um acontecimento bom">
+                  Por comemoração a um acontecimento bom
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label
+                >O que você gostaria que não fosse modificado no seu plano
+                alimentar?</label
+              >
+              <input
+                type="text"
+                id="naoModificarPlanoAlimentar"
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-4">
+              <label>Você tem alguma aversão alimentar?</label>
+              <input type="text" id="aversaoAlimentar" class="form-control" />
+            </div>
+
+            <div class="mb-4">
+              <label
+                >Tolera igualmente os alimentos fonte de proteína animal?</label
+              >
+              <input
+                type="text"
+                id="toleraAlimentosProteinaAnimal"
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-4">
+              <label>Apresenta alergias e /ou intolerâncias alimentares?</label>
+              <input
+                type="text"
+                id="alergiaIntoleranciasAlimentares"
+                class="form-control"
+              />
+            </div>
+
             <div class="row">
               <div class="col-md-6 mb-4">
-                <label>Nota Saciedade (0-10)</label
-                ><input
-                  type="number"
-                  id="notaSaciedade"
-                  class="form-control"
-                  min="0"
-                  max="10"
-                />
+                <label>Nota Saciedade (0-10)</label>
+                <div class="d-flex justify-content-between">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="1"
+                    /><label class="form-check-label">1</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="2"
+                    /><label class="form-check-label">2</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="3"
+                    /><label class="form-check-label">3</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="4"
+                    /><label class="form-check-label">4</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="5"
+                    /><label class="form-check-label">5</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="6"
+                    /><label class="form-check-label">6</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="7"
+                    /><label class="form-check-label">7</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="8"
+                    /><label class="form-check-label">8</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="9"
+                    /><label class="form-check-label">9</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaSaciedadePosRefeicoes"
+                      value="10"
+                    /><label class="form-check-label">10</label>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6 mb-4">
-                <label>Nota Humor (0-10)</label
-                ><input
-                  type="number"
-                  id="notaHumor"
-                  class="form-control"
-                  min="0"
-                  max="10"
-                />
+                <label>Nota Humor (0-10)</label>
+                <div class="d-flex justify-content-between">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="1"
+                    /><label class="form-check-label">1</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="2"
+                    /><label class="form-check-label">2</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="3"
+                    /><label class="form-check-label">3</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="4"
+                    /><label class="form-check-label">4</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="5"
+                    /><label class="form-check-label">5</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="6"
+                    /><label class="form-check-label">6</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="7"
+                    /><label class="form-check-label">7</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="8"
+                    /><label class="form-check-label">8</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="9"
+                    /><label class="form-check-label">9</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="notaHumorPosRefeicoes"
+                      value="10"
+                    /><label class="form-check-label">10</label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="tab">
-            <div class="header-tab"><h2 class="fs-5">Antropometria</h2></div>
+            <div class="header-tab">
+              <h2 class="fs-5">Avaliação Antropometria</h2>
+            </div>
+
             <div class="row">
-              <div class="col-md-4 mb-4">
-                <label>Peso (kg)</label
-                ><input
-                  type="text"
-                  id="peso"
+              <div class="col-md-4 mb-3">
+                <label for="pesoAtual" class="form-label"
+                  >Peso atual (kg)</label
+                >
+                <input
+                  type="number"
+                  id="pesoAtual"
                   class="form-control"
-                  placeholder="0.0"
+                  min="0"
+                  step="0.1"
                 />
               </div>
-              <div class="col-md-4 mb-4">
-                <label>Estatura (m)</label
-                ><input
-                  type="text"
+              <div class="col-md-4 mb-3">
+                <label for="estatura" class="form-label">Estatura (m)</label>
+                <input
+                  type="number"
                   id="estatura"
                   class="form-control"
-                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
                 />
               </div>
-              <div class="col-md-4 mb-4">
-                <label>IMC</label
-                ><input
-                  type="text"
+              <div class="col-md-4 mb-3">
+                <label for="imc" class="form-label">IMC (kg/m²)</label>
+                <input
+                  type="number"
                   id="imc"
                   class="form-control"
-                  placeholder="0.0"
+                  min="0"
+                  step="0.1"
                 />
               </div>
             </div>
-            <div class="mb-4">
-              <label>Circ. Cintura (cm)</label
-              ><input
-                type="text"
-                id="circunferenciaCintura"
-                class="form-control"
-                placeholder="0.0"
-              />
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="cb" class="form-label">CB (cm)</label>
+                <input
+                  type="number"
+                  id="cb"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="dct" class="form-label">DCT (mm)</label>
+                <input
+                  type="number"
+                  id="dct"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="dcb" class="form-label">DCB (mm)</label>
+                <input
+                  type="number"
+                  id="dcb"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
             </div>
-            <div class="mb-4">
-              <label>Somatória 4 Dobras</label
-              ><input
-                type="text"
-                id="somatoria4Dobras"
-                class="form-control"
-                placeholder="0.0"
-              />
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="dcse" class="form-label">DCSE (mm)</label>
+                <input
+                  type="number"
+                  id="dcse"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="dcsi" class="form-label">DCSI (mm)</label>
+                <input
+                  type="number"
+                  id="dcsi"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
             </div>
-            <div class="mb-4">
-              <label>Peso Gordura</label
-              ><input
-                type="text"
-                id="pesoGordura"
-                class="form-control"
-                placeholder="0.0"
-              />
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="somatoria4Dobras" class="form-label"
+                  >Somatória 4 dobras</label
+                >
+                <input
+                  type="number"
+                  id="somatoria4Dobras"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label
+                  for="porcentagemGorduraCorporalSomatoria4Dobras"
+                  class="form-label"
+                  >% Gordura Corporal</label
+                >
+                <input
+                  type="number"
+                  id="porcentagemGorduraCorporalSomatoria4Dobras"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="pesoGordura" class="form-label"
+                  >Peso Gordura (kg)</label
+                >
+                <input
+                  type="number"
+                  id="pesoGordura"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="pesoMassaMagra" class="form-label"
+                  >Peso Massa Magra (kg)</label
+                >
+                <input
+                  type="number"
+                  id="pesoMassaMagra"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="totalAgua" class="form-label">Total Água (L)</label>
+                <input
+                  type="number"
+                  id="totalAgua"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="porcentagemAguaMassaMagra" class="form-label"
+                  >% Água/Massa Magra</label
+                >
+                <input
+                  type="number"
+                  id="porcentagemAguaMassaMagra"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="resistencia" class="form-label">Resistência</label>
+                <input
+                  type="number"
+                  id="resistencia"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="reactancia" class="form-label">Reactância</label>
+                <input
+                  type="number"
+                  id="reactancia"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="anguloDeFase" class="form-label"
+                  >Ângulo de Fase</label
+                >
+                <input
+                  type="number"
+                  id="anguloDeFase"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="circunferenciaCintura" class="form-label"
+                  >Circ. Cintura (cm)</label
+                >
+                <input
+                  type="number"
+                  id="circunferenciaCintura"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="circunferenciaQuadril" class="form-label"
+                  >Circ. Quadril (cm)</label
+                >
+                <input
+                  type="number"
+                  id="circunferenciaQuadril"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="circunferenciaPanturrilha" class="form-label"
+                  >Circ. Panturrilha (cm)</label
+                >
+                <input
+                  type="number"
+                  id="circunferenciaPanturrilha"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="emapDireita" class="form-label">EMAP Direita</label>
+                <input
+                  type="number"
+                  id="emapDireita"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="emapEsquerda" class="form-label"
+                  >EMAP Esquerda</label
+                >
+                <input
+                  type="number"
+                  id="emapEsquerda"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="forcaPreencaoManualDireita" class="form-label"
+                  >Força Manual Direita</label
+                >
+                <input
+                  type="number"
+                  id="forcaPreencaoManualDireita"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="forcaPreencaoManualEsquerda" class="form-label"
+                  >Força Manual Esquerda</label
+                >
+                <input
+                  type="number"
+                  id="forcaPreencaoManualEsquerda"
+                  class="form-control"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
             </div>
           </div>
 

@@ -36,30 +36,50 @@ public class AnamneseController {
 	@PostMapping
 	public ResponseEntity<?> criarAnamnese(@RequestBody Anamnese newAnamnese) {
 		try {
-			// O Service agora vai tratar de buscar as entidades gerenciadas
 			Anamnese anamneseSalva = anamneseService.criarAnamnese(newAnamnese);
 			return ResponseEntity.status(HttpStatus.CREATED).body(anamneseSalva);
 		} catch (Exception e) {
-			e.printStackTrace(); // Log do erro completo
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no servidor: " + e.getMessage());
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Anamnese> alterarAnamnese(@PathVariable Integer id,
+	public ResponseEntity<?> alterarAnamnese(@PathVariable Integer id,
 			@RequestBody Anamnese anamneseAtualizado) {
-		Optional<Anamnese> anamneseExistente = anamneseService.consultarAnamnese(id);
-		if (anamneseExistente.isPresent()) {
-			anamneseAtualizado.setId(id);
-			anamneseAtualizado.setCriadoEm(anamneseExistente.get().getCriadoEm());
-			if (anamneseAtualizado.getDadosFisiologicos() != null
-					&& anamneseExistente.get().getDadosFisiologicos() != null) {
-				anamneseAtualizado.getDadosFisiologicos().setId(anamneseExistente.get().getDadosFisiologicos().getId());
-				anamneseAtualizado.getDadosFisiologicos().setAnamnese(anamneseAtualizado);
+
+		try {
+			Optional<Anamnese> anamneseExistenteOpt = anamneseService.consultarAnamnese(id);
+
+			if (anamneseExistenteOpt.isPresent()) {
+				Anamnese anamneseExistente = anamneseExistenteOpt.get();
+
+				// 1. Garante o ID da Anamnese
+				anamneseAtualizado.setId(id);
+				anamneseAtualizado.setCriadoEm(anamneseExistente.getCriadoEm());
+
+				// 2. Correção Crítica: Dados Fisiológicos
+				// Se estamos enviando dados novos, precisamos vincular ao ID antigo se ele
+				// existir
+				if (anamneseAtualizado.getDadosFisiologicos() != null) {
+					// Se já existia dados no banco, pega o ID dele para atualizar, senão cria novo
+					if (anamneseExistente.getDadosFisiologicos() != null) {
+						anamneseAtualizado.getDadosFisiologicos()
+								.setId(anamneseExistente.getDadosFisiologicos().getId());
+					}
+					// Garante o vinculo bidirecional
+					anamneseAtualizado.getDadosFisiologicos().setAnamnese(anamneseAtualizado);
+				}
+
+				// 3. Salva
+				return ResponseEntity.ok(anamneseService.alterarAnamnese(anamneseAtualizado));
 			}
-			return ResponseEntity.ok(anamneseService.alterarAnamnese(anamneseAtualizado));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+		} catch (Exception e) {
+			e.printStackTrace(); // Isso vai mostrar o erro exato no console do Java
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar: " + e.getMessage());
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@DeleteMapping("/{id}")

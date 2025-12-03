@@ -58,15 +58,25 @@ CREATE TABLE tb_anamnese (
     id_anamnese INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     id_paciente INT NOT NULL,
     id_matricula INT NOT NULL,
+    
+    -- Dados Clínicos e Pessoais
     ds_motivo TEXT NULL,
     ds_doenca TEXT NULL,
     ds_antecedentes TEXT NULL,
     ds_medicamento TEXT NULL,
     ds_suplemento TEXT NULL,
+    
+    -- Rotina
     nm_periodo_estudo ENUM('manha', 'tarde', 'noite', 'NA') NULL,
+    fl_lanche_estudo BOOLEAN NULL, 
     nm_periodo_trabalho ENUM('manha', 'tarde', 'noite', 'NA') NULL,
+    fl_lanche_trabalho BOOLEAN NULL, 
+    
+    -- Dados Sociais
     nr_pessoa_domicilio TINYINT NULL,
     ds_quem_cozinha TEXT NULL,
+    
+    -- Comportamento Alimentar
     ds_necessidade_comer_estressado_ansioso_triste ENUM('sim', 'nao', 'as_vezes') NULL,
     ds_realiza_refeicoes_sozinho_acompanhado ENUM('sozinho', 'acompanhado') NULL,
     ds_fome_fisiologica VARCHAR(60) NULL,
@@ -75,15 +85,42 @@ CREATE TABLE tb_anamnese (
     ds_aversao_alimentar TEXT NULL,
     ds_tolera_alimentos_proteina_animal TEXT NULL,
     ds_alergia_intolerancias_alimentares TEXT NULL,
+    
+    -- Novos Campos de Comportamento
+    ds_sintomas_excesso_alimentos TEXT NULL,
+    ds_dificuldade_rotina TEXT NULL,
+    ds_consolo_alimentar ENUM('sim', 'nao', 'as_vezes') NULL,
+    ds_dificuldade_parar_comer ENUM('sim', 'nao', 'as_vezes') NULL,
+
+    -- Notas
     nr_nota_saciedade_pos_refeicoes TINYINT NULL,
     nr_nota_humor_pos_refeicoes TINYINT NULL,
-    consistencia_evacuacao TINYINT NULL, -- Campo adicionado
+    
+    -- Intestino
+    consistencia_evacuacao TINYINT NULL,
+    
+    -- Atividade Física
+    fl_pratica_atividade_fisica BOOLEAN NULL,
+    ds_atividade_fisica_descricao TEXT NULL,
+
+    -- Descrição das Refeições
+    ds_cafe_manha TEXT NULL,
+    ds_lanche_manha TEXT NULL,
+    ds_almoco TEXT NULL,
+    ds_lanche_tarde TEXT NULL,
+    ds_jantar TEXT NULL,
+    ds_ceia TEXT NULL,
+
+    -- Metas e Auditoria
     ds_metas TEXT NULL,
     dt_criacao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    
+    -- Foreign Keys
     id_escolaridade INT NULL,
     id_profissao INT NULL,
     id_renda_familiar INT NULL,
     id_evacuacao INT NULL,
+    
     FOREIGN KEY (id_paciente) REFERENCES tb_paciente(id_paciente),
     FOREIGN KEY (id_matricula) REFERENCES tb_usuario(id_matricula),
     FOREIGN KEY (id_escolaridade) REFERENCES tb_escolaridade(id_escolaridade),

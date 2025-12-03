@@ -49,64 +49,110 @@ function cadastrarAnamnese() {
 }
 
 function getData() {
+  // Helpers para capturar valores com tratamento de nulos/vazios
   const getString = (id) => { const el = document.getElementById(id); return (el && el.value.trim() !== "") ? el.value.trim() : null; };
   const getInt = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseInt(el.value, 10); return isNaN(v) ? null : v; };
   const getFloat = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseFloat(el.value.replace(',', '.')); return isNaN(v) ? null : v; };
-  
-  // CORREÇÃO: Enviar apenas o ID, não objeto aninhado
-  const getObjId = (id) => { 
-    const v = getInt(id); 
-    return v ? { id: v } : null; 
-  };
+  const getObjId = (id) => { const v = getInt(id); return v ? { id: v } : null; };
+  const getCheck = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
 
   const usuarioIdLocal = localStorage.getItem("usuarioId");
 
   const data = {
     usuario: { id: parseInt(usuarioIdLocal) },
     paciente: { id: getInt("pacienteId") },
+    
+    // --- Dados Pessoais e Rotina ---
     escolaridade: getObjId("escolaridade"),
     profissao: getObjId("profissao"),
-    rendaFamiliar: getObjId("rendaFamiliar"),
-    evacuacao: getObjId("evacuacao"),
-    motivo: getString("motivo"),
-    doenca: getString("doenca"),
-    antecedentes: getString("antecedentes"),
-    medicamento: getString("medicamento"),
-    suplemento: getString("suplemento"),
     periodoEstudo: getString("periodoEstudo"),
     periodoTrabalho: getString("periodoTrabalho"),
+    lancheEstudo: getCheck("lancheEstudo"),
+    lancheTrabalho: getCheck("lancheTrabalho"),
+
+    // --- Dados Clínicos ---
+    rendaFamiliar: getObjId("rendaFamiliar"),
+    evacuacao: getObjId("frequenciaEvacuacao"), // ID do select de evacuação
+    motivo: getString("motivo"),
+    doenca: getString("apresentaDoenca"), // ID HTML: apresentaDoenca
+    antecedentes: getString("antecedentesFamiliares"), // ID HTML: antecedentesFamiliares
+    medicamento: getString("medicamentosContinuos"), // ID HTML: medicamentosContinuos
+    suplemento: getString("suplementosComplementos"), // ID HTML: suplementosComplementos
+    consistenciaEvacuacao: getInt("consistenciaEvacuacao"),
+    
+    // --- Atividade Física ---
+    praticaAtvFisica: getCheck("praticaAtvFisica"),
+    atvFisica: getString("atvFisica"),
+
+    // --- Descrição das Refeições ---
+    cafeDaManha: getString("cafeDaManha"),
+    lancheDaManha: getString("lancheDaManha"),
+    almoco: getString("almoco"),
+    lancheDaTarde: getString("lancheDaTarde"),
+    jantar: getString("jantar"),
+    ceia: getString("ceia"),
+    
+    // --- Comportamento Alimentar ---
     quemCozinha: getString("quemCozinha"),
-    necessidadeComerEmocional: getString("necessidadeComerEmocional"),
-    companhiaRefeicoes: getString("companhiaRefeicoes"),
-    fomeFisiologica: getString("fomeFisiologica"),
-    necessidadeEmocionalComer: getString("necessidadeEmocionalComer"),
-    naoModificarPlano: getString("naoModificarPlano"),
+    necessidadeComerEmocional: getString("necessidadeComerEstressadoAnsiosoTriste"),
+    companhiaRefeicoes: getString("realizaRefeicoesSozinhoAcompanhado"),
+    
+    // Novos campos de comportamento
+    excessoAlimentosNaoSaudaveisSintomas: getString("excessoAlimentosNaoSaudaveisSintomas"),
+    dificuldadeRotinaAlimentarSaudavel: getString("dificuldadeRotinaAlimentarSaudavel"),
+    necessidadeConsoloAlimentar: getString("necessidadeConsoloAlimentar"),
+    dificuldadePararDeComer: getString("dificuldadePararDeComer"),
+
+    fomeFisiologica: getString("frequenciaFomeFisiologica"),
+    necessidadeEmocionalComer: getString("frequenciaNecessidadeEmocionalComer"),
+    naoModificarPlano: getString("naoModificarPlanoAlimentar"),
     aversaoAlimentar: getString("aversaoAlimentar"),
-    toleraProteinaAnimal: getString("toleraProteinaAnimal"),
-    alergias: getString("alergias"),
+    toleraProteinaAnimal: getString("toleraAlimentosProteinaAnimal"),
+    alergias: getString("alergiaIntoleranciasAlimentares"),
+    
+    // --- Metas e Notas ---
     metas: getString("metas"),
     numPessoasDomicilio: getInt("numPessoasDomicilio"),
-    notaSaciedade: getInt("notaSaciedade"),
-    notaHumor: getInt("notaHumor"),
-    consistenciaEvacuacao: getInt("consistenciaEvacuacao"),
+    notaSaciedade: parseInt(document.querySelector('input[name="notaSaciedadePosRefeicoes"]:checked')?.value || 0),
+    notaHumor: parseInt(document.querySelector('input[name="notaHumorPosRefeicoes"]:checked')?.value || 0),
+    
+    // --- Antropometria Completa ---
     dadosFisiologicos: {
-        peso: getFloat("peso"),
+        peso: getFloat("pesoAtual"), // ID HTML: pesoAtual
         estatura: getFloat("estatura"),
         imc: getFloat("imc"),
         circunferenciaCintura: getFloat("circunferenciaCintura"),
         somatoria4Dobras: getFloat("somatoria4Dobras"),
-        pesoGordura: getFloat("pesoGordura")
+        percentualGorduraCalculado: getFloat("porcentagemGorduraCorporalSomatoria4Dobras"),
+        pesoGordura: getFloat("pesoGordura"),
+        pesoMassaMagra: getFloat("pesoMassaMagra"),
+        totalAgua: getFloat("totalAgua"),
+        porcentagemAguaMassaMagra: getFloat("porcentagemAguaMassaMagra"),
+        resistencia: getFloat("resistencia"),
+        reactancia: getFloat("reactancia"),
+        anguloDeFase: getFloat("anguloDeFase"),
+        circunferenciaQuadril: getFloat("circunferenciaQuadril"),
+        circunferenciaPanturrilha: getFloat("circunferenciaPanturrilha"),
+        emapDireita: getFloat("emapDireita"),
+        emapEsquerda: getFloat("emapEsquerda"),
+        forcaPreencaoManualDireita: getFloat("forcaPreencaoManualDireita"),
+        forcaPreencaoManualEsquerda: getFloat("forcaPreencaoManualEsquerda"),
+        cb: getFloat("cb"),
+        dct: getFloat("dct"),
+        dcb: getFloat("dcb"),
+        dcse: getFloat("dcse"),
+        dcsi: getFloat("dcsi")
     },
     refeicoes: [],
     alimentos: []
   };
 
-  // Refeições selecionadas
+  // --- Coleta das Refeições (Checkboxes) ---
   document.querySelectorAll('input[name="refeicoes"]:checked').forEach(ck => {
     data.refeicoes.push({ id: parseInt(ck.value) });
   });
 
-  // Alimentos selecionados
+  // --- Coleta dos Alimentos (Tabela de Frequência) ---
   document.querySelectorAll('.food-row').forEach(row => {
       const id = row.getAttribute('data-id');
       const rad = row.querySelector(`input[name="f_${id}"]:checked`);

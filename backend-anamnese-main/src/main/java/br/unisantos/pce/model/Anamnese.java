@@ -134,14 +134,14 @@ public class Anamnese {
 	@Column(name = "ds_dificuldade_parar_comer")
 	private Opcao dificuldadePararDeComer;
 
-	// --- FKs ---
+	// --- FKs e Campos Editados ---
 	@ManyToOne
 	@JoinColumn(name = "id_escolaridade")
 	private Escolaridade escolaridade;
 
-	@ManyToOne
-	@JoinColumn(name = "id_profissao")
-	private Profissao profissao;
+	// ALTERAÇÃO AQUI: Mudança de Entidade para String
+	@Column(name = "ds_profissao")
+	private String profissao;
 
 	@ManyToOne
 	@JoinColumn(name = "id_renda_familiar")
@@ -160,8 +160,6 @@ public class Anamnese {
 	@JoinTable(name = "tb_anamnese_refeicao", joinColumns = @JoinColumn(name = "id_anamnese"), inverseJoinColumns = @JoinColumn(name = "id_refeicao"))
 	private List<Refeicao> refeicoes;
 
-	// AQUI ESTAVA O ERRO: Adicionado orphanRemoval = true para permitir atualização
-	// da lista
 	@JsonManagedReference
 	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AnamneseAlimento> alimentos = new ArrayList<>();

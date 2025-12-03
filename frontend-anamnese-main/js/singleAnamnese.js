@@ -41,7 +41,10 @@ function consultarAnamnese() {
         // Dados Pessoais e Rotina
         set("pacienteId", a.paciente?.id);
         set("escolaridade", a.escolaridade?.id);
-        set("profissao", a.profissao?.id); // Corrigido para pegar ID do objeto
+        
+        // CORREÇÃO: Profissão agora é texto direto, não objeto com ID
+        set("profissao", a.profissao); 
+        
         set("periodoEstudo", a.periodoEstudo);
         setCheck("lancheEstudo", a.lancheEstudo); 
         set("periodoTrabalho", a.periodoTrabalho);
@@ -156,7 +159,10 @@ function getData() {
     usuario: { id: parseInt(uid) },
     paciente: { id: getInt("pacienteId") },
     escolaridade: getObjId("escolaridade"),
-    profissao: getObjId("profissao"), // AQUI ESTAVA O ERRO: Agora pega o ID do select
+    
+    // CORREÇÃO: Profissão como getString (texto), não getObjId
+    profissao: getString("profissao"), 
+    
     rendaFamiliar: getObjId("rendaFamiliar"),
     evacuacao: getObjId("frequenciaEvacuacao"),
     

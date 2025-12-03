@@ -10,10 +10,7 @@ CREATE TABLE tb_escolaridade (
     ds_escolaridade VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE tb_profissao (
-    id_profissao INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ds_profissao VARCHAR(100) NOT NULL UNIQUE
-);
+/* TABELA PROFISSÃO REMOVIDA */
 
 CREATE TABLE tb_renda_familiar (
     id_renda_familiar INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -115,16 +112,18 @@ CREATE TABLE tb_anamnese (
     ds_metas TEXT NULL,
     dt_criacao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     
+    -- Campos Alterados/Novos
+    ds_profissao VARCHAR(255) NULL, -- Agora é um campo de texto livre
+
     -- Foreign Keys
     id_escolaridade INT NULL,
-    id_profissao INT NULL,
     id_renda_familiar INT NULL,
     id_evacuacao INT NULL,
     
     FOREIGN KEY (id_paciente) REFERENCES tb_paciente(id_paciente),
     FOREIGN KEY (id_matricula) REFERENCES tb_usuario(id_matricula),
     FOREIGN KEY (id_escolaridade) REFERENCES tb_escolaridade(id_escolaridade),
-    FOREIGN KEY (id_profissao) REFERENCES tb_profissao(id_profissao),
+    -- FK de profissão removida
     FOREIGN KEY (id_renda_familiar) REFERENCES tb_renda_familiar(id_renda_familiar),
     FOREIGN KEY (id_evacuacao) REFERENCES tb_evacuacao(id_evacuacao)
 );
@@ -216,7 +215,7 @@ INSERT INTO tb_sexo (ds_sexo) VALUES ('Masculino'), ('Feminino'), ('Não informa
 INSERT INTO tb_escolaridade (ds_escolaridade) VALUES 
 ('Fundamental Completo'), ('Ensino Médio Completo'), ('Ensino Superior Incompleto'), ('Ensino Superior Completo'), ('Outra');
 
-INSERT INTO tb_profissao (ds_profissao) VALUES ('Engenheiro'), ('Médico'), ('Estudante');
+-- INSERTS DE PROFISSÃO REMOVIDOS
 
 INSERT INTO tb_renda_familiar (ds_renda_familiar) VALUES 
 ('Menos de 1 salário mínimo'), ('De 1 a 2 salários mínimos'), ('De 3 a 5 salários mínimos'), ('Mais de 5 salários mínimos'), ('Não sei');

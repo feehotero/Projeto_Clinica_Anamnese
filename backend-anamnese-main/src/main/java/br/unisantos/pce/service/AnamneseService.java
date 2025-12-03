@@ -19,12 +19,10 @@ public class AnamneseService {
     private final PacienteRepository pacienteRepository;
     private final UserRepository userRepository;
 
-    // Novos repositórios necessários
     @Autowired(required = false)
     private EscolaridadeRepository escolaridadeRepository;
 
-    @Autowired(required = false)
-    private ProfissaoRepository profissaoRepository;
+    // ProfissaoRepository REMOVIDO pois agora é String
 
     @Autowired(required = false)
     private RendaFamiliarRepository rendaFamiliarRepository;
@@ -90,9 +88,7 @@ public class AnamneseService {
             anamnese.setEscolaridade(escolaridadeRepository.findById(anamnese.getEscolaridade().getId()).orElse(null));
         }
 
-        if (profissaoRepository != null && anamnese.getProfissao() != null && anamnese.getProfissao().getId() != null) {
-            anamnese.setProfissao(profissaoRepository.findById(anamnese.getProfissao().getId()).orElse(null));
-        }
+        // LÓGICA DE PROFISSÃO REMOVIDA (String é salva diretamente)
 
         if (rendaFamiliarRepository != null && anamnese.getRendaFamiliar() != null
                 && anamnese.getRendaFamiliar().getId() != null) {
@@ -125,7 +121,6 @@ public class AnamneseService {
                         aa.setAlimento(alimentoOpt.get());
                         aa.setAnamnese(anamnese);
 
-                        // Criar chave composta
                         AnamneseAlimentoKey key = new AnamneseAlimentoKey();
                         key.setAlimentoId(aa.getAlimento().getId());
                         aa.setId(key);
@@ -147,7 +142,6 @@ public class AnamneseService {
 
     @Transactional
     public Anamnese alterarAnamnese(Anamnese anamneseAtualizado) {
-        // 1. Buscar a anamnese existente
         Optional<Anamnese> anamneseExistenteOpt = anamneseRepository.findById(anamneseAtualizado.getId());
 
         if (!anamneseExistenteOpt.isPresent()) {
@@ -156,32 +150,25 @@ public class AnamneseService {
 
         Anamnese anamneseExistente = anamneseExistenteOpt.get();
 
-        // 2. Buscar Paciente gerenciado
         if (anamneseAtualizado.getPaciente() != null && anamneseAtualizado.getPaciente().getId() != null) {
             Paciente paciente = pacienteRepository.findById(anamneseAtualizado.getPaciente().getId())
                     .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
             anamneseAtualizado.setPaciente(paciente);
         }
 
-        // 3. Buscar Usuario gerenciado
         if (anamneseAtualizado.getUsuario() != null && anamneseAtualizado.getUsuario().getId() != null) {
             User usuario = userRepository.findById(anamneseAtualizado.getUsuario().getId())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
             anamneseAtualizado.setUsuario(usuario);
         }
 
-        // 4. Buscar entidades de domínio gerenciadas
         if (escolaridadeRepository != null && anamneseAtualizado.getEscolaridade() != null
                 && anamneseAtualizado.getEscolaridade().getId() != null) {
             anamneseAtualizado.setEscolaridade(
                     escolaridadeRepository.findById(anamneseAtualizado.getEscolaridade().getId()).orElse(null));
         }
 
-        if (profissaoRepository != null && anamneseAtualizado.getProfissao() != null
-                && anamneseAtualizado.getProfissao().getId() != null) {
-            anamneseAtualizado.setProfissao(
-                    profissaoRepository.findById(anamneseAtualizado.getProfissao().getId()).orElse(null));
-        }
+        // LÓGICA DE PROFISSÃO REMOVIDA
 
         if (rendaFamiliarRepository != null && anamneseAtualizado.getRendaFamiliar() != null
                 && anamneseAtualizado.getRendaFamiliar().getId() != null) {
@@ -195,7 +182,6 @@ public class AnamneseService {
                     evacuacaoRepository.findById(anamneseAtualizado.getEvacuacao().getId()).orElse(null));
         }
 
-        // 5. Processar Refeições
         if (refeicaoRepository != null && anamneseAtualizado.getRefeicoes() != null) {
             List<Refeicao> refeicoesGerenciadas = new ArrayList<>();
             for (Refeicao r : anamneseAtualizado.getRefeicoes()) {
@@ -206,13 +192,11 @@ public class AnamneseService {
             anamneseAtualizado.setRefeicoes(refeicoesGerenciadas);
         }
 
-        // 6. CORREÇÃO CRÍTICA: Limpar alimentos antigos antes de adicionar novos
         if (anamneseExistente.getAlimentos() != null) {
             anamneseExistente.getAlimentos().clear();
-            anamneseRepository.flush(); // Força a sincronização com o banco
+            anamneseRepository.flush();
         }
 
-        // Processar novos Alimentos
         if (alimentoRepository != null && anamneseAtualizado.getAlimentos() != null
                 && !anamneseAtualizado.getAlimentos().isEmpty()) {
             List<AnamneseAlimento> alimentosGerenciados = new ArrayList<>();
@@ -224,7 +208,6 @@ public class AnamneseService {
                         aa.setAlimento(alimentoOpt.get());
                         aa.setAnamnese(anamneseAtualizado);
 
-                        // Criar chave composta
                         AnamneseAlimentoKey key = new AnamneseAlimentoKey();
                         key.setAnamneseId(anamneseAtualizado.getId());
                         key.setAlimentoId(aa.getAlimento().getId());
@@ -237,18 +220,14 @@ public class AnamneseService {
             anamneseAtualizado.setAlimentos(alimentosGerenciados);
         }
 
-        // 7. CORREÇÃO: Processar DadosFisiologicos mantendo ID existente
         if (anamneseAtualizado.getDadosFisiologicos() != null) {
-            // Se já existia dados no banco, usa o ID antigo
             if (anamneseExistente.getDadosFisiologicos() != null) {
                 anamneseAtualizado.getDadosFisiologicos()
                         .setId(anamneseExistente.getDadosFisiologicos().getId());
             }
-            // Garante o vínculo bidirecional
             anamneseAtualizado.getDadosFisiologicos().setAnamnese(anamneseAtualizado);
         }
 
-        // 8. Manter data de criação original
         anamneseAtualizado.setCriadoEm(anamneseExistente.getCriadoEm());
 
         return anamneseRepository.save(anamneseAtualizado);

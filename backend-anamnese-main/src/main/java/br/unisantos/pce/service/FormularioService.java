@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.unisantos.pce.model.Anamnese;
-import br.unisantos.pce.model.AnamneseAlimento;
 import br.unisantos.pce.model.Refeicao;
 import br.unisantos.pce.model.Retorno;
 
@@ -51,7 +50,7 @@ public class FormularioService {
                         "Quem Cozinha",
                         "Comer Emocional",
                         "Refeições Realizadas",
-                        "Frequência Alimentar", // Novo campo
+                        "Frequência Alimentar",
                         "Peso (kg)",
                         "Estatura (m)",
                         "IMC",
@@ -62,7 +61,10 @@ public class FormularioService {
                 // 1. Dados de Relacionamentos (Null Safety)
                 String escolaridade = anamnese.getEscolaridade() != null ? anamnese.getEscolaridade().getDescricao()
                         : "";
-                String profissao = anamnese.getProfissao() != null ? anamnese.getProfissao().getDescricao() : "";
+
+                // ALTERAÇÃO AQUI: Profissão agora é String direta
+                String profissao = anamnese.getProfissao() != null ? anamnese.getProfissao() : "";
+
                 String renda = anamnese.getRendaFamiliar() != null ? anamnese.getRendaFamiliar().getDescricao() : "";
 
                 // 2. Dados Fisiológicos
@@ -78,7 +80,7 @@ public class FormularioService {
                     cintura = anamnese.getDadosFisiologicos().getCircunferenciaCintura();
                 }
 
-                // 3. Lista de Refeições (concatenada)
+                // 3. Lista de Refeições
                 String refeicoesStr = "";
                 if (anamnese.getRefeicoes() != null && !anamnese.getRefeicoes().isEmpty()) {
                     refeicoesStr = anamnese.getRefeicoes().stream()
@@ -86,7 +88,7 @@ public class FormularioService {
                             .collect(Collectors.joining(", "));
                 }
 
-                // 4. Lista de Alimentos (concatenada: "Cenoura: diario; Alface: semanal")
+                // 4. Lista de Alimentos
                 String alimentosStr = "";
                 if (anamnese.getAlimentos() != null && !anamnese.getAlimentos().isEmpty()) {
                     alimentosStr = anamnese.getAlimentos().stream()
@@ -111,7 +113,7 @@ public class FormularioService {
                         anamnese.getPeriodoEstudo(),
                         anamnese.getPeriodoTrabalho(),
                         anamnese.getQuemCozinha(),
-                        anamnese.getNecessidadeComerEmocional(), // Nome corrigido (era getComerEmocional)
+                        anamnese.getNecessidadeComerEmocional(),
                         refeicoesStr,
                         alimentosStr,
                         peso,
@@ -164,7 +166,7 @@ public class FormularioService {
                         retorno.getSentiuMudancaHabitos(),
                         retorno.getAdaptacaoMudanca(),
                         retorno.getDificuldadeAdaptacao(),
-                        retorno.getMelhorarAlimentacao(), // Nome corrigido
+                        retorno.getMelhorarAlimentacao(),
                         retorno.getAtividadeFisica(),
                         retorno.getHabitoIntestinal(),
                         retorno.getMetasProximoRetorno(),

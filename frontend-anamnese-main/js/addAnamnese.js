@@ -64,7 +64,7 @@ function getData() {
     
     // --- Dados Pessoais e Rotina ---
     escolaridade: getObjId("escolaridade"),
-    profissao: getObjId("profissao"),
+    profissao: getString("profissao"), // ALTERADO PARA getString
     periodoEstudo: getString("periodoEstudo"),
     periodoTrabalho: getString("periodoTrabalho"),
     lancheEstudo: getCheck("lancheEstudo"),
@@ -72,12 +72,12 @@ function getData() {
 
     // --- Dados Clínicos ---
     rendaFamiliar: getObjId("rendaFamiliar"),
-    evacuacao: getObjId("frequenciaEvacuacao"), // ID do select de evacuação
+    evacuacao: getObjId("frequenciaEvacuacao"), 
     motivo: getString("motivo"),
-    doenca: getString("apresentaDoenca"), // ID HTML: apresentaDoenca
-    antecedentes: getString("antecedentesFamiliares"), // ID HTML: antecedentesFamiliares
-    medicamento: getString("medicamentosContinuos"), // ID HTML: medicamentosContinuos
-    suplemento: getString("suplementosComplementos"), // ID HTML: suplementosComplementos
+    doenca: getString("apresentaDoenca"), 
+    antecedentes: getString("antecedentesFamiliares"), 
+    medicamento: getString("medicamentosContinuos"), 
+    suplemento: getString("suplementosComplementos"), 
     consistenciaEvacuacao: getInt("consistenciaEvacuacao"),
     
     // --- Atividade Física ---
@@ -118,7 +118,7 @@ function getData() {
     
     // --- Antropometria Completa ---
     dadosFisiologicos: {
-        peso: getFloat("pesoAtual"), // ID HTML: pesoAtual
+        peso: getFloat("pesoAtual"), 
         estatura: getFloat("estatura"),
         imc: getFloat("imc"),
         circunferenciaCintura: getFloat("circunferenciaCintura"),

@@ -78,6 +78,15 @@ public class Retorno {
     @Column(name = "dt_criacao", nullable = false)
     private LocalDateTime criadoEm;
 
+    // --- CAMPOS ADICIONAIS PARA O FRONTEND ---
+    public String getTipoFormulario() {
+        return "Retorno";
+    }
+
+    public String getPacienteNome() {
+        return paciente != null ? paciente.getNome() : "";
+    }
+
     @PrePersist
     protected void onCreate() {
         criadoEm = LocalDateTime.now();

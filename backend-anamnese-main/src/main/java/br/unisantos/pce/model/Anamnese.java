@@ -114,6 +114,18 @@ public class Anamnese {
 	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL)
 	private List<AnamneseAlimento> alimentos = new ArrayList<>();
 
+	// --- CAMPOS ADICIONAIS PARA O FRONTEND ---
+	@Transient
+	private List<Retorno> retornos;
+
+	public String getTipoFormulario() {
+		return "Anamnese";
+	}
+
+	public String getPacienteNome() {
+		return paciente != null ? paciente.getNome() : "";
+	}
+
 	@Column(name = "dt_criacao", nullable = false)
 	private LocalDateTime criadoEm;
 

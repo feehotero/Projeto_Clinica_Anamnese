@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.*;
 import br.unisantos.pce.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // Importação Necessária
 
 @Data
 @NoArgsConstructor
@@ -27,6 +28,8 @@ public class Retorno {
 
     @ManyToOne
     @JoinColumn(name = "id_anamnese", nullable = false)
+    @JsonIgnoreProperties("retornos") // CORREÇÃO: Evita o loop infinito ignorando a lista 'retornos' dentro deste
+                                      // objeto anamnese
     private Anamnese anamnese;
 
     @ManyToOne

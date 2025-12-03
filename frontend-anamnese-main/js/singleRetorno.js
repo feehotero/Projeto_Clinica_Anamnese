@@ -1,5 +1,6 @@
 const formAddRetorno = document.querySelector(".formAddRetorno");
-const pacienteNome = document.getElementById("pacienteNome");
+// CORREÇÃO: Buscando o elemento do título com o novo ID
+const tituloPacienteNome = document.getElementById("tituloPacienteNome");
 const criadoPor = document.getElementById("criadoPor");
 const retornoId = localStorage.getItem("retornoId");
 const nextBtn = document.getElementById("nextBtn");
@@ -14,15 +15,21 @@ function consultarRetorno() {
     })
     .then(response => response.json())
     .then(retorno => {
-        // Preencher header e selects
-        if(retorno.paciente) pacienteNome.textContent = retorno.paciente.nome;
+        // Preencher header
+        // CORREÇÃO: Usando a nova referência do título
+        if(retorno.paciente) tituloPacienteNome.textContent = retorno.paciente.nome;
         if(retorno.usuario) criadoPor.textContent = retorno.usuario.nome;
         
         // Helper
-        const setVal = (id, v) => { if(document.getElementById(id)) document.getElementById(id).value = v || ""; };
+        const setVal = (id, v) => { 
+            const el = document.getElementById(id);
+            if(el) el.value = v || ""; 
+        };
 
         setVal("anamneseId", retorno.anamnese?.id);
         setVal("pacienteId", retorno.paciente?.id);
+        
+        // CORREÇÃO: Agora o 'pacienteNome' no HTML é único (o input), então setVal funcionará
         setVal("pacienteNome", retorno.paciente?.nome);
 
         setVal("metasUltimasConsultas", retorno.metasUltimasConsultas);
@@ -42,6 +49,8 @@ function consultarRetorno() {
         setVal("circunferenciaAbdominal", retorno.circunferenciaAbdominal);
         
         setVal("valoresBioimpedancia", retorno.valoresBioimpedancia);
+        
+        // CORREÇÃO: Como o HTML foi corrigido, este campo agora será encontrado
         setVal("observacoesBioimpedancia", retorno.observacoesBioimpedancia);
 
         // Radio desempenho
@@ -55,7 +64,6 @@ function consultarRetorno() {
 
 // Atualizar (PUT) usando mesma lógica do addRetorno
 function atualizarRetorno() {
-    // ... Replicar getData() do addRetorno.js aqui ...
     const data = getDataLocal(); 
     return new Promise((resolve, reject) => {
         if (validateForm(formAddRetorno)) {
@@ -75,8 +83,12 @@ function atualizarRetorno() {
 }
 
 function getDataLocal() {
-    // Cópia local do getData do addRetorno.js para garantir funcionamento independente
-    const getVal = (id) => document.getElementById(id).value || null;
+    // Helper seguro
+    const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value : null;
+    };
+    
     const usuarioIdLocal = localStorage.getItem("usuarioId");
     const data = {
         usuario: { id: usuarioIdLocal },
@@ -85,7 +97,7 @@ function getDataLocal() {
         metasUltimasConsultas: getVal("metasUltimasConsultas"),
         comentariosObservacao: getVal("comentariosObservacao"),
         metasForamCumpridas: getVal("metasForamCumpridas"),
-        desempenhoMetas: getVal("desempenhoCumprimentoMetas"),
+        // Desempenho tratado separadamente
         motivoCumprimentoMetas: getVal("motivoAssinaladoCumprimentoMetas"),
         sentiuMudancaHabitos: getVal("comoSentiuMudancaHabitos"),
         adaptacaoMudanca: getVal("adaptacaoMudancaHabitos"),
@@ -101,7 +113,8 @@ function getDataLocal() {
         observacoesBioimpedancia: getVal("observacoesBioimpedancia")
     };
     const desempenhoRadio = document.querySelector('input[name="desempenhoCumprimentoMetas"]:checked');
-    if(desempenhoRadio) data.desempenhoMetas = desempenhoRadio.value;
+    data.desempenhoMetas = desempenhoRadio ? desempenhoRadio.value : null;
+    
     return data;
 }
 

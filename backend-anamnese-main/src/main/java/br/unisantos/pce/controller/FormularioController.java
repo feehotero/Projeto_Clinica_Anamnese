@@ -54,8 +54,8 @@ public class FormularioController {
             } else {
                 List<Anamnese> anamneses = anamneseService.listarAnamnesesByPacienteNome(nome);
 
-                // Agora que adicionamos o campo @Transient na Model Anamnese, podemos popular a
-                // lista
+                // --- LÓGICA CRÍTICA DE AGRUPAMENTO ---
+                // Popula a lista @Transient 'retornos' dentro de cada Anamnese
                 for (var anamnese : anamneses) {
                     anamnese.setRetornos(retornoService.listarRetornosByAnamneseId(anamnese.getId()));
                 }
@@ -109,7 +109,6 @@ public class FormularioController {
     public ResponseEntity<List<Anamnese>> listarFormulariosDoPaciente(@PathVariable Integer id) {
         List<Anamnese> anamneses = anamneseService.listarAnamnesesByPacienteId(id);
 
-        // Popula retornos também na busca por paciente
         for (var anamnese : anamneses) {
             anamnese.setRetornos(retornoService.listarRetornosByAnamneseId(anamnese.getId()));
         }

@@ -36,10 +36,14 @@ function cadastrarRetorno() {
 }
 
 function getData() {
-  const getVal = (id) => document.getElementById(id).value || null;
+  // Helper para pegar valor de input pelo ID de forma segura
+  const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value : null;
+  };
+  
   const usuarioIdLocal = localStorage.getItem("usuarioId");
 
-  // Estrutura aninhada para Retorno
   const data = {
       usuario: { id: usuarioIdLocal },
       paciente: { id: getVal("pacienteId") },
@@ -48,7 +52,7 @@ function getData() {
       metasUltimasConsultas: getVal("metasUltimasConsultas"),
       comentariosObservacao: getVal("comentariosObservacao"),
       metasForamCumpridas: getVal("metasForamCumpridas"),
-      desempenhoMetas: getVal("desempenhoCumprimentoMetas"), // Nome ajustado à entidade nova
+      // desempenhoMetas removido daqui pois é radio button
       motivoCumprimentoMetas: getVal("motivoAssinaladoCumprimentoMetas"),
       sentiuMudancaHabitos: getVal("comoSentiuMudancaHabitos"),
       adaptacaoMudanca: getVal("adaptacaoMudancaHabitos"),
@@ -66,14 +70,14 @@ function getData() {
       observacoesBioimpedancia: getVal("observacoesBioimpedancia")
   };
   
-  // Tratar Radio buttons se houver (ex: desempenho)
+  // Tratamento correto para Radio Button
   const desempenhoRadio = document.querySelector('input[name="desempenhoCumprimentoMetas"]:checked');
-  if(desempenhoRadio) data.desempenhoMetas = desempenhoRadio.value;
+  data.desempenhoMetas = desempenhoRadio ? desempenhoRadio.value : null;
 
   return data;
 }
 
-// Logica para preencher o select de Anamneses e auto-selecionar Paciente
+// Lógica para preencher o select de Anamneses e auto-selecionar Paciente
 function listarAnamnesesSelect(selectEl) {
     fetch(urlApi + endpointAnamneses, { headers: { "Authorization": `${token}` }})
     .then(r => r.json())

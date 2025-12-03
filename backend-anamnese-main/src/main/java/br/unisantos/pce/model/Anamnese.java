@@ -39,7 +39,6 @@ public class Anamnese {
 	@JoinColumn(name = "id_matricula", nullable = false)
 	private User usuario;
 
-	// --- Campos Originais ---
 	@Column(name = "ds_motivo", columnDefinition = "TEXT")
 	private String motivo;
 	@Column(name = "ds_doenca", columnDefinition = "TEXT")
@@ -87,7 +86,6 @@ public class Anamnese {
 	@Column(name = "ds_necessidade_emocional_comer")
 	private String necessidadeEmocionalComer;
 
-	// --- NOVOS CAMPOS ADICIONADOS ---
 	@Column(name = "fl_lanche_estudo")
 	private Boolean lancheEstudo;
 
@@ -100,7 +98,6 @@ public class Anamnese {
 	@Column(name = "ds_atividade_fisica_descricao", columnDefinition = "TEXT")
 	private String atvFisica;
 
-	// Descrição das refeições (Recordatório Alimentar)
 	@Column(name = "ds_cafe_manha", columnDefinition = "TEXT")
 	private String cafeDaManha;
 
@@ -119,7 +116,6 @@ public class Anamnese {
 	@Column(name = "ds_ceia", columnDefinition = "TEXT")
 	private String ceia;
 
-	// Novos Campos de Comportamento
 	@Column(name = "ds_sintomas_excesso_alimentos", columnDefinition = "TEXT")
 	private String excessoAlimentosNaoSaudaveisSintomas;
 
@@ -134,12 +130,10 @@ public class Anamnese {
 	@Column(name = "ds_dificuldade_parar_comer")
 	private Opcao dificuldadePararDeComer;
 
-	// --- FKs e Campos Editados ---
 	@ManyToOne
 	@JoinColumn(name = "id_escolaridade")
 	private Escolaridade escolaridade;
 
-	// ALTERAÇÃO AQUI: Mudança de Entidade para String
 	@Column(name = "ds_profissao")
 	private String profissao;
 
@@ -151,7 +145,6 @@ public class Anamnese {
 	@JoinColumn(name = "id_evacuacao")
 	private Evacuacao evacuacao;
 
-	// --- Listas ---
 	@JsonManagedReference
 	@OneToOne(mappedBy = "anamnese", cascade = CascadeType.ALL)
 	private DadosFisiologicos dadosFisiologicos;
@@ -164,9 +157,9 @@ public class Anamnese {
 	@OneToMany(mappedBy = "anamnese", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AnamneseAlimento> alimentos = new ArrayList<>();
 
-	// --- Auxiliares ---
+	// --- ESTE CAMPO É O RESPONSÁVEL POR LEVAR OS RETORNOS PARA O FRONT ---
 	@Transient
-	private List<Retorno> retornos;
+	private List<Retorno> retornos = new ArrayList<>();
 
 	public String getTipoFormulario() {
 		return "Anamnese";

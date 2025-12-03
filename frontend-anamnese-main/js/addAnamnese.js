@@ -13,7 +13,7 @@ function cadastrarAnamnese() {
   nextBtn.textContent = "Enviando...";
 
   return new Promise((resolve, reject) => {
-    if (!data.paciente.id) {
+    if (!data.paciente || !data.paciente.id) {
         badWarning.textContent = "Erro: Selecione um paciente na primeira etapa.";
         nextBtn.disabled = false;
         nextBtn.textContent = originalText;
@@ -28,7 +28,6 @@ function cadastrarAnamnese() {
     })
     .then(response => {
       if (!response.ok) {
-          // Tenta ler o erro do backend
           return response.text().then(text => Promise.reject(text));
       }
       return response.json();
@@ -50,11 +49,15 @@ function cadastrarAnamnese() {
 }
 
 function getData() {
-  // Funções de limpeza para evitar envio de strings vazias em campos numéricos
   const getString = (id) => { const el = document.getElementById(id); return (el && el.value.trim() !== "") ? el.value.trim() : null; };
   const getInt = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseInt(el.value, 10); return isNaN(v) ? null : v; };
   const getFloat = (id) => { const el = document.getElementById(id); if(!el || el.value.trim() === "") return null; const v = parseFloat(el.value.replace(',', '.')); return isNaN(v) ? null : v; };
-  const getObjId = (id) => { const v = getInt(id); return v ? { id: v } : null; };
+  
+  // CORREÇÃO: Enviar apenas o ID, não objeto aninhado
+  const getObjId = (id) => { 
+    const v = getInt(id); 
+    return v ? { id: v } : null; 
+  };
 
   const usuarioIdLocal = localStorage.getItem("usuarioId");
 
@@ -98,12 +101,23 @@ function getData() {
     alimentos: []
   };
 
-  document.querySelectorAll('input[name="refeicoes"]:checked').forEach(ck => data.refeicoes.push({ id: parseInt(ck.value) }));
+  // Refeições selecionadas
+  document.querySelectorAll('input[name="refeicoes"]:checked').forEach(ck => {
+    data.refeicoes.push({ id: parseInt(ck.value) });
+  });
+
+  // Alimentos selecionados
   document.querySelectorAll('.food-row').forEach(row => {
       const id = row.getAttribute('data-id');
       const rad = row.querySelector(`input[name="f_${id}"]:checked`);
-      if(rad) data.alimentos.push({ alimento: { id: parseInt(id) }, frequencia: rad.value });
+      if(rad) {
+        data.alimentos.push({ 
+          alimento: { id: parseInt(id) }, 
+          frequencia: rad.value 
+        });
+      }
   });
+
   return data;
 }
 

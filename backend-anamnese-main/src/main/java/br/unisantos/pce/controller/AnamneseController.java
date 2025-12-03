@@ -36,22 +36,11 @@ public class AnamneseController {
 	@PostMapping
 	public ResponseEntity<?> criarAnamnese(@RequestBody Anamnese newAnamnese) {
 		try {
-			// Vinculos Pai-Filho
-			if (newAnamnese.getDadosFisiologicos() != null) {
-				newAnamnese.getDadosFisiologicos().setAnamnese(newAnamnese);
-			}
-			if (newAnamnese.getAlimentos() != null) {
-				for (var item : newAnamnese.getAlimentos()) {
-					item.setAnamnese(newAnamnese);
-					if (item.getAlimento() != null) {
-						item.getId().setAlimentoId(item.getAlimento().getId());
-					}
-				}
-			}
+			// O Service agora vai tratar de buscar as entidades gerenciadas
 			Anamnese anamneseSalva = anamneseService.criarAnamnese(newAnamnese);
 			return ResponseEntity.status(HttpStatus.CREATED).body(anamneseSalva);
 		} catch (Exception e) {
-			// Retorna a mensagem real do erro para o frontend
+			e.printStackTrace(); // Log do erro completo
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no servidor: " + e.getMessage());
 		}
 	}
